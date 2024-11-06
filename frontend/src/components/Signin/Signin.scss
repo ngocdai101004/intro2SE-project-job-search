@@ -1,0 +1,80 @@
+.signin-container {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+
+  .title {
+    h3 {
+      font-weight: 700;
+    }
+  }
+
+  .input-icons {
+    position: relative;
+
+    i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6c757d;
+      font-size: 19px;
+      pointer-events: none;
+    }
+
+    input {
+      padding-left: 35px;
+      padding-right: 30px;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+      background-color: #eff2f6;
+      border-radius: 5px;
+      width: 100%;
+    }
+
+    svg {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6c757d;
+      pointer-events: none;
+    }
+  }
+
+  .forgot-password {
+    color: #0a66ca;
+    font-weight: 600;
+    font-size: 14px;
+    // move to the right
+    float: right;
+    text-align: right;
+
+    // hover
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  .signin-btn {
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .other-signin-btn {
+    button {
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      border-radius: 10px;
+      border-style: hidden;
+
+      svg {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
