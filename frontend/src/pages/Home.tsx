@@ -7,7 +7,7 @@ export default function Home() {
         <div>
             <MyButton className="btn btn-primary" text="Sign Up" onClick={() => navigate("/signup")} />
             <div className="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Oh snap! You got an error!</strong>
+                <strong>vjp vjp vjp !</strong>
                 <p>Change this and that and try again.</p>
                 <button
                     type="button"

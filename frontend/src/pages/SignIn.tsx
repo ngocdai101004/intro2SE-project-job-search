@@ -1,10 +1,60 @@
-import { FormEvent, useState } from 'react';
+import api from '../common/axiosAPI';
+import axios from "axios";
 import MyFooter from '../components/MyFooter';
 import MyHeader from '../components/MyHeader';
 import MyTextInput from '../components/MyTextInput';
+import {FormEvent, useState} from "react";
+import { useNavigate } from "react-router-dom";
+
+
+
+function SignInForm() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setLoading(true); // Start loading
+
+        try {
+            const response = await api.post('/auth/login', { email, password });
+            navigate('/home');
+            console.log('Login successful:', response.data);
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                setErrorMessage(error.response.data?.message || 'An error occurred.');
+            } else {
+                setErrorMessage('An unexpected error occurred. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
+
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+                <MyTextInput label="Email address" type="email" id="email" placeholder="Enter email" value={email} setValue={setEmail} />
+            </div>
+
+            <div className="mb-3">
+                <MyTextInput label="Password" type="password" id="password" placeholder="Password" value={password} setValue={setPassword} />
+            </div>
+
+            <button type="submit" className="btn btn-primary fw-bold w-100" disabled={loading}>
+                {loading ? 'Signing In...' : 'Sign In'}
+            </button>
+            {errorMessage && <p className="text-danger">{errorMessage}</p>}
+        </form>
+    );
+}
+
 
 function SignIn() {
-
     return (
         <div className="d-flex flex-column min-vh-100">
             <MyHeader />
@@ -58,29 +108,6 @@ function SignIn() {
     );
 };
 
-function SignInForm() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        console.log('Login attempt with:', { email, password });
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-                <MyTextInput label="Email address" type="email" id="email" placeholder="Enter email" value={email} setValue={setEmail} />
-            </div>
-
-            <div className="mb-3">
-                <MyTextInput label="Password" type="password" id="password" placeholder="Password" value={password} setValue={setPassword} />
-            </div>
-            <button type="submit" className="btn btn-primary fw-bold w-100">
-                Sign In
-            </button>
-        </form>
-    )
-}
 
 export default SignIn;
