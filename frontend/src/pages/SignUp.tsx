@@ -2,6 +2,7 @@ import { FormEvent, useState } from 'react';
 import MyFooter from '../components/MyFooter';
 import MyHeader from '../components/MyHeader';
 import MyTextInput from '../components/MyTextInput';
+import axiosInstance from '../common/axiosInstance.tsx';
 
 function SignUp() {
 
@@ -33,10 +34,19 @@ function SignUpForm() {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        console.log('Sign Up attempt with:', { firstName, lastName, email, phone, password, confirmPassword });
+        setLoading(true);
+        if (password !== confirmPassword) {
+            alert('Passwords do not match');
+            setLoading(false);
+            return;
+        }
+        axiosInstance.post('/auth/register', { firstName, lastName, email, phone, password })
+        console.log('Sign Up attempt with:', { firstName, lastName, email, phone, password });
     };
 
     return (
@@ -51,11 +61,11 @@ function SignUpForm() {
             </div>
 
             <div className="mb-3">
-                <MyTextInput label="Email address" type="email" id="email" placeholder="Enter email" value={email} setValue={setPhone} />
+                <MyTextInput label="Email address" type="email" id="email" placeholder="Enter email" value={email} setValue={setEmail} />
             </div>
 
             <div className="mb-3">
-                <MyTextInput label="Phone number" type="phone" id="phone" placeholder="Enter phone" value={phone} setValue={setEmail} />
+                <MyTextInput label="Phone number" type="phone" id="phone" placeholder="Enter phone" value={phone} setValue={setPhone} />
             </div>
 
             <div className="mb-3">
@@ -66,8 +76,8 @@ function SignUpForm() {
                 <MyTextInput label="Confirm password" type="password" id="confirm_password" placeholder="Confirm password" value={confirmPassword} setValue={setConfirmPassword} />
             </div>
 
-            <button type="submit" className="btn btn-primary fw-bold w-100">
-                Sign Up
+            <button type="submit" className="btn btn-primary fw-bold w-100" disabled={loading}>
+                {loading ? 'Checking your information' : 'Sign Up'}
             </button>
 
         </form>

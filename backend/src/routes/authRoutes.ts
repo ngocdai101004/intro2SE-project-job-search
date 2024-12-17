@@ -1,17 +1,22 @@
-import express from 'express';
-const router = express.Router();
+import {Router, Request, Response} from 'express';
+import {verifyUser} from "../middlewares/verifyUser";
+
+const router = Router();
+
 import {
     loginUser,
     registerUser,
     logoutUser,
     verifyEmail,
     getVerifyCode,
-    resetPassword
+    resetPassword,
+    sendVerificationEmail
 } from "../controllers/authController";
 
+router.get("/check", verifyUser);
 router.post("/login", loginUser);
-router.post("/register", registerUser);
-router.post("/logout", logoutUser);
+router.post("/register", registerUser, sendVerificationEmail);
+router.get("/logout", logoutUser);
 router.post("/email/verify", verifyEmail);
 router.post("/email/code", getVerifyCode);
 router.post("/password/reset", resetPassword);

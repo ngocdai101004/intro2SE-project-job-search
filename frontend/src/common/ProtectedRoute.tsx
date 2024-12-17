@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { isAuthenticated } from '../common/isAuthenticated';
+import {useNavigate} from "react-router-dom";
 import * as React from "react";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [auth, setAuth] = useState<boolean | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkAuth = async () => {
             const authStatus = await isAuthenticated();
             setAuth(authStatus);
-            console.log(authStatus);
         };
         checkAuth();
     }, []);
@@ -21,8 +21,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
     }
 
     if (!auth) {
-        // Redirect to login page if not authenticated
-        return <Navigate to="signin" replace />;
+        navigate("/signin");
     }
 
     // Render the protected content if authenticated

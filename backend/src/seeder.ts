@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
-import users from './src/data/users';
-import User from './src/models/userModel';
-import connectDB from './src/config/db';
+import {users} from './data/users';
+import User from './models/userModel';
+import connectDB from './configs/db';
 
 dotenv.config();
 
@@ -37,3 +37,5 @@ if (process.argv[2] === '-d') {
 } else {
     importData();
 }
+
+

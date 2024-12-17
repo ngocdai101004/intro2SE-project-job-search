@@ -1,10 +1,12 @@
-import api from '../common/axiosAPI';
-import axios from "axios";
 import MyFooter from '../components/MyFooter';
 import MyHeader from '../components/MyHeader';
 import MyTextInput from '../components/MyTextInput';
 import {FormEvent, useState} from "react";
-import { useNavigate } from "react-router-dom";
+import axiosInstance from "../common/axiosInstance.tsx";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+
+
 
 
 
@@ -20,7 +22,7 @@ function SignInForm() {
         setLoading(true); // Start loading
 
         try {
-            const response = await api.post('/auth/login', { email, password });
+            const response = await axiosInstance.post('/auth/login', { email, password });
             navigate('/home');
             console.log('Login successful:', response.data);
         } catch (error: unknown) {
@@ -28,6 +30,7 @@ function SignInForm() {
                 setErrorMessage(error.response.data?.message || 'An error occurred.');
             } else {
                 setErrorMessage('An unexpected error occurred. Please try again.');
+                console.log('Login failed:', error);
             }
         } finally {
             setLoading(false);
@@ -49,6 +52,7 @@ function SignInForm() {
                 {loading ? 'Signing In...' : 'Sign In'}
             </button>
             {errorMessage && <p className="text-danger">{errorMessage}</p>}
+
         </form>
     );
 }

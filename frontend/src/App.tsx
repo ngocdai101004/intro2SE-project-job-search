@@ -4,6 +4,7 @@ import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home.tsx";
 import ProtectedRoute from "./common/ProtectedRoute.tsx";
+import AuthCode from "./pages/AuthCode.tsx";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Route path="signin" element={<SignIn/>}/>
                 <Route path="signup" element={<SignUp/>}/>
                 <Route path="forgotpassword" element={<ForgotPassword/>}/>
+                <Route path="authcode" element={<AuthCode/>}/>
 
                 <Route path="home" element={
                     <ProtectedRoute>
