@@ -12,6 +12,12 @@ interface IUserMongoose extends mongoose.Document {
     password: string;
     is_verified: boolean;
     verification_code: string;
+    address: string;
+    city_state: string;
+    zip_code: string;
+    country: string;
+    gender: string;
+    date_of_birth: Date;
 
     matchPassword(enteredPassword: string): Promise<boolean>;
 }
