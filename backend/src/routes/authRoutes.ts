@@ -1,24 +1,33 @@
-import {Router, Request, Response} from 'express';
+import {NextFunction,Request,Response, Router} from 'express';
 import {verifyUser} from "../middlewares/verifyUser";
 
 const router = Router();
 
 import {
+    checkUser,
     loginUser,
     registerUser,
     logoutUser,
     verifyEmail,
     getVerifyCode,
     resetPassword,
-    sendVerificationEmail
 } from "../controllers/authController";
 
-router.get("/check", verifyUser);
+router.get(
+    "/check",
+    (req: Request, res: Response ,next: NextFunction) => {
+        setTimeout(() => {
+            next();  // Call next() after the timeout, for visualizing the loading spinner
+        }, 1000);
+    },
+    verifyUser,
+    checkUser
+);
 router.post("/login", loginUser);
-router.post("/register", registerUser, sendVerificationEmail);
+router.post("/register", registerUser);
 router.get("/logout", logoutUser);
-router.post("/email/verify", verifyEmail);
-router.post("/email/code", getVerifyCode);
-router.post("/password/reset", resetPassword);
+router.post("/verify_account", verifyUser ,verifyEmail);
+router.post("/get_code", getVerifyCode);
+router.post("/reset_password", resetPassword);
 
 export default router;

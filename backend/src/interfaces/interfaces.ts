@@ -15,8 +15,48 @@ export interface IJwtPayload {
     isVerified: boolean;
 }
 
+
+// IVerifiedRequest replacement
 export interface IVerifiedRequest extends Request {
     body: {
-        user: IUser
+        userID: string;
+        isVerified: boolean;
+    }
+}
+
+
+export interface ILoginRequest extends Request {
+    body: {
+        email: string;
+        password: string;
+    }
+}
+
+export interface IRegisterRequest extends Request {
+    body: {
+        first_name: string;
+        last_name: string;
+        email: string;
+        password: string;
+    }
+}
+
+export interface IVerifyAccountRequest extends IVerifiedRequest {
+    body: IVerifiedRequest["body"] & {
+        code: string;
+    }
+}
+
+export interface IGetVerifyCodeRequest extends Request {
+    body: {
+        email: string;
+    }
+}
+
+export interface IResetPasswordRequest extends Request {
+    body: {
+        email: string;
+        new_password: string;
+        code: string;
     }
 }

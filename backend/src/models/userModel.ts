@@ -32,7 +32,6 @@ const userSchema = new mongoose.Schema<IUserMongoose>({
         },
         phone: {
             type: String,
-            required: true,
         },
         password: {
             type: String,

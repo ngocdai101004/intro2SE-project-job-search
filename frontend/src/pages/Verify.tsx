@@ -4,7 +4,7 @@ import MyHeader from '../components/MyHeader';
 import MyTextInput from '../components/MyTextInput';
 import { useNavigate } from 'react-router-dom';
 
-function AuthCode() {
+function VerifyCode() {
     const navigate = useNavigate();
     const [code, setCode] = useState('');
 
@@ -52,4 +52,4 @@ function AuthCode() {
 };
 
 
-export default AuthCode;
+export default VerifyCode;
