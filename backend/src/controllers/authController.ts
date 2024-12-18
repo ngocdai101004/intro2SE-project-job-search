@@ -57,6 +57,7 @@ const logoutUser = (req: Request, res: Response): void => {
 
 const registerUser = async (req: IRegisterRequest, res: Response) => {
     const {first_name, last_name, email, password} = req.body;
+    console.log(req.body);
 
     if (!first_name || !last_name || !email || !password) {
         res.status(400).json({message: "Please fill in all fields"});
@@ -93,6 +94,7 @@ const verifyEmail = async (req: IVerifyAccountRequest, res: Response) => {
         if (user.verification_code === code) {
             user.is_verified = true;
             await user.save();
+            generateToken(res, {userID: user._id, isVerified: user.is_verified});
             res.status(200).json({message: "Email verified"});
         } else {
             res.status(400).json({message: "Invalid code"});

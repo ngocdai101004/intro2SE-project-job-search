@@ -3,15 +3,41 @@ import MyFooter from '../components/MyFooter';
 import MyHeader from '../components/MyHeader';
 import MyTextInput from '../components/MyTextInput';
 import { useNavigate } from 'react-router-dom';
+import {toast} from "react-toastify";
+import axiosInstance from "../common/axiosInstance.tsx";
+import axios from "axios";
+import {MyToastContainer} from "../components/MyToastContainer.tsx";
 
-function VerifyCode() {
+function Verify() {
     const navigate = useNavigate();
     const [code, setCode] = useState('');
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log(code);
-        // navigate('/signin');
+        const toastId = toast.loading('Verifying...');
+
+        try {
+            const response = await axiosInstance.post('/auth/verify_account', { code });
+            navigate('/home');
+            console.log('Verify successfully:', response.data);
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                toast.update(toastId, {
+                    render: error.response.data?.message || 'An error occurred.',
+                    type: 'error',
+                    isLoading: false,
+                    autoClose: 3000,
+                });
+            } else {
+                toast.update(toastId, {
+                    render: 'Verify failed. Please try again.',
+                    type: 'error',
+                    isLoading: false,
+                    autoClose: 3000,
+                });
+                console.log('Verify failed:', error);
+            }
+        }
     };
 
     return (
@@ -46,10 +72,11 @@ function VerifyCode() {
                     </div>
                 </div>
             </div>
+            <MyToastContainer/>
             <MyFooter/>
         </div>
     );
 };
 
 
-export default VerifyCode;
+export default Verify;

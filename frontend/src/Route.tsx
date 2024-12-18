@@ -3,18 +3,13 @@ import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import ProtectedRoute from "./common/ProtectedRoute.tsx";
 import Home from "./pages/Home.tsx";
+import Verify from "./pages/Verify.tsx";
+import ForgotPassword from "./pages/ForgotPassword.tsx";
+import VerifyCodePassword from "./pages/ForgotPasswordEmail.tsx";
+import ForgotPasswordEmail from "./pages/ForgotPasswordEmail.tsx";
 
-// Function to get the access token from cookies
-const getAccessToken = () => {
-    return true;
-}
 
-// Function to check if the user is authenticated
-const isAuthenticated = () => {
-    return getAccessToken();
-}
 
-// Create the router configuration
 const router = createBrowserRouter(
     [
         {
@@ -25,14 +20,30 @@ const router = createBrowserRouter(
         {
             path: '/signup',
             element: <SignUp/>,
-            // index: true
         },
         {
-            element: <ProtectedRoute isAuthenticated={isAuthenticated()} />,
+            path: '/verify',
+            element: <Verify/>
+        },
+        {
+            path: '/forgotpassword/:email',
+            element: <ForgotPasswordEmail/>,
+        },
+        {
+            path: '/forgotpassword',
+            element: <ForgotPassword/>
+        },
+
+        {
+            element: <ProtectedRoute/>,
             children: [
                 {
                     path: '/home',
                     element: <Home/>,
+                },
+                {
+                    path: '*',
+                    element: <Home/>
                 }
             ]
         },

@@ -5,6 +5,8 @@ import {FormEvent, useState} from "react";
 import axiosInstance from "../common/axiosInstance.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
+import {MyToastContainer} from "../components/MyToastContainer.tsx";
 
 
 
@@ -13,13 +15,11 @@ import {useNavigate} from "react-router-dom";
 function SignInForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        setLoading(true); // Start loading
+        const toastId = toast.loading('Signing in...');
 
         try {
             const response = await axiosInstance.post('/auth/login', { email, password });
@@ -27,15 +27,22 @@ function SignInForm() {
             console.log('Login successful:', response.data);
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
-                setErrorMessage(error.response.data?.message || 'An error occurred.');
+                toast.update(toastId, {
+                    render: error.response.data?.message || 'An error occurred.',
+                    type: 'error',
+                    isLoading: false,
+                    autoClose: 3000,
+                });
             } else {
-                setErrorMessage('An unexpected error occurred. Please try again.');
+                toast.update(toastId, {
+                    render: 'Login failed. Please try again.',
+                    type: 'error',
+                    isLoading: false,
+                    autoClose: 3000,
+                });
                 console.log('Login failed:', error);
             }
-        } finally {
-            setLoading(false);
         }
-
     };
 
     return (
@@ -48,14 +55,13 @@ function SignInForm() {
                 <MyTextInput label="Password" type="password" id="password" placeholder="Password" value={password} setValue={setPassword} />
             </div>
 
-            <button type="submit" className="btn btn-primary fw-bold w-100" disabled={loading}>
-                {loading ? 'Signing In...' : 'Sign In'}
+            <button type="submit" className="btn btn-primary fw-bold w-100">
+                Sign In
             </button>
-            {errorMessage && <p className="text-danger">{errorMessage}</p>}
-
         </form>
     );
 }
+
 
 
 function SignIn() {
@@ -107,6 +113,7 @@ function SignIn() {
                     </div>
                 </div>
             </div>
+            <MyToastContainer />
             <MyFooter />
         </div>
     );
