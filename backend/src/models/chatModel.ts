@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const chatInfoSchema = new mongoose.Schema(
+const chatSchema = new mongoose.Schema(
     {
         users: [
             {
@@ -12,7 +12,7 @@ const chatInfoSchema = new mongoose.Schema(
 
         messages: [
             {
-                user_id: {
+                sender_id: {
                     type: mongoose.Schema.Types.ObjectId,
                     ref: "User", // Assuming this references a User model
                     required: true,
@@ -35,6 +35,6 @@ const chatInfoSchema = new mongoose.Schema(
 );
 
 // Create the model
-const ChatInfo = mongoose.model("ChatInfo", chatInfoSchema);
+const ChatDB = mongoose.model("ChatInfo", chatSchema);
 
-export default ChatInfo;
+export default ChatDB;

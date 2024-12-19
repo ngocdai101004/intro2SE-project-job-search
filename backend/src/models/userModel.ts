@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema(
         },
         last_name: {
             type: String,
-            required: true,
         },
         email: {
             type: String,
@@ -28,6 +27,30 @@ const userSchema = new mongoose.Schema(
         verification_code: {
             type: String,
         },
+        phone: {
+            type: String,
+        },
+        address: {
+            district: {
+                type: String,
+            },
+            city_state: {
+                type: String,
+            },
+            zip_code: {
+                type: String,
+            },
+            country: {
+                type: String,
+            }
+        },
+        gender: {
+            type: String,
+            enum: ["male", "female"]
+        },
+        date_of_birth: {
+            type: Date,
+        }
     },
     {
         timestamps: true,
@@ -55,6 +78,6 @@ type UserDocument = InferSchemaType<typeof userSchema> & {
 };
 
 // Create the User model
-const User: Model<UserDocument> = mongoose.model<UserDocument>('User', userSchema);
+const UserDB = mongoose.model<UserDocument>('User', userSchema);
 
-export default User;
+export default UserDB;

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const jobInfoSchema = new mongoose.Schema(
+const jobSchema = new mongoose.Schema(
     {
         company_id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -36,16 +36,7 @@ const jobInfoSchema = new mongoose.Schema(
             enum: ["remote", "on-site", "hybrid"], // Example location types
         },
 
-        zip_code: {
-            type: String,
-        },
-
         description: {
-            type: String,
-            required: true,
-        },
-
-        location: {
             type: String,
             required: true,
         },
@@ -57,7 +48,6 @@ const jobInfoSchema = new mongoose.Schema(
 
         emails: {
             type: String,
-            required: true,
         },
 
         requirements: {
@@ -75,6 +65,6 @@ const jobInfoSchema = new mongoose.Schema(
 );
 
 // Create the model
-const JobInfo = mongoose.model("JobInfo", jobInfoSchema);
+const JobDB = mongoose.model("JobInfo", jobSchema);
 
-export default JobInfo;
+export default JobDB;

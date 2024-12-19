@@ -5,18 +5,26 @@ const userInfoSchema = new mongoose.Schema(
         user_id: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
-            ref: 'User', // Assuming this references a User model
+            ref: 'User',
         },
+
+
 
         review: [
             {
                 reviewer: {
                     type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User', // Assuming reviewers are also users
+                    ref: 'User',
+                    required: true,
                 },
                 content: {
                     type: String,
                     required: true,
+                },
+                rating: {
+                    type: Number,
+                    required: true,
+                    enum: [1, 2, 3, 4, 5],
                 },
             },
         ],
@@ -35,19 +43,12 @@ const userInfoSchema = new mongoose.Schema(
                     type: String,
                     required: true,
                 },
-                month_begin: {
-                    type: Number,
+                begin: {
+                    type: Date,
                     required: true,
                 },
-                year_begin: {
-                    type: Number,
-                    required: true,
-                },
-                month_end: {
-                    type: Number,
-                },
-                year_end: {
-                    type: Number,
+                end: {
+                    type: Date,
                 },
                 additional_details: {
                     type: String,
@@ -65,19 +66,12 @@ const userInfoSchema = new mongoose.Schema(
                     type: String,
                     required: true,
                 },
-                month_begin: {
-                    type: Number,
+                begin: {
+                    type: Date,
                     required: true,
                 },
-                year_begin: {
-                    type: Number,
-                    required: true,
-                },
-                month_end: {
-                    type: Number,
-                },
-                year_end: {
-                    type: Number,
+                end: {
+                    type: Date,
                 },
                 description: {
                     type: String,
@@ -85,16 +79,12 @@ const userInfoSchema = new mongoose.Schema(
             },
         ],
 
-        skills: {
-            type: [String],
-        },
+        skills: [String],
 
-        certifications: {
-            type: [String], // Array of strings
-        },
+        certifications: [String],
 
-        job_preferences: {
-            job_type: {
+        job_preferences: [{
+            job_title: {
                 type: String,
                 required: true,
             },
@@ -108,40 +98,22 @@ const userInfoSchema = new mongoose.Schema(
             },
             salary_expectation: {
                 type: Number,
-                required: true,
             },
-        },
+        }],
 
         ready_to_work: {
             type: Boolean,
             default: false,
+            required: true,
         },
 
-        // Additional information
-        additional_info: {
-            type: String,
-        },
+        additional_info: String,
 
-        awards: {
-            type: [String], // Array of strings
-        },
+        awards: [String],
 
-        languages: [
-            {
-                language: {
-                    type: String,
-                    required: true,
-                },
-                proficiency: {
-                    type: String,
-                    required: true,
-                },
-            },
-        ],
+        languages: [String],
 
-        link: {
-            type: String,
-        },
+        link: [String],
 
         publications: [
             {
@@ -149,12 +121,8 @@ const userInfoSchema = new mongoose.Schema(
                     type: String,
                     required: true,
                 },
-                url: {
-                    type: String,
-                },
-                description: {
-                    type: String,
-                },
+                url: String,
+                description: String,
             },
         ],
     },
@@ -164,6 +132,6 @@ const userInfoSchema = new mongoose.Schema(
 );
 
 // Create the model
-const UserInfo = mongoose.model('UserInfo', userInfoSchema);
+const UserInfoDB = mongoose.model('UserInfo', userInfoSchema);
 
-export default UserInfo;
+export default UserInfoDB;

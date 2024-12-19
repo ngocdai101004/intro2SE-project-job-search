@@ -29,7 +29,7 @@ function SignInForm() {
             if (axios.isAxiosError(error) && error.response) {
                 toast.update(toastId, {
                     render: error.response.data?.message || 'An error occurred.',
-                    type: 'error',
+                    type: 'success',
                     isLoading: false,
                     autoClose: 3000,
                 });

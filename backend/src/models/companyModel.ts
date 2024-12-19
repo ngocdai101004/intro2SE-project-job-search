@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const companyInfoSchema = new mongoose.Schema(
+const companySchema = new mongoose.Schema(
     {
         owner_id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -18,6 +18,21 @@ const companyInfoSchema = new mongoose.Schema(
         company_name: {
             type: String,
             required: true,
+        },
+
+        address: {
+            district: {
+                type: String,
+            },
+            city_state: {
+                type: String,
+            },
+            zip_code: {
+                type: String,
+            },
+            country: {
+                type: String,
+            }
         },
 
         description: {
@@ -40,10 +55,7 @@ const companyInfoSchema = new mongoose.Schema(
             default: 0, // Optional default value
         },
 
-        legal_document_url: {
-            type: String,
-            required: true,
-        },
+        legal_document_url: String,
 
         reviews: [
             {
@@ -55,8 +67,7 @@ const companyInfoSchema = new mongoose.Schema(
                 rating: {
                     type: Number,
                     required: true,
-                    min: 1,
-                    max: 5, // Ensures rating is between 1 and 5
+                    enum: [1, 2, 3, 4, 5],
                 },
                 review: {
                     type: String,
@@ -70,6 +81,6 @@ const companyInfoSchema = new mongoose.Schema(
 );
 
 // Create the model
-const CompanyInfo = mongoose.model("CompanyInfo", companyInfoSchema);
+const CompanyDB = mongoose.model("CompanyInfo", companySchema);
 
-export default CompanyInfo;
+export default CompanyDB;
