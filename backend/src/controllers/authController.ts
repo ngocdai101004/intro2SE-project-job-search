@@ -4,11 +4,11 @@ import generateToken from "../utils/generateToken";
 import {generateRandomSixDigitString} from "../utils/generateVerifyCode";
 import {sendEmail} from "../utils/sendEmail";
 import {
+    IGetVerifyCodeRequest,
     ILoginRequest,
     IRegisterRequest,
     IVerifiedRequest,
-    IVerifyAccountRequest,
-    IGetVerifyCodeRequest
+    IVerifyAccountRequest
 } from "../interfaces/interfaces";
 
 require("dotenv").config();
@@ -98,6 +98,7 @@ const verifyEmail = async (req: IVerifyAccountRequest, res: Response) => {
     const {code} = req.body;
     if (!code) {
         res.status(400).json({message: "Code not found"});
+        return;
     }
     const user = await User.findById(req.body.userID);
     if (user) {
@@ -119,6 +120,7 @@ const getVerifyCode = async (req: IGetVerifyCodeRequest, res: Response) => {
     const {email} = req.body;
     if (!email) {
         res.status(400).json({message: "Email not found"});
+        return;
     }
     const user = await User.findOne({email});
     if (user) {
@@ -132,21 +134,24 @@ const getVerifyCode = async (req: IGetVerifyCodeRequest, res: Response) => {
     }
 }
 const resetPassword = async (req: Request, res: Response) => {
-    const {email, new_password, code} = req.body;
-    if (!email || !new_password || !code) {
+    const {email, password, code} = req.body;
+
+    if (!email || !password || !code) {
         res.status(400).json({message: "Please fill in all fields"})
+        return;
     }
     const user = await User.findOne({email});
     if (user) {
         if (user.verification_code === "") {
             res.status(400).json({message: "Verify code not found"})
         } else if (user.verification_code === code) {
-            user.password = new_password;
+            user.password = password;
             user.verification_code = "";
             await user.save();
             res.status(200).json({message: "Password reset"});
         } else {
             res.status(400).json({message: "Invalid code"});
+            console.log(user)
         }
     } else {
         res.status(400).json({message: "User not found"});
