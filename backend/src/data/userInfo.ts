@@ -1,4 +1,5 @@
 import {users} from "./users";
+import {companies} from "./companies";
 
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
@@ -8,7 +9,7 @@ export const userInfo = [
         user_id: users[0]._id, // User's unique ObjectId
         review: [
             {
-                reviewer: new ObjectId(), // ObjectId of the reviewer
+                reviewer: companies[0]._id,
                 content: "Great user!",
                 rating: 5
             }
