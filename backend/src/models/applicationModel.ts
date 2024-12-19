@@ -37,6 +37,6 @@
     );
 
     // Create the model
-    const ApplicationDB = mongoose.model("ApplicationInfo", applicationSchema);
+    const ApplicationDB = mongoose.model("Application", applicationSchema);
 
     export default ApplicationDB;

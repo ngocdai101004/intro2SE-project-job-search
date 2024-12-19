@@ -1,6 +1,17 @@
 import dotenv from 'dotenv';
 import {users} from './data/users';
 import User from './models/userModel';
+import {chats} from './data/chat';
+import Chat from './models/chatModel';
+import {applications} from "./data/application";
+import Application from './models/applicationModel';
+import {jobs} from "./data/jobs";
+import Job from './models/jobModel';
+import {companies} from "./data/companies";
+import Company from './models/companyModel';
+import {userInfo} from "./data/userInfo";
+import UserInfo from './models/userInfoModel';
+
 import connectDB from './configs/db';
 
 dotenv.config();
@@ -11,6 +22,16 @@ const importData = async () => {
     try {
         await User.deleteMany();
         await User.insertMany(users);
+        await Chat.deleteMany();
+        await Chat.insertMany(chats);
+        await Application.deleteMany();
+        await Application.insertMany(applications);
+        await Job.deleteMany();
+        await Job.insertMany(jobs);
+        await Company.deleteMany();
+        await Company.insertMany(companies);
+        await UserInfo.deleteMany();
+        await UserInfo.insertMany(userInfo);
 
         console.log('Data Imported!');
         process.exit();

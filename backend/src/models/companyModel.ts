@@ -81,6 +81,6 @@ const companySchema = new mongoose.Schema(
 );
 
 // Create the model
-const CompanyDB = mongoose.model("CompanyInfo", companySchema);
+const CompanyDB = mongoose.model("Company", companySchema);
 
 export default CompanyDB;
