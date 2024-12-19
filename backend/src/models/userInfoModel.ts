@@ -56,7 +56,3 @@ interface IUserInfo extends mongoose.Document {
         description: string;
     }[]
 }
-
-const UserInfo = mongoose.model<IUserInfo>('UserInfo', userInfoSchema);
-
-export default UserInfo;
