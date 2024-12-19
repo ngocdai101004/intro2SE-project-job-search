@@ -5,7 +5,6 @@ import ProtectedRoute from "./common/ProtectedRoute.tsx";
 import Home from "./pages/Home.tsx";
 import Verify from "./pages/Verify.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
-import VerifyCodePassword from "./pages/ForgotPasswordEmail.tsx";
 import ForgotPasswordEmail from "./pages/ForgotPasswordEmail.tsx";
 
 

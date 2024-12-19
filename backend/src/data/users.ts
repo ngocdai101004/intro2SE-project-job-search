@@ -1,4 +1,3 @@
-import {Schema} from "mongoose";
 import {ObjectId} from "mongodb";
 
 
@@ -10,7 +9,7 @@ export const users = [
         first_name: "Vo Anh",
         last_name: "Tuan",
         email: "admin@email.com",
-        password: "hashed_password_1",
+        password: bcrypt.hashSync('123', 10),
         is_verified: true,
         verification_code: "123123",
         phone: "+1234567890",
@@ -28,7 +27,7 @@ export const users = [
         first_name: "Phuc Dong",
         last_name: "Song Gia",
         email: "fuc@email.com",
-        password: "hashed_password_2",
+        password: bcrypt.hashSync("124", 10),
         is_verified: true,
         phone: "+2345678901",
         address: {

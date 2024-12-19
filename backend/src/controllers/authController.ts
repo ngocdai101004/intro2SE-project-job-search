@@ -25,6 +25,10 @@ const checkUser = async (req: IVerifiedRequest, res: Response) => {
 
 const loginUser = async (req: ILoginRequest, res: Response) => {
     const {email, password} = req.body;
+    if(!email || !password) {
+        res.status(400).json({message: "Please fill in all fields"});
+        return;
+    }
     const user = await User.findOne({email});
     if (user && (await user.matchPassword(password))) {
         generateToken(res, {userID: user._id.toString(), isVerified: user.is_verified});
