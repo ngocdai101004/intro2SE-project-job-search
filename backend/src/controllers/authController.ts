@@ -15,17 +15,16 @@ require("dotenv").config();
 
 
 const checkUser = async (req: IVerifiedRequest, res: Response) => {
-    if(req.body.isVerified) {
+    if (req.body.isVerified) {
         res.status(200).json({message: "User is verified"});
-    }
-    else {
+    } else {
         res.status(200).json({message: "User is not verified"});
     }
 }
 
 const loginUser = async (req: ILoginRequest, res: Response) => {
     const {email, password} = req.body;
-    if(!email || !password) {
+    if (!email || !password) {
         res.status(400).json({message: "Please fill in all fields"});
         return;
     }
@@ -42,7 +41,6 @@ const loginUser = async (req: ILoginRequest, res: Response) => {
 }
 
 
-
 const logoutUser = (req: Request, res: Response): void => {
     try {
         res.clearCookie('jwt', {
@@ -51,9 +49,9 @@ const logoutUser = (req: Request, res: Response): void => {
             sameSite: 'strict',
         });
 
-        res.status(200).json({ message: 'Logged out successfully' });
+        res.status(200).json({message: 'Logged out successfully'});
     } catch (error) {
-        res.status(500).json({ message: 'Logout failed'});
+        res.status(500).json({message: 'Logout failed'});
     }
 };
 
@@ -77,7 +75,14 @@ const registerUser = async (req: IRegisterRequest, res: Response) => {
 
     sendEmail(email, "Verify your email at job search", `Your verification code is: ${code}`);
 
-    const user = await User.create({first_name, last_name, email, password, is_verified: false, verification_code: code});
+    const user = await User.create({
+        first_name,
+        last_name,
+        email,
+        password,
+        is_verified: false,
+        verification_code: code
+    });
     if (user) {
         generateToken(res, {userID: user._id.toString(), isVerified: user.is_verified});
         res.status(201).json({
