@@ -1,28 +1,8 @@
-import mongoose from 'mongoose';
+import mongoose, { InferSchemaType, Model } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-
-// Define an interfaces for the User document
-interface IUserMongoose extends mongoose.Document {
-    _id: string
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone: string;
-    password: string;
-    is_verified: boolean;
-    verification_code: string;
-    address: string;
-    city_state: string;
-    zip_code: string;
-    country: string;
-    gender: string;
-    date_of_birth: Date;
-
-    matchPassword(enteredPassword: string): Promise<boolean>;
-}
-
-const userSchema = new mongoose.Schema<IUserMongoose>(
+// Define the schema
+const userSchema = new mongoose.Schema(
     {
         first_name: {
             type: String,
@@ -47,27 +27,34 @@ const userSchema = new mongoose.Schema<IUserMongoose>(
         },
         verification_code: {
             type: String,
-        }
+        },
     },
     {
         timestamps: true,
     }
 );
 
-userSchema.methods.matchPassword = async function (enteredPassword: string) {
+// Add the matchPassword method
+userSchema.methods.matchPassword = async function (enteredPassword: string): Promise<boolean> {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
+// Pre-save hook to hash passwords
 userSchema.pre('save', async function (next) {
-        if (!this.isModified('password')) {
-            next();
-        }
-
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
+    if (!this.isModified('password')) {
+        next();
     }
-);
 
-const User = mongoose.model<IUserMongoose>('User', userSchema);
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
+
+// Infer the type from the schema
+type UserDocument = InferSchemaType<typeof userSchema> & {
+    matchPassword(enteredPassword: string): Promise<boolean>;
+};
+
+// Create the User model
+const User: Model<UserDocument> = mongoose.model<UserDocument>('User', userSchema);
 
 export default User;

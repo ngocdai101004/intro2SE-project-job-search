@@ -10,7 +10,6 @@ import {
     IVerifyAccountRequest,
     IGetVerifyCodeRequest
 } from "../interfaces/interfaces";
-// import mongoose from "mongoose";
 
 require("dotenv").config();
 
@@ -28,7 +27,7 @@ const loginUser = async (req: ILoginRequest, res: Response) => {
     const {email, password} = req.body;
     const user = await User.findOne({email});
     if (user && (await user.matchPassword(password))) {
-        generateToken(res, {userID: user._id, isVerified: user.is_verified});
+        generateToken(res, {userID: user._id.toString(), isVerified: user.is_verified});
         res.status(200).json({
             name: user.first_name + " " + user.last_name,
             email: user.email,
@@ -76,7 +75,7 @@ const registerUser = async (req: IRegisterRequest, res: Response) => {
 
     const user = await User.create({first_name, last_name, email, password, is_verified: false, verification_code: code});
     if (user) {
-        generateToken(res, {userID: user._id, isVerified: user.is_verified});
+        generateToken(res, {userID: user._id.toString(), isVerified: user.is_verified});
         res.status(201).json({
             _id: user._id,
             name: user.first_name + " " + user.last_name,
@@ -94,7 +93,7 @@ const verifyEmail = async (req: IVerifyAccountRequest, res: Response) => {
         if (user.verification_code === code) {
             user.is_verified = true;
             await user.save();
-            generateToken(res, {userID: user._id, isVerified: user.is_verified});
+            generateToken(res, {userID: user._id.toString(), isVerified: user.is_verified});
             res.status(200).json({message: "Email verified"});
         } else {
             res.status(400).json({message: "Invalid code"});
