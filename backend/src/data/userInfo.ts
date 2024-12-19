@@ -1,9 +1,11 @@
+import {users} from "./users";
+
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 export const userInfo = [
     {
-        user_id: new ObjectId(), // User's unique ObjectId
+        user_id: users[0]._id, // User's unique ObjectId
         review: [
             {
                 reviewer: new ObjectId(), // ObjectId of the reviewer
