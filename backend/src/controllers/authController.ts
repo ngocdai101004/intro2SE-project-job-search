@@ -58,7 +58,6 @@ const logoutUser = (req: Request, res: Response): void => {
 
 const registerUser = async (req: IRegisterRequest, res: Response) => {
     const {first_name, last_name, email, password} = req.body;
-    console.log(req.body);
 
     if (!first_name || !last_name || !email || !password) {
         res.status(400).json({message: "Please fill in all fields"});
@@ -97,10 +96,14 @@ const registerUser = async (req: IRegisterRequest, res: Response) => {
 
 const verifyEmail = async (req: IVerifyAccountRequest, res: Response) => {
     const {code} = req.body;
+    if (!code) {
+        res.status(400).json({message: "Code not found"});
+    }
     const user = await User.findById(req.body.userID);
     if (user) {
         if (user.verification_code === code) {
             user.is_verified = true;
+            user.verification_code = "";
             await user.save();
             generateToken(res, {userID: user._id.toString(), isVerified: user.is_verified});
             res.status(200).json({message: "Email verified"});
@@ -114,6 +117,9 @@ const verifyEmail = async (req: IVerifyAccountRequest, res: Response) => {
 
 const getVerifyCode = async (req: IGetVerifyCodeRequest, res: Response) => {
     const {email} = req.body;
+    if (!email) {
+        res.status(400).json({message: "Email not found"});
+    }
     const user = await User.findOne({email});
     if (user) {
         const code = generateRandomSixDigitString();
@@ -127,10 +133,16 @@ const getVerifyCode = async (req: IGetVerifyCodeRequest, res: Response) => {
 }
 const resetPassword = async (req: Request, res: Response) => {
     const {email, new_password, code} = req.body;
+    if (!email || !new_password || !code) {
+        res.status(400).json({message: "Please fill in all fields"})
+    }
     const user = await User.findOne({email});
     if (user) {
-        if (user.verification_code === code) {
+        if (user.verification_code === "") {
+            res.status(400).json({message: "Verify code not found"})
+        } else if (user.verification_code === code) {
             user.password = new_password;
+            user.verification_code = "";
             await user.save();
             res.status(200).json({message: "Password reset"});
         } else {
