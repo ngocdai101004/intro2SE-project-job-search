@@ -5,8 +5,8 @@ import ProtectedRoute from "./common/ProtectedRoute.tsx";
 import Verify from "./pages/Verify.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
 import ForgotPasswordEmail from "./pages/ForgotPasswordEmail.tsx";
-import Company from "./components/Company/Company";
-import Home from "./components/Home/Home.tsx";
+import Company from "./pages/Company/Company.tsx";
+import Home from "./pages/Home/Home.tsx";
 
 const router = createBrowserRouter([
   {

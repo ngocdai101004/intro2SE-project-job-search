@@ -1,4 +1,4 @@
-import MyHeader from "../MyHeader";
+import MyHeader from "../../components/MyHeader.tsx";
 
 const Home = () => {
   return (

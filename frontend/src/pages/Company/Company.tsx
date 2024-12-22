@@ -1,4 +1,4 @@
-import MyHeader from "../MyHeader";
+import MyHeader from "../../components/MyHeader";
 import CompanyHeader from "./Header/CompanyHeader";
 
 function Company() {
