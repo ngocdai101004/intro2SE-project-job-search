@@ -1,6 +1,15 @@
+import React from "react";
 import { Nav } from "react-bootstrap";
 
-export default function MyHeader() {
+interface MyHeaderProps {
+  mydefaultActiveKey: string;
+}
+
+export default function MyHeader({ mydefaultActiveKey }: MyHeaderProps) {
+  const [myActiveKey, setMyActiveKey] = React.useState(
+    mydefaultActiveKey || "/home"
+  );
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
       <div
@@ -15,15 +24,19 @@ export default function MyHeader() {
             </span>
           </a>
 
-          <Nav variant="underline" defaultActiveKey="/home">
+          <Nav
+            variant="underline"
+            activeKey={myActiveKey}
+            onSelect={(selectedKey) => setMyActiveKey(selectedKey || "/home")}
+          >
             <Nav.Item>
-              <Nav.Link eventKey="link-1" href="/signin" className="text-white">
+              <Nav.Link eventKey="/home" href="/home" className="text-white">
                 Home
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link
-                eventKey="link-1"
+                eventKey="/company"
                 href="/company"
                 className="text-white"
               >

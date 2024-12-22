@@ -1,6 +1,9 @@
+import React from "react";
 import { Card, Col, Nav, Row, Image } from "react-bootstrap";
 
 const CompanyHeader = () => {
+  const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
+
   return (
     <div className="bg-cyan py-3 pb-0">
       <div className="container">
@@ -66,28 +69,39 @@ const CompanyHeader = () => {
             <Nav
               className="mx-auto"
               variant="underline"
-              defaultActiveKey="/link-1"
+              activeKey={myActiveKey}
+              onSelect={(selectedKey) =>
+                setMyActiveKey(selectedKey || "/snapshot")
+              }
             >
               <Nav.Item className="me-2 me-md-5">
-                <Nav.Link href="/signin" className="text-dark fs-5">
+                <Nav.Link
+                  eventKey="/snapshot"
+                  href=""
+                  className="text-dark fs-5"
+                >
                   Snapshot
                 </Nav.Link>
               </Nav.Item>
 
               <Nav.Item className="me-2 me-md-5">
-                <Nav.Link href="/signin" className="text-dark fs-5">
+                <Nav.Link eventKey="/jobs" href="" className="text-dark fs-5">
                   Jobs
                 </Nav.Link>
               </Nav.Item>
 
               <Nav.Item className="me-2 me-md-5">
-                <Nav.Link href="/signin" className="text-dark fs-5">
+                <Nav.Link
+                  eventKey="/reviews"
+                  href=""
+                  className="text-dark fs-5"
+                >
                   Reviews
                 </Nav.Link>
               </Nav.Item>
 
               <Nav.Item className="me-2 me-md-5">
-                <Nav.Link href="/signin" className="text-dark fs-5">
+                <Nav.Link eventKey="/qa" href="" className="text-dark fs-5">
                   Q&A
                 </Nav.Link>
               </Nav.Item>

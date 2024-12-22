@@ -4,7 +4,7 @@ import CompanyHeader from "./Header/CompanyHeader";
 function Company() {
   return (
     <div className="d-flex flex-column min-vh-100">
-      <MyHeader />
+      <MyHeader mydefaultActiveKey="/company" />
       <CompanyHeader />
     </div>
   );
