@@ -1,4 +1,3 @@
-import React from "react";
 import MyHeader from "../MyHeader";
 
 const Home = () => {
