@@ -6,6 +6,7 @@ import Home from "./pages/Home.tsx";
 import Verify from "./pages/Verify.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
 import ForgotPasswordEmail from "./pages/ForgotPasswordEmail.tsx";
+import Company from "./components/Company/Company";
 
 
 
@@ -31,6 +32,10 @@ const router = createBrowserRouter(
         {
             path: '/forgotpassword',
             element: <ForgotPassword/>
+        },
+        {
+            path: '/company',
+            element: <Company/>
         },
 
         {

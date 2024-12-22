@@ -11,12 +11,13 @@ interface CustomButtonProps {
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
-    text = "My Button", // Default button text
-    onClick = () => { }, // Default no-op function
-    className = "", // Additional classes
-    type = "button", // Button type (button, submit, reset)
-    disabled = false, // Disabled state 
-}) => {
+                                                       text = "My Button", // Default button text
+                                                       onClick = () => {
+                                                       }, // Default no-op function
+                                                       className = "", // Additional classes
+                                                       type = "button", // Button type (button, submit, reset)
+                                                       disabled = false, // Disabled state
+                                                   }) => {
     return (
         <button
             type={type}

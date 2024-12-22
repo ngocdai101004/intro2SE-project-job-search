@@ -22,7 +22,11 @@ export default function MyHeader() {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="link-1" href="/signin" className="text-white">
+              <Nav.Link
+                eventKey="link-1"
+                href="/company"
+                className="text-white"
+              >
                 Company
               </Nav.Link>
             </Nav.Item>
