@@ -1,63 +1,61 @@
-import {Request} from "express";
+import { Request } from "express";
 
 export interface IUser {
-    userID: string;
-    username: string;
-    email: string;
-    password: string;
-    is_verified: boolean;
-    verification_code: string;
-    createdAt: string;
+  userID: string;
+  username: string;
+  email: string;
+  password: string;
+  is_verified: boolean;
+  verification_code: string;
+  createdAt: string;
 }
 
 export interface IJwtPayload {
-    userID: string;
-    isVerified: boolean;
+  userID: string;
+  isVerified: boolean;
 }
-
 
 // IVerifiedRequest replacement
 export interface IVerifiedRequest extends Request {
-    body: {
-        userID: string;
-        isVerified: boolean;
-    }
+  body: {
+    userID: string;
+    isVerified: boolean;
+  };
 }
 
-
 export interface ILoginRequest extends Request {
-    body: {
-        email: string;
-        password: string;
-        // tuan: string;
-    }
+  body: {
+    email: string;
+    password: string;
+    // tuan: string;
+  };
 }
 
 export interface IRegisterRequest extends Request {
-    body: {
-        first_name: string;
-        last_name: string;
-        email: string;
-        password: string;
-    }
+  body: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    password: string;
+  };
 }
 
 export interface IVerifyAccountRequest extends IVerifiedRequest {
-    body: IVerifiedRequest["body"] & {
-        code: string;
-    }
+  body: IVerifiedRequest["body"] & {
+    code: string;
+  };
 }
 
 export interface IGetVerifyCodeRequest extends Request {
-    body: {
-        email: string;
-    }
+  body: {
+    email: string;
+  };
 }
 
 export interface IResetPasswordRequest extends Request {
-    body: {
-        email: string;
-        new_password: string;
-        code: string;
-    }
+  body: {
+    email: string;
+    new_password: string;
+    code: string;
+  };
 }

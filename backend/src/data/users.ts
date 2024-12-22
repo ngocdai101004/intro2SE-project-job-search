@@ -38,5 +38,22 @@ export const users = [
         },
         gender: "male",
         date_of_birth: new Date("1985-08-20")
+    },
+    {
+        _id: new ObjectId(),
+        first_name: "Tuan",
+        last_name: "Vo Anh",
+        email: "votuan.hcmus.it@gmail.com",
+        password: bcrypt.hashSync("1", 10),
+        is_verified: true,
+        phone: "+2345678901",
+        address: {
+            district: "District 2",
+            city_state: "Hanoi",
+            zip_code: "100000",
+            country: "Vietnam"
+        },
+        gender: "male",
+        date_of_birth: new Date("1985-08-20")
     }
 ];
