@@ -6,16 +6,14 @@
 2. Clone the repository
 3. Run `npm install` in both backend and frontend directories
 4. Create a `.env` file in the backend directory and add the following variables:
-    ```dotenv
-    PORT=3200
-    MONGO_URI=mongodb://localhost:27017/job_search
-    
-    JWT_SECRET=secret
-    JWT_EXPIRE=30d
-    
-    EMAIL_USER=jobsearchpdtt@gmail.com
-    EMAIL_PASS="eeyp prpy sguq ttzn"
-    ```
+ ```dotenv
+PORT=3200
+MONGO_URI=mongodb://localhost:27017/job_search
+JWT_SECRET=secret
+JWT_EXPIRE=30d
+EMAIL_USER=jobsearchpdtt@gmail.com
+EMAIL_PASS="eeyp prpy sguq ttzn"
+ ```
 5. Run `npm run dev` in the backend and frontend directories
 
 # Add mock data
@@ -26,4 +24,3 @@
 5. Mock data should be added to the database. You can check it by using MongoDB Compass or MongoDB shell
 
 You should add mock data whenever you introduced a new feature or fixed a bug to make sure that the application works correctly.
-
