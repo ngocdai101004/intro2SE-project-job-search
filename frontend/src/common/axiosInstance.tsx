@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    withCredentials: true, // Optional: Enable credentials for requests
+    withCredentials: true,
 });
 
 // Interceptors for requests

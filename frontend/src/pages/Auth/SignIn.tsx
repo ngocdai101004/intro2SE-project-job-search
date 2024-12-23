@@ -1,12 +1,12 @@
-import MyFooter from '../components/MyFooter';
-import MyHeader from '../components/MyHeader';
-import MyTextInput from '../components/MyTextInput';
+import MyFooter from '../../components/MyFooter.tsx';
+import MyHeader from '../../components/MyHeader.tsx';
+import MyTextInput from '../../components/MyTextInput.tsx';
 import {FormEvent, useState} from "react";
-import axiosInstance from "../common/axiosInstance.tsx";
+import axiosInstance from "../../common/axiosInstance.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
-import {MyToastContainer} from "../components/MyToastContainer.tsx";
+import {MyToastContainer} from "../../components/MyToastContainer.tsx";
 
 
 
@@ -67,7 +67,7 @@ function SignInForm() {
 function SignIn() {
     return (
         <div className="d-flex flex-column min-vh-100">
-            <MyHeader />
+            <MyHeader mydefaultActiveKey={''} />
             <div className="container flex-grow-1 d-flex align-items-center justify-content-center">
                 <div className="card shadow-lg" style={{ width: '100%', maxWidth: '400px' }}>
                     <div className="card-body p-4">
