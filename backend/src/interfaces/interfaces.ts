@@ -59,3 +59,9 @@ export interface IResetPasswordRequest extends Request {
     code: string;
   };
 }
+
+export interface IGetUserProfileRequest extends Request {
+  body: {
+    userID: string;
+  };
+}
