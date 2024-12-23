@@ -1,25 +1,25 @@
-import {FormEvent, useState} from 'react';
-import MyFooter from '../components/MyFooter';
-import MyHeader from '../components/MyHeader';
-import MyTextInput from '../components/MyTextInput';
-import {useNavigate, useParams} from 'react-router-dom';
+import { FormEvent, useState } from 'react';
+import MyFooter from '../../components/MyFooter.tsx';
+import MyHeader from '../../components/MyHeader.tsx';
+import MyTextInput from '../../components/MyTextInput.tsx';
+import { useNavigate } from 'react-router-dom';
 import {toast} from "react-toastify";
-import axiosInstance from "../common/axiosInstance.tsx";
-import {MyToastContainer} from "../components/MyToastContainer.tsx";
+import axiosInstance from "../../common/axiosInstance.tsx";
 import axios from "axios";
+import {MyToastContainer} from "../../components/MyToastContainer.tsx";
 
-function ForgotPasswordEmail() {
+function Verify() {
     const navigate = useNavigate();
-    const email = useParams().email;
-    const [password, setPassword] = useState('');
     const [code, setCode] = useState('');
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const toastId = toast.loading('Verifying code...');
+        const toastId = toast.loading('Verifying...');
+
         try {
-            await axiosInstance.post('/auth/reset_password', {email, code, password});
+            const response = await axiosInstance.post('/auth/verify_account', { code });
             navigate('/home');
+            console.log('Verify successfully:', response.data);
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
                 toast.update(toastId, {
@@ -30,38 +30,33 @@ function ForgotPasswordEmail() {
                 });
             } else {
                 toast.update(toastId, {
-                    render: 'Please try again.',
+                    render: 'Verify failed. Please try again.',
                     type: 'error',
                     isLoading: false,
                     autoClose: 3000,
                 });
+                console.log('Verify failed:', error);
             }
         }
     };
 
     return (
         <div className="d-flex flex-column min-vh-100">
-            <MyHeader/>
+            <MyHeader mydefaultActiveKey={''} />
             <div className="container flex-grow-1 d-flex align-items-center justify-content-center">
-                <div className="card shadow-lg" style={{width: '100%', maxWidth: '400px'}}>
+                <div className="card shadow-lg" style={{ width: '100%', maxWidth: '400px' }}>
                     <div className="card-body p-4">
-                        <h2 className="card-title text-center fw-bold mb-4">Forgot password</h2>
+                        <h2 className="card-title text-center fw-bold mb-4">Authenticate your email</h2>
 
-                        <small>
-                            We've sent a 6-digit verification code to
-                            <span className="fw-bold"> {email}</span>
-                            . Please enter the code below to verify your identity.
+                        <small className="text-muted">
+                            We've sent a 6-digit verification code to your email/phone. Please enter the code below to
+                            verify your identity.
                         </small>
-                        <form onSubmit={handleSubmit}>
 
+                        <form onSubmit={handleSubmit}>
                             <div className="mb-2">
                                 <MyTextInput label="Authentication code" type="number" id="number" placeholder="Code"
                                              value={code} setValue={setCode}/>
-                            </div>
-
-                            <div className="mb-2">
-                                <MyTextInput label="New password" type="password" id="password" placeholder="Password"
-                                             value={password} setValue={setPassword}/>
                             </div>
 
 
@@ -84,4 +79,4 @@ function ForgotPasswordEmail() {
 };
 
 
-export default ForgotPasswordEmail;
+export default Verify;

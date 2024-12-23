@@ -1,11 +1,11 @@
 import { FormEvent, useState } from "react";
-import MyFooter from "../components/MyFooter";
-import MyHeader from "../components/MyHeader";
-import MyTextInput from "../components/MyTextInput";
+import MyFooter from "../../components/MyFooter.tsx";
+import MyHeader from "../../components/MyHeader.tsx";
+import MyTextInput from "../../components/MyTextInput.tsx";
 import { useNavigate } from "react-router-dom";
-import { MyToastContainer } from "../components/MyToastContainer.tsx";
+import { MyToastContainer } from "../../components/MyToastContainer.tsx";
 import { toast } from "react-toastify";
-import axiosInstance from "../common/axiosInstance.tsx";
+import axiosInstance from "../../common/axiosInstance.tsx";
 import axios from "axios";
 
 function ForgotPassword() {

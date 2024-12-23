@@ -8,7 +8,7 @@ export const users = [
         _id: new ObjectId(),
         first_name: "Vo Anh",
         last_name: "Tuan",
-        email: "admin@email.com",
+        email: "voanhtuan2004@gmail.com",
         password: bcrypt.hashSync('123', 10),
         is_verified: true,
         verification_code: "123123",

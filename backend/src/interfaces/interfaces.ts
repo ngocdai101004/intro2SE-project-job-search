@@ -55,7 +55,7 @@ export interface IGetVerifyCodeRequest extends Request {
 export interface IResetPasswordRequest extends Request {
   body: {
     email: string;
-    new_password: string;
+    password: string;
     code: string;
   };
 }
