@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Nav, Row, Image } from "react-bootstrap";
+import axiosInstance from "../../../common/axiosInstance";
 
-const CompanyHeader = () => {
-  const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
+interface CompanyHeaderProps {
+  myState?: string;
+  setMyState?: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const CompanyHeader = ({ myState, setMyState }: CompanyHeaderProps) => {
+  const myActiveKey = myState || "/snapshot";
+  const setMyActiveKey = setMyState || (() => {});
+
+  const getinfo = async () => {
+    try {
+      const res = await axiosInstance.get("/company");
+      setCompanyName(res.data.companyName);
+    } catch (error) {
+      console.log(error);
+    }
+    return;
+  };
+
+  const [companyName, setCompanyName] = useState("");
+  useEffect(() => {
+    getinfo();
+  }, []);
+  // use realod
 
   return (
     <div className="bg-cyan py-3 pb-0">
@@ -22,7 +45,7 @@ const CompanyHeader = () => {
                 />
               </Col>
               <Col className="d-flex flex-column justify-content-center">
-                <h5 className="mb-1">DPTT Corporation</h5>
+                <h5 className="mb-1">{companyName || "Fusodoya Company"}</h5>
                 <div className="d-flex align-items-center mb-1">
                   <span className="me-2 text-primary fw-bold">4.0</span>
                   <div className="text-warning">
