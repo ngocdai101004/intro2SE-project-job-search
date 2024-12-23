@@ -13,6 +13,7 @@ import {
 
 require("dotenv").config();
 
+// Check if user is verified
 const checkUser = async (req: IVerifiedRequest, res: Response) => {
   if (req.body.isVerified) {
     res.status(200).json({ message: "User is verified" });
@@ -21,6 +22,7 @@ const checkUser = async (req: IVerifiedRequest, res: Response) => {
   }
 };
 
+// Login user
 const loginUser = async (req: ILoginRequest, res: Response) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -42,6 +44,7 @@ const loginUser = async (req: ILoginRequest, res: Response) => {
   }
 };
 
+// Logout user
 const logoutUser = (req: Request, res: Response): void => {
   try {
     res.clearCookie("jwt", {
@@ -56,6 +59,7 @@ const logoutUser = (req: Request, res: Response): void => {
   }
 };
 
+// Register user
 const registerUser = async (req: IRegisterRequest, res: Response) => {
   const { first_name, last_name, email, password } = req.body;
 
@@ -101,6 +105,7 @@ const registerUser = async (req: IRegisterRequest, res: Response) => {
   }
 };
 
+// Verify email
 const verifyEmail = async (req: IVerifyAccountRequest, res: Response) => {
   const { code } = req.body;
   if (!code) {
@@ -126,6 +131,7 @@ const verifyEmail = async (req: IVerifyAccountRequest, res: Response) => {
   }
 };
 
+// Get verification code
 const getVerifyCode = async (req: IGetVerifyCodeRequest, res: Response) => {
   const { email } = req.body;
   if (!email) {
@@ -147,6 +153,8 @@ const getVerifyCode = async (req: IGetVerifyCodeRequest, res: Response) => {
     res.status(400).json({ message: "User not found" });
   }
 };
+
+// Reset password
 const resetPassword = async (req: Request, res: Response) => {
   const { email, password, code } = req.body;
 
