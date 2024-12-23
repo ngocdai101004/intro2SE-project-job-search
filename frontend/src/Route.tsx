@@ -7,6 +7,7 @@ import ForgotPassword from "./pages/ForgotPassword.tsx";
 import ForgotPasswordEmail from "./pages/ForgotPasswordEmail.tsx";
 import Company from "./pages/Company/Company.tsx";
 import Home from "./pages/Home/Home.tsx";
+import CreateJobPost from "./pages/MyCompany/CreateJobPost/CreateJobPost.tsx";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/company",
     element: <Company />,
+  },
+  {
+    path: "/my-company/create-job-post",
+    element: <CreateJobPost />,
   },
   {
     path: "/home",
