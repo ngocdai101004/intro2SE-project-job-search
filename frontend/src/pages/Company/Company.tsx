@@ -1,9 +1,13 @@
 import React from "react";
 import MyHeader from "../../components/MyHeader";
-import Snapshot from "./Body/SnapSHot";
+import Snapshot from "./Body/SnapShot";
 import CompanyHeader from "./Header/CompanyHeader";
 import Jobs from "./Body/Jobs";
 import Reviews from "./Body/Reviews";
+import axiosInstance from "../../common/axiosInstance";
+import { useEffect } from "react";
+import { useState } from "react";
+import ICompany from "../../interfaces/company"
 
 const QA = () => (
   <div className="content-section bg-lightyellow">Q&A Content</div>
@@ -11,11 +15,26 @@ const QA = () => (
 
 function Company() {
   const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
+  const companyID = "676a2f93fc0132097a2a71ea";
+
+  const [companyData, setCompanyData] = useState<ICompany>({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get("/company/" + companyID);
+        setCompanyData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching company data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+  console.log("Company data State:", companyData);
 
   const renderContent = () => {
     switch (myActiveKey) {
       case "/snapshot":
-        return <Snapshot />;
+        return <Snapshot companyData={companyData} />;
       case "/jobs":
         return <Jobs />;
       case "/reviews":
@@ -23,7 +42,7 @@ function Company() {
       case "/qa":
         return <QA />;
       default:
-        return <Snapshot />;
+        return <Snapshot companyData={companyData} />;
     }
   };
 
@@ -38,7 +57,7 @@ function Company() {
       }}
     >
       <MyHeader mydefaultActiveKey="/company" />
-      <CompanyHeader myState={myActiveKey} setMyState={setMyActiveKey} />
+      <CompanyHeader myState={myActiveKey} setMyState={setMyActiveKey} companyData={companyData} />
       <div className="">{renderContent()}</div>
     </div>
   );
