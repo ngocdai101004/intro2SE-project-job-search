@@ -41,7 +41,7 @@ function Company() {
     >
       <MyHeader mydefaultActiveKey="/company" />
       <CompanyHeader myState={myActiveKey} setMyState={setMyActiveKey} />
-      {renderContent()}
+      <div className="">{renderContent()}</div>
     </div>
   );
 }

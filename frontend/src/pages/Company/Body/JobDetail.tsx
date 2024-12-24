@@ -1,4 +1,4 @@
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Container, Col, Row } from "react-bootstrap";
 
 interface iJobDescription {
   id: number;
@@ -7,6 +7,10 @@ interface iJobDescription {
   date: string;
   description: string;
   requirements: string[];
+  employmentType: string; // e.g., Full-time, Part-time
+  workMode: string; // e.g., On-site, Remote
+  applicantCount: number; // Số lượng ứng viên
+  level: string; // e.g., Internship, Entry-level, Mid-level, Senior-level
 }
 
 interface headerProps {
@@ -15,24 +19,61 @@ interface headerProps {
 
 const JobDetail = ({ job }: headerProps) => {
   return (
-    <div style={{ overflow: "scroll", scrollbarWidth: "none", height: "60vh" }}>
-      <Card className="my-4 mt-0 mb-20px">
+    <div
+      style={{
+        overflow: "scroll",
+        scrollbarWidth: "none",
+        height: "52vh",
+        border: "1px solid lightgray",
+        borderRadius: "12px",
+      }}
+    >
+      <Card className="my-4 mt-0 mb-20px" style={{ border: "none" }}>
         <Card.Body>
-          <Card.Title style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+          <Card.Title
+            style={{
+              fontSize: "1.25rem",
+              fontWeight: "bold",
+              marginBottom: 20,
+            }}
+          >
             {job.title}
           </Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">
+          {/* <Card.Subtitle className="mb-2 text-muted">
             {job.location}
-          </Card.Subtitle>
-          <Card.Text className="text-muted" style={{ fontSize: "0.9rem" }}>
-            {job.date} | Over {job.requirements.length} requirements
-          </Card.Text>
-          <Button
-            variant="primary"
-            style={{ marginBottom: "1rem", fontSize: "0.9rem" }}
-          >
-            Apply Now
-          </Button>
+          </Card.Subtitle> */}
+          <Container className="mb-0" style={{ fontSize: "0.9rem" }}>
+            <Row className="mb-3">
+              <Col md="auto" className="me-3">
+                {job.location}
+              </Col>
+              <Col md="auto" className="me-3">
+                {job.date}
+              </Col>
+              <Col md="auto" className="me-3">
+                Over {job.applicantCount} applicants
+              </Col>
+            </Row>
+            <Row>
+              <Col md="auto" className="me-3">
+                {job.workMode}{" "}
+              </Col>
+              <Col md="auto" className="me-3">
+                {job.employmentType}{" "}
+              </Col>
+              <Col md="auto" className="me-3">
+                {job.level}{" "}
+              </Col>
+              <Col md="auto" className="ms-auto">
+                <Button variant="primary" style={{ fontSize: "0.9rem" }}>
+                  Apply Now
+                </Button>
+              </Col>
+            </Row>
+          </Container>
+
+          <hr style={{ borderTop: "1px solid gray", margin: "1rem 0" }} />
+
           <Card.Text style={{ fontSize: "0.9rem" }}>
             <strong>About the job</strong>
           </Card.Text>

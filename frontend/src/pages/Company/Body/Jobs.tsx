@@ -10,6 +10,10 @@ interface iJobDescription {
   date: string;
   description: string;
   requirements: string[];
+  employmentType: string; // e.g., Full-time, Part-time
+  workMode: string; // e.g., On-site, Remote
+  applicantCount: number; // Số lượng ứng viên
+  level: string; // e.g., Internship, Entry-level, Mid-level, Senior-level
 }
 
 const jobInstance = {
@@ -24,6 +28,10 @@ const jobInstance = {
     "Experience with Python and machine learning libraries",
     "Experience with cloud computing platforms",
   ],
+  employmentType: "Full-time", // Loại hình việc làm
+  workMode: "On-site", // Hình thức làm việc
+  applicantCount: 150, // Số lượng ứng viên
+  level: "Internship", // Cấp độ công việc
 };
 
 const Jobs = () => {
@@ -60,8 +68,8 @@ const Jobs = () => {
       </Row>
       <Row>
         <Col
-          md={4}
-          style={{ overflow: "scroll", scrollbarWidth: "none", height: "60vh" }}
+          xs={4}
+          style={{ overflow: "scroll", scrollbarWidth: "none", height: "52vh" }}
         >
           <ListGroup>
             {jobs.map((job) => (
@@ -94,7 +102,7 @@ const Jobs = () => {
           </ListGroup>
         </Col>
 
-        <Col md={8}>
+        <Col xs={8}>
           {selectedJob ? (
             <JobDetail job={selectedJob} />
           ) : (
