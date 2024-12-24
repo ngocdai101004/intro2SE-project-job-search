@@ -1,8 +1,16 @@
 import React from "react";
 import { Card, Col, Nav, Row, Image } from "react-bootstrap";
+import ICompany from "../../../interfaces/company";
 
-const CompanyHeader = () => {
-  const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
+interface CompanyHeaderProps {
+  myState?: string;
+  setMyState?: React.Dispatch<React.SetStateAction<string>>;
+  companyData: ICompany;
+}
+
+const CompanyHeader = ({ myState, setMyState, companyData }: CompanyHeaderProps) => {
+  const myActiveKey = myState || "/snapshot";
+  const setMyActiveKey = setMyState || (() => {});
 
   return (
     <div className="bg-cyan py-3 pb-0">
@@ -22,7 +30,7 @@ const CompanyHeader = () => {
                 />
               </Col>
               <Col className="d-flex flex-column justify-content-center">
-                <h5 className="mb-1">DPTT Corporation</h5>
+                <h5 className="mb-1">{companyData.company_name || "Fusodoya Company"}</h5>
                 <div className="d-flex align-items-center mb-1">
                   <span className="me-2 text-primary fw-bold">4.0</span>
                   <div className="text-warning">
@@ -54,7 +62,7 @@ const CompanyHeader = () => {
             </Row>
             <Row>
               <Col xs="auto" className="d-flex justify-content-center">
-                <small className="text-muted">217K followers</small>
+                <small className="text-muted"> {companyData.followers?.length} followers</small>
               </Col>
               <Col xs="auto" className="d-flex justify-content-center">
                 <small className="text-muted">1K-5K employees </small>

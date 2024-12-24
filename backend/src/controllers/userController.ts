@@ -8,15 +8,15 @@ const getUser = async (req: Request, res: Response) => {
     const { userID } = req.body;
     const user = await User.findById(userID).select("-password");
     if (user) {
-      res.status(200).json({ user });
+      res.status(200).json({ message: "User found", data: { user } });
     } else {
-      res.status(400).json({ message: "User not found" });
+      res.status(400).json({ message: "User not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -31,15 +31,17 @@ const updateUser = async (req: Request, res: Response) => {
       { new: true }
     );
     if (user) {
-      res.status(200).json({ message: "User updated successfully", user });
+      res
+        .status(200)
+        .json({ message: "User updated successfully", data: { user } });
     } else {
-      res.status(400).json({ message: "User not found" });
+      res.status(400).json({ message: "User not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -53,16 +55,16 @@ const deleteUser = async (req: Request, res: Response) => {
       await UserInfo.findOneAndDelete({ user_id: userID });
       res.status(200).json({
         message: "User and corresponding user info deleted successfully",
-        user,
+        data: { user },
       });
     } else {
-      res.status(400).json({ message: "User not found" });
+      res.status(400).json({ message: "User not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -78,38 +80,15 @@ const createUserInfo = async (req: Request, res: Response) => {
     await userInfo.save();
     res
       .status(201)
-      .json({ message: "User info created successfully", userInfo });
+      .json({ message: "User info created successfully", data: { userInfo } });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
-  // Update user
-  const updateUser = async (req: Request, res: Response) => {
-    try {
-      const { userID, ...updateData } = req.body;
-      const user = await User.findByIdAndUpdate(
-        userID,
-        { $set: updateData },
-        { new: true }
-      );
-      if (user) {
-        res.status(200).json({ message: "User updated successfully", user });
-      } else {
-        res.status(400).json({ message: "User not found" });
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        res.status(500).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: "An unknown error occurred" });
-      }
-    }
-  };
 };
-
 // Get user info
 const getUserInfo = async (req: Request, res: Response) => {
   try {
@@ -118,15 +97,15 @@ const getUserInfo = async (req: Request, res: Response) => {
       "user_id"
     );
     if (userInfo) {
-      res.status(200).json({ userInfo });
+      res.status(200).json({ message: "User info found", data: { userInfo } });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -135,24 +114,24 @@ const getUserInfo = async (req: Request, res: Response) => {
 const updateUserInfo = async (req: Request, res: Response) => {
   try {
     const { userID, ...updateData } = req.body;
-    console.log(updateData);
     const userInfo = await UserInfo.findOneAndUpdate(
       { user_id: userID },
       { $set: updateData },
       { new: true }
     );
     if (userInfo) {
-      res
-        .status(200)
-        .json({ message: "User info updated successfully", userInfo });
+      res.status(200).json({
+        message: "User info updated successfully",
+        data: { userInfo },
+      });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -163,17 +142,18 @@ const deleteUserInfo = async (req: Request, res: Response) => {
     const { userID } = req.body;
     const userInfo = await UserInfo.findOneAndDelete({ user_id: userID });
     if (userInfo) {
-      res
-        .status(200)
-        .json({ message: "User info deleted successfully", userInfo });
+      res.status(200).json({
+        message: "User info deleted successfully",
+        data: { userInfo },
+      });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -188,17 +168,18 @@ const updateShortBio = async (req: Request, res: Response) => {
       { new: true }
     );
     if (userInfo) {
-      res
-        .status(200)
-        .json({ message: "Short bio updated successfully", userInfo });
+      res.status(200).json({
+        message: "Short bio updated successfully",
+        data: { userInfo },
+      });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -213,17 +194,18 @@ const updateProfilePicture = async (req: Request, res: Response) => {
       { new: true }
     );
     if (userInfo) {
-      res
-        .status(200)
-        .json({ message: "Profile picture updated successfully", userInfo });
+      res.status(200).json({
+        message: "Profile picture updated successfully",
+        data: { userInfo },
+      });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -240,15 +222,15 @@ const updateSummary = async (req: Request, res: Response) => {
     if (userInfo) {
       res
         .status(200)
-        .json({ message: "Summary updated successfully", userInfo });
+        .json({ message: "Summary updated successfully", data: { userInfo } });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -263,17 +245,18 @@ const updateReadyToWork = async (req: Request, res: Response) => {
       { new: true }
     );
     if (userInfo) {
-      res
-        .status(200)
-        .json({ message: "Ready to work updated successfully", userInfo });
+      res.status(200).json({
+        message: "Ready to work updated successfully",
+        data: { userInfo },
+      });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -286,15 +269,17 @@ const addReview = async (req: Request, res: Response) => {
     if (userInfo) {
       userInfo.review.push(reviewData);
       await userInfo.save();
-      res.status(200).json({ message: "Review added successfully", userInfo });
+      res
+        .status(200)
+        .json({ message: "Review added successfully", data: { userInfo } });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -313,18 +298,18 @@ const editReview = async (req: Request, res: Response) => {
         await userInfo.save();
         res
           .status(200)
-          .json({ message: "Review edited successfully", userInfo });
+          .json({ message: "Review edited successfully", data: { userInfo } });
       } else {
-        res.status(400).json({ message: "Review not found" });
+        res.status(400).json({ message: "Review not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -343,18 +328,18 @@ const deleteReview = async (req: Request, res: Response) => {
         await userInfo.save();
         res
           .status(200)
-          .json({ message: "Review deleted successfully", userInfo });
+          .json({ message: "Review deleted successfully", data: { userInfo } });
       } else {
-        res.status(400).json({ message: "Review not found" });
+        res.status(400).json({ message: "Review not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -369,15 +354,15 @@ const addEducation = async (req: Request, res: Response) => {
       await userInfo.save();
       res
         .status(200)
-        .json({ message: "Education added successfully", userInfo });
+        .json({ message: "Education added successfully", data: { userInfo } });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -394,20 +379,21 @@ const editEducation = async (req: Request, res: Response) => {
       if (educationIndex !== -1) {
         userInfo.education[educationIndex] = educationData;
         await userInfo.save();
-        res
-          .status(200)
-          .json({ message: "Education edited successfully", userInfo });
+        res.status(200).json({
+          message: "Education edited successfully",
+          data: { userInfo },
+        });
       } else {
-        res.status(400).json({ message: "Education not found" });
+        res.status(400).json({ message: "Education not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -424,23 +410,25 @@ const deleteEducation = async (req: Request, res: Response) => {
       if (educationIndex !== -1) {
         userInfo.education.splice(educationIndex, 1);
         await userInfo.save();
-        res
-          .status(200)
-          .json({ message: "Education deleted successfully", userInfo });
+        res.status(200).json({
+          message: "Education deleted successfully",
+          data: { userInfo },
+        });
       } else {
-        res.status(400).json({ message: "Education not found" });
+        res.status(400).json({ message: "Education not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
+
 // Update user info: Add experience
 const addExperience = async (req: Request, res: Response) => {
   try {
@@ -451,18 +439,19 @@ const addExperience = async (req: Request, res: Response) => {
       await userInfo.save();
       res
         .status(200)
-        .json({ message: "Experience added successfully", userInfo });
+        .json({ message: "Experience added successfully", data: { userInfo } });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
+
 // Update user info: Edit experience
 const editExperience = async (req: Request, res: Response) => {
   try {
@@ -475,23 +464,25 @@ const editExperience = async (req: Request, res: Response) => {
       if (experienceIndex !== -1) {
         userInfo.experience[experienceIndex] = experienceData;
         await userInfo.save();
-        res
-          .status(200)
-          .json({ message: "Experience edited successfully", userInfo });
+        res.status(200).json({
+          message: "Experience edited successfully",
+          data: { userInfo },
+        });
       } else {
-        res.status(400).json({ message: "Experience not found" });
+        res.status(400).json({ message: "Experience not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
+
 // Update user info: Delete experience
 const deleteExperience = async (req: Request, res: Response) => {
   try {
@@ -504,24 +495,24 @@ const deleteExperience = async (req: Request, res: Response) => {
       if (experienceIndex !== -1) {
         userInfo.experience.splice(experienceIndex, 1);
         await userInfo.save();
-        res
-          .status(200)
-          .json({ message: "Experience deleted successfully", userInfo });
+        res.status(200).json({
+          message: "Experience deleted successfully",
+          data: { userInfo },
+        });
       } else {
-        res.status(400).json({ message: "Experience not found" });
+        res.status(400).json({ message: "Experience not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
-
 // Update user info: Add skill
 const addSkill = async (req: Request, res: Response) => {
   try {
@@ -530,25 +521,26 @@ const addSkill = async (req: Request, res: Response) => {
     if (userInfo) {
       userInfo.skills.push(skill);
       await userInfo.save();
-      res.status(200).json({ message: "Skill added successfully", userInfo });
+      res
+        .status(200)
+        .json({ message: "Skill added successfully", data: { userInfo } });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
+
 // Update user info: Delete skill
 const deleteSkill = async (req: Request, res: Response) => {
   try {
     const { userID, skill } = req.body;
-    const userInfo = await UserInfo.findOne({
-      user_id: userID,
-    });
+    const userInfo = await UserInfo.findOne({ user_id: userID });
     if (userInfo) {
       const skillIndex = userInfo.skills.indexOf(skill);
       if (skillIndex !== -1) {
@@ -556,21 +548,22 @@ const deleteSkill = async (req: Request, res: Response) => {
         await userInfo.save();
         res
           .status(200)
-          .json({ message: "Skill deleted successfully", userInfo });
+          .json({ message: "Skill deleted successfully", data: { userInfo } });
       } else {
-        res.status(400).json({ message: "Skill not found" });
+        res.status(400).json({ message: "Skill not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
+
 // Update user info: Add certification
 const addCertification = async (req: Request, res: Response) => {
   try {
@@ -579,17 +572,18 @@ const addCertification = async (req: Request, res: Response) => {
     if (userInfo) {
       userInfo.certifications.push(certification);
       await userInfo.save();
-      res
-        .status(200)
-        .json({ message: "Certification added successfully", userInfo });
+      res.status(200).json({
+        message: "Certification added successfully",
+        data: { userInfo },
+      });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -598,28 +592,27 @@ const addCertification = async (req: Request, res: Response) => {
 const deleteCertification = async (req: Request, res: Response) => {
   try {
     const { userID, certification } = req.body;
-    const userInfo = await UserInfo.findOne({
-      user_id: userID,
-    });
+    const userInfo = await UserInfo.findOne({ user_id: userID });
     if (userInfo) {
       const certificationIndex = userInfo.certifications.indexOf(certification);
       if (certificationIndex !== -1) {
         userInfo.certifications.splice(certificationIndex, 1);
         await userInfo.save();
-        res
-          .status(200)
-          .json({ message: "Certification deleted successfully", userInfo });
+        res.status(200).json({
+          message: "Certification deleted successfully",
+          data: { userInfo },
+        });
       } else {
-        res.status(400).json({ message: "Certification not found" });
+        res.status(400).json({ message: "Certification not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -632,17 +625,18 @@ const addJobPreference = async (req: Request, res: Response) => {
     if (userInfo) {
       userInfo.job_preferences.push(jobPreference);
       await userInfo.save();
-      res
-        .status(200)
-        .json({ message: "Job preference added successfully", userInfo });
+      res.status(200).json({
+        message: "Job preference added successfully",
+        data: { userInfo },
+      });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -654,25 +648,26 @@ const editJobPreference = async (req: Request, res: Response) => {
     const userInfo = await UserInfo.findOne({ user_id: userID });
     if (userInfo) {
       const jobPreferenceIndex = userInfo.job_preferences.findIndex(
-        (jobPreference) => jobPreference._id === jobPreference._id
+        (jp) => jp._id === jobPreference._id
       );
       if (jobPreferenceIndex !== -1) {
         userInfo.job_preferences[jobPreferenceIndex] = jobPreference;
         await userInfo.save();
-        res
-          .status(200)
-          .json({ message: "Job preference edited successfully", userInfo });
+        res.status(200).json({
+          message: "Job preference edited successfully",
+          data: { userInfo },
+        });
       } else {
-        res.status(400).json({ message: "Job preference not found" });
+        res.status(400).json({ message: "Job preference not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -684,25 +679,26 @@ const deleteJobPreference = async (req: Request, res: Response) => {
     const userInfo = await UserInfo.findOne({ user_id: userID });
     if (userInfo) {
       const jobPreferenceIndex = userInfo.job_preferences.findIndex(
-        (jobPreference) => jobPreference._id === jobPreferenceID
+        (jp) => jp._id === jobPreferenceID
       );
       if (jobPreferenceIndex !== -1) {
         userInfo.job_preferences.splice(jobPreferenceIndex, 1);
         await userInfo.save();
-        res
-          .status(200)
-          .json({ message: "Job preference deleted successfully", userInfo });
+        res.status(200).json({
+          message: "Job preference deleted successfully",
+          data: { userInfo },
+        });
       } else {
-        res.status(400).json({ message: "Job preference not found" });
+        res.status(400).json({ message: "Job preference not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -715,18 +711,21 @@ const addAward = async (req: Request, res: Response) => {
     if (userInfo) {
       userInfo.awards.push(award);
       await userInfo.save();
-      res.status(200).json({ message: "Award added successfully", userInfo });
+      res
+        .status(200)
+        .json({ message: "Award added successfully", data: { userInfo } });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
+
 // Update user info: Delete award
 const deleteAward = async (req: Request, res: Response) => {
   try {
@@ -739,18 +738,18 @@ const deleteAward = async (req: Request, res: Response) => {
         await userInfo.save();
         res
           .status(200)
-          .json({ message: "Award deleted successfully", userInfo });
+          .json({ message: "Award deleted successfully", data: { userInfo } });
       } else {
-        res.status(400).json({ message: "Award not found" });
+        res.status(400).json({ message: "Award not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -765,15 +764,15 @@ const addLanguage = async (req: Request, res: Response) => {
       await userInfo.save();
       res
         .status(200)
-        .json({ message: "Language added successfully", userInfo });
+        .json({ message: "Language added successfully", data: { userInfo } });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -788,20 +787,21 @@ const deleteLanguage = async (req: Request, res: Response) => {
       if (languageIndex !== -1) {
         userInfo.languages.splice(languageIndex, 1);
         await userInfo.save();
-        res
-          .status(200)
-          .json({ message: "Language deleted successfully", userInfo });
+        res.status(200).json({
+          message: "Language deleted successfully",
+          data: { userInfo },
+        });
       } else {
-        res.status(400).json({ message: "Language not found" });
+        res.status(400).json({ message: "Language not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -810,21 +810,21 @@ const deleteLanguage = async (req: Request, res: Response) => {
 const addLink = async (req: Request, res: Response) => {
   try {
     const { userID, link } = req.body;
-    const userInfo = await UserInfo.findOne({
-      user_id: userID,
-    });
+    const userInfo = await UserInfo.findOne({ user_id: userID });
     if (userInfo) {
       userInfo.link.push(link);
       await userInfo.save();
-      res.status(200).json({ message: "Link added successfully", userInfo });
+      res
+        .status(200)
+        .json({ message: "Link added successfully", data: { userInfo } });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -833,9 +833,7 @@ const addLink = async (req: Request, res: Response) => {
 const deleteLink = async (req: Request, res: Response) => {
   try {
     const { userID, link } = req.body;
-    const userInfo = await UserInfo.findOne({
-      user_id: userID,
-    });
+    const userInfo = await UserInfo.findOne({ user_id: userID });
     if (userInfo) {
       const linkIndex = userInfo.link.indexOf(link);
       if (linkIndex !== -1) {
@@ -843,18 +841,18 @@ const deleteLink = async (req: Request, res: Response) => {
         await userInfo.save();
         res
           .status(200)
-          .json({ message: "Link deleted successfully", userInfo });
+          .json({ message: "Link deleted successfully", data: { userInfo } });
       } else {
-        res.status(400).json({ message: "Link not found" });
+        res.status(400).json({ message: "Link not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -863,23 +861,22 @@ const deleteLink = async (req: Request, res: Response) => {
 const addPublication = async (req: Request, res: Response) => {
   try {
     const { userID, publication } = req.body;
-    const userInfo = await UserInfo.findOne({
-      user_id: userID,
-    });
+    const userInfo = await UserInfo.findOne({ user_id: userID });
     if (userInfo) {
       userInfo.publications.push(publication);
       await userInfo.save();
-      res
-        .status(200)
-        .json({ message: "Publication added successfully", userInfo });
+      res.status(200).json({
+        message: "Publication added successfully",
+        data: { userInfo },
+      });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -888,28 +885,27 @@ const addPublication = async (req: Request, res: Response) => {
 const deletePublication = async (req: Request, res: Response) => {
   try {
     const { userID, publication } = req.body;
-    const userInfo = await UserInfo.findOne({
-      user_id: userID,
-    });
+    const userInfo = await UserInfo.findOne({ user_id: userID });
     if (userInfo) {
       const publicationIndex = userInfo.publications.indexOf(publication);
       if (publicationIndex !== -1) {
         userInfo.publications.splice(publicationIndex, 1);
         await userInfo.save();
-        res
-          .status(200)
-          .json({ message: "Publication deleted successfully", userInfo });
+        res.status(200).json({
+          message: "Publication deleted successfully",
+          data: { userInfo },
+        });
       } else {
-        res.status(400).json({ message: "Publication not found" });
+        res.status(400).json({ message: "Publication not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -918,23 +914,22 @@ const deletePublication = async (req: Request, res: Response) => {
 const addQualification = async (req: Request, res: Response) => {
   try {
     const { userID, qualification } = req.body;
-    const userInfo = await UserInfo.findOne({
-      user_id: userID,
-    });
+    const userInfo = await UserInfo.findOne({ user_id: userID });
     if (userInfo) {
       userInfo.qualifications.push(qualification);
       await userInfo.save();
-      res
-        .status(200)
-        .json({ message: "Qualification added successfully", userInfo });
+      res.status(200).json({
+        message: "Qualification added successfully",
+        data: { userInfo },
+      });
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };
@@ -943,28 +938,27 @@ const addQualification = async (req: Request, res: Response) => {
 const deleteQualification = async (req: Request, res: Response) => {
   try {
     const { userID, qualification } = req.body;
-    const userInfo = await UserInfo.findOne({
-      user_id: userID,
-    });
+    const userInfo = await UserInfo.findOne({ user_id: userID });
     if (userInfo) {
       const qualificationIndex = userInfo.qualifications.indexOf(qualification);
       if (qualificationIndex !== -1) {
         userInfo.qualifications.splice(qualificationIndex, 1);
         await userInfo.save();
-        res
-          .status(200)
-          .json({ message: "Qualification deleted successfully", userInfo });
+        res.status(200).json({
+          message: "Qualification deleted successfully",
+          data: { userInfo },
+        });
       } else {
-        res.status(400).json({ message: "Qualification not found" });
+        res.status(400).json({ message: "Qualification not found", data: {} });
       }
     } else {
-      res.status(400).json({ message: "User info not found" });
+      res.status(400).json({ message: "User info not found", data: {} });
     }
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message, data: {} });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
     }
   }
 };

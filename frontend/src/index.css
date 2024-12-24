@@ -1,6 +1,7 @@
 :root {
   --bs-secondary: #fc7676 !important; /* Thay mã màu bằng màu bạn muốn */
   --bs-cyan: #e7f7ff !important; /* Thay mã màu bằng màu bạn muốn */
+  --light-gray: #6c757d !important;
 }
 
 .bg-cyan {

@@ -13,9 +13,18 @@ export const companies = [
       zip_code: "550000",
       country: "Vietnam",
     },
-    description: "Leading tech company in Vietnam.",
+    description: {
+      company_size: [200, 300],
+      industry: "Technology",
+      headquarters: "Da Nang, Vietnam",
+      links: ["https://techcorp.vn"],
+      founded: new Date("2010-01-01"),
+      specialities: ["Software Development", "AI", "Cloud Computing"],
+    },
     short_description: "Innovative tech solutions.",
     number_of_employees: 200,
+    number_of_followers: 1,
+    legal_document_url: "https://techcorp.vn/legal",
     reviews: [
       {
         user_id: users[1]._id,
