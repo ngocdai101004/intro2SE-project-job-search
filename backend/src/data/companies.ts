@@ -14,7 +14,7 @@ export const companies = [
       country: "Vietnam",
     },
     description: {
-      company_size: [200],
+      company_size: [200, 300],
       industry: "Technology",
       headquarters: "Da Nang, Vietnam",
       links: ["https://techcorp.vn"],
