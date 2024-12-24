@@ -23,12 +23,15 @@ const companySchema = new mongoose.Schema(
     address: {
       district: {
         type: String,
+        default: "",
       },
       city_state: {
         type: String,
+        default: "",
       },
       zip_code: {
         type: String,
+        default: "",
       },
       country: {
         type: String,
@@ -72,6 +75,13 @@ const companySchema = new mongoose.Schema(
         review: {
           type: String,
         },
+      },
+    ],
+
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
   },
