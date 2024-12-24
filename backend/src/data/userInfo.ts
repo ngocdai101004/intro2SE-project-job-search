@@ -72,5 +72,6 @@ export const userInfo = [
       "Strong background in cloud technologies and DevOps practices, with certifications in AWS and Kubernetes. " +
       "Excellent problem-solving abilities and a passion for continuous learning and improvement. " +
       "Looking for opportunities to leverage my skills in a dynamic and innovative environment.",
+    following: [companies[0]._id],
   },
 ];

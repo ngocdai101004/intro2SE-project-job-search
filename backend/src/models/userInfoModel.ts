@@ -27,6 +27,13 @@ const userInfoSchema = new mongoose.Schema(
       },
     ],
 
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+      },
+    ],
+
     education: [
       {
         education_level: {

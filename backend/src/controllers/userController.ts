@@ -135,6 +135,7 @@ const getUserInfo = async (req: Request, res: Response) => {
 const updateUserInfo = async (req: Request, res: Response) => {
   try {
     const { userID, ...updateData } = req.body;
+    console.log(updateData);
     const userInfo = await UserInfo.findOneAndUpdate(
       { user_id: userID },
       { $set: updateData },
