@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
+import { useNavigate } from "react-router-dom";
 
 const CreateJobPost: React.FC = () => {
+  const navigate = useNavigate();
+
   const [selectedOption, setSelectedOption] = useState<string>("new");
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
 
   return (
     <MainLayout>
@@ -22,6 +29,7 @@ const CreateJobPost: React.FC = () => {
               >
                 <header className="header mb-4">
                   <h1>Create a job post</h1>
+                  <hr /> {/* Đường kẻ ngang */}
                 </header>
 
                 <Form className="form-section">
@@ -76,7 +84,14 @@ const CreateJobPost: React.FC = () => {
                   {/* Nút tiếp tục */}
                   <Form.Group as={Row} className="mt-4">
                     <Col sm={12} className="d-flex justify-content-end">
-                      <Button className="continue-btn">Continue →</Button>
+                      <Button
+                        className="continue-btn"
+                        onClick={() =>
+                          handleNavigation("/my-company/add-job-basics")
+                        }
+                      >
+                        Continue →
+                      </Button>
                     </Col>
                   </Form.Group>
                 </Form>
