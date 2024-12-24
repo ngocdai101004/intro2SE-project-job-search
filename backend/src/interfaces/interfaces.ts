@@ -1,4 +1,5 @@
-import { Request } from "express";
+import exp from "constants";
+import e, { Request } from "express";
 
 export interface IUser {
   userID: string;
@@ -57,5 +58,11 @@ export interface IResetPasswordRequest extends Request {
     email: string;
     password: string;
     code: string;
+  };
+}
+
+export interface IGetUserProfileRequest extends Request {
+  body: {
+    userID: string;
   };
 }

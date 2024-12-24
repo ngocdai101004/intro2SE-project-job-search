@@ -29,19 +29,24 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
+      default: "",
     },
     address: {
       district: {
         type: String,
+        default: "",
       },
       city_state: {
         type: String,
+        default: "",
       },
       zip_code: {
         type: String,
+        default: "",
       },
       country: {
         type: String,
+        default: "",
       },
     },
     gender: {
@@ -50,6 +55,7 @@ const userSchema = new mongoose.Schema(
     },
     date_of_birth: {
       type: Date,
+      default: new Date("1990-01-01"),
     },
   },
   {

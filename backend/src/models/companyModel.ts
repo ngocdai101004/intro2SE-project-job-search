@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { companies } from "../data/companies";
 
 const companySchema = new mongoose.Schema(
   {
@@ -23,12 +24,15 @@ const companySchema = new mongoose.Schema(
     address: {
       district: {
         type: String,
+        default: "",
       },
       city_state: {
         type: String,
+        default: "",
       },
       zip_code: {
         type: String,
+        default: "",
       },
       country: {
         type: String,
@@ -36,8 +40,28 @@ const companySchema = new mongoose.Schema(
     },
 
     description: {
-      type: String,
-      required: true,
+      company_size: {
+        type: [Number],
+        required: true,
+      },
+      industry: {
+        type: String,
+        required: true,
+      },
+      headquarters: {
+        type: String,
+        required: true,
+      },
+      links: {
+        type: [String],
+      },
+      founded: {
+        type: Date,
+        required: true,
+      },
+      specialities: {
+        type: [String],
+      },
     },
 
     short_description: {
@@ -72,6 +96,13 @@ const companySchema = new mongoose.Schema(
         review: {
           type: String,
         },
+      },
+    ],
+
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
   },

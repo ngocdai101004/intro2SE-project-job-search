@@ -27,6 +27,13 @@ const userInfoSchema = new mongoose.Schema(
       },
     ],
 
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+      },
+    ],
+
     education: [
       {
         education_level: {
@@ -125,6 +132,33 @@ const userInfoSchema = new mongoose.Schema(
         description: String,
       },
     ],
+
+    qualifications: [
+      {
+        title: {
+          type: String,
+          required: true,
+        },
+        description: String,
+      },
+    ],
+
+    short_bio: {
+      type: String,
+      required: true,
+    },
+
+    profile_picture: {
+      type: String,
+    },
+
+    resume: {
+      type: [String],
+    },
+
+    summary: {
+      type: String,
+    },
   },
   {
     timestamps: true,
