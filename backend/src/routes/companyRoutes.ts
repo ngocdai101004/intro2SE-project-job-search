@@ -3,6 +3,7 @@ import { verifyUser } from "../middlewares/verifyUser";
 import {
   createCompany,
   updateCompany,
+  getAllCompanies,
   getCompany,
   deleteCompany,
   followCompany,
@@ -15,6 +16,11 @@ import {
 const router = Router();
 
 router.post("/", verifyUser, createCompany);
+
+router.get("/", (req, res, next) => {
+  getAllCompanies(req, res).catch(next);
+});
+
 router.put("/:companyID", verifyUser, (req, res, next) => {
   updateCompany(req, res).catch(next);
 });

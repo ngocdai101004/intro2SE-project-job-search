@@ -15,6 +15,19 @@ export const createCompany = async (req: Request, res: Response) => {
   }
 };
 
+// Get all companies
+export const getAllCompanies = async (req: Request, res: Response) => {
+  try {
+    const companies = await Company.find();
+    res.status(200).json({
+      message: "Companies retrieved successfully",
+      data: companies,
+    });
+  } catch (error) {
+    res.status(400).json({ message: (error as any).message, data: {} });
+  }
+};
+
 // Update a company
 export const updateCompany = async (req: Request, res: Response) => {
   try {
@@ -239,6 +252,7 @@ export const getCompanyReviews = async (req: Request, res: Response) => {
 
 export default {
   createCompany,
+  getAllCompanies,
   updateCompany,
   getCompany,
   deleteCompany,
