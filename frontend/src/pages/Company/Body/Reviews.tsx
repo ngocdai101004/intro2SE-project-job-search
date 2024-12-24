@@ -34,7 +34,7 @@ const jobInstance = {
   level: "Internship", // Cấp độ công việc
 };
 
-const Jobs = () => {
+const Reviews = () => {
   const [jobs, setJobs] = useState(
     Array(10)
       .fill(jobInstance)
@@ -68,7 +68,7 @@ const Jobs = () => {
       </Row>
       <Row>
         <Col
-          xs={selectedJob ? 4 : 12}
+          xs={7}
           style={{ overflow: "scroll", scrollbarWidth: "none", height: "52vh" }}
         >
           <ListGroup>
@@ -102,7 +102,7 @@ const Jobs = () => {
           </ListGroup>
         </Col>
 
-        <Col xs={selectedJob ? 8 : 0}>
+        <Col xs={5}>
           {selectedJob ? <JobDetail job={selectedJob} /> : <> </>}
         </Col>
       </Row>
@@ -110,4 +110,4 @@ const Jobs = () => {
   );
 };
 
-export default Jobs;
+export default Reviews;

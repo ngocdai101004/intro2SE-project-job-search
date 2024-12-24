@@ -3,10 +3,8 @@ import MyHeader from "../../components/MyHeader";
 import Snapshot from "./Body/SnapSHot";
 import CompanyHeader from "./Header/CompanyHeader";
 import Jobs from "./Body/Jobs";
+import Reviews from "./Body/Reviews";
 
-const Reviews = () => (
-  <div className="content-section bg-lightcoral">Reviews Content</div>
-);
 const QA = () => (
   <div className="content-section bg-lightyellow">Q&A Content</div>
 );
