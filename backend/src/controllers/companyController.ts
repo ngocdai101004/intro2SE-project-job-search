@@ -53,7 +53,7 @@ export const updateCompany = async (req: Request, res: Response) => {
 // Get a company
 export const getCompany = async (req: Request, res: Response) => {
   try {
-    const { companyID } = req.params;
+    const { companyID } = req.params as { companyID: string };
     const company = await Company.findById(companyID);
     if (!company) {
       return res.status(404).json({ message: "Company not found", data: {} });
@@ -160,59 +160,33 @@ export const unfollowCompany = async (req: Request, res: Response) => {
 export const reviewCompany = async (req: Request, res: Response) => {
   try {
     const { companyID } = req.params;
-    const { userID, rating, review } = req.body;
+    const { userID, isVerified, ...review } = req.body;
     const company = await Company.findById(companyID);
     if (!company) {
       return res.status(404).json({ message: "Company not found", data: {} });
     }
-    if (
-      company.admin_id.includes(userID) ||
-      company.owner_id.toString() === userID
-    ) {
+    if (!isVerified) {
       return res
         .status(403)
-        .json({ message: "You are an admin of this company", data: {} });
+        .json({ message: "Please verify your account", data: {} });
     }
-    const reviewData = { user_id: userID, rating, review };
-    await Company.findByIdAndUpdate(
-      companyID,
-      { $push: { reviews: reviewData } },
-      { new: true }
-    );
+    if (company.reviews.some((r) => r.user_id.toString() === userID)) {
+      // Update review
+      await Company.updateOne(
+        { _id: companyID, "reviews.user_id": userID },
+        { $set: { "reviews.$": review } }
+      );
+    } else {
+      // Create review
+      await Company.findByIdAndUpdate(
+        companyID,
+        { $push: { reviews: review } },
+        { new: true }
+      );
+    }
     res
       .status(200)
-      .json({ message: "Review added successfully", data: reviewData });
-  } catch (error) {
-    res.status(400).json({ message: (error as any).message, data: {} });
-  }
-};
-
-// Update a company review
-export const updateCompanyReview = async (req: Request, res: Response) => {
-  try {
-    const { companyID } = req.params;
-    const { userID, rating, review } = req.body;
-    const company = await Company.findById(companyID);
-    if (!company) {
-      return res.status(404).json({ message: "Company not found", data: {} });
-    }
-    if (
-      company.admin_id.includes(userID) ||
-      company.owner_id.toString() === userID
-    ) {
-      return res
-        .status(403)
-        .json({ message: "You are an admin of this company", data: {} });
-    }
-    const reviewData = { user_id: userID, rating, review };
-    await Company.findOneAndUpdate(
-      { _id: companyID, "reviews.user_id": userID },
-      { $set: { "reviews.$": reviewData } },
-      { new: true }
-    );
-    res
-      .status(200)
-      .json({ message: "Review updated successfully", data: reviewData });
+      .json({ message: "Review submitted successfully", data: review });
   } catch (error) {
     res.status(400).json({ message: (error as any).message, data: {} });
   }
@@ -221,26 +195,26 @@ export const updateCompanyReview = async (req: Request, res: Response) => {
 // Delete a company review
 export const deleteCompanyReview = async (req: Request, res: Response) => {
   try {
-    const { companyID } = req.params;
+    const { companyID, reviewID } = req.params;
     const { userID } = req.body;
     const company = await Company.findById(companyID);
     if (!company) {
       return res.status(404).json({ message: "Company not found", data: {} });
     }
-    if (
-      company.admin_id.includes(userID) ||
-      company.owner_id.toString() === userID
-    ) {
+    if (!company.reviews.some((r) => r.user_id.toString() === userID)) {
       return res
         .status(403)
-        .json({ message: "You are an admin of this company", data: {} });
+        .json({ message: "You have not reviewed this company", data: {} });
     }
     await Company.findByIdAndUpdate(
       companyID,
-      { $pull: { reviews: { user_id: userID } } },
+      { $pull: { reviews: { _id: reviewID } } },
       { new: true }
     );
-    res.status(200).json({ message: "Review deleted successfully", data: {} });
+    res.status(200).json({
+      message: "Review deleted successfully",
+      data: {},
+    });
   } catch (error) {
     res.status(400).json({ message: (error as any).message, data: {} });
   }
@@ -271,7 +245,6 @@ export default {
   followCompany,
   unfollowCompany,
   reviewCompany,
-  updateCompanyReview,
   deleteCompanyReview,
   getCompanyReviews,
 };

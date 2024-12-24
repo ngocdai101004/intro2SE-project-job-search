@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { companies } from "../data/companies";
 
 const companySchema = new mongoose.Schema(
   {
@@ -39,8 +40,28 @@ const companySchema = new mongoose.Schema(
     },
 
     description: {
-      type: String,
-      required: true,
+      company_size: {
+        type: [Number],
+        required: true,
+      },
+      industry: {
+        type: String,
+        required: true,
+      },
+      headquarters: {
+        type: String,
+        required: true,
+      },
+      links: {
+        type: [String],
+      },
+      founded: {
+        type: Date,
+        required: true,
+      },
+      specialities: {
+        type: [String],
+      },
     },
 
     short_description: {
