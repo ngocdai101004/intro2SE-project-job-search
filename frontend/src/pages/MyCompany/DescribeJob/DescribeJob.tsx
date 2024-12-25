@@ -107,7 +107,7 @@ const DescribeJob: React.FC = () => {
                     </Button>
                     <Button
                       variant="primary"
-                      onClick={() => handleNavigation("/next-page")}
+                      onClick={() => handleNavigation("/my-company/job-list")}
                     >
                       Continue →
                     </Button>

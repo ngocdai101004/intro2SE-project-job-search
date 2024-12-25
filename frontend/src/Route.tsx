@@ -13,6 +13,7 @@ import AddJobDetails from "./pages/MyCompany/AddJobDetails/AddJobDetails.tsx";
 import AddPaysAndBenefits from "./pages/MyCompany/AddPaysAndBenefits/AddPaysAndBenefits.tsx";
 import DescribeJob from "./pages/MyCompany/DescribeJob/DescribeJob.tsx";
 import PreviewJob from "./pages/MyCompany/PreviewJob/PreviewJob.tsx";
+import JobList from "./pages/MyCompany/JobList/JobList.tsx";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
   {
     path: "/my-company/preview-job",
     element: <PreviewJob />,
+  },
+  {
+    path: "/my-company/job-list",
+    element: <JobList />,
   },
   // {
   //   path: "/home",

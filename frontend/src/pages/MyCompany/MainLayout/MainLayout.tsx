@@ -18,9 +18,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <MyHeader mydefaultActiveKey="/company" />
 
-        <div style={{ flex: 1, overflowY: "auto", padding: "20px" }}>
-          {children}
-        </div>
+        <div style={{ flex: 1, overflowY: "auto" }}>{children}</div>
       </div>
     </div>
   );
