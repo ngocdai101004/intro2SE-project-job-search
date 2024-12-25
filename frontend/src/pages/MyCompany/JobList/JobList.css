@@ -1,0 +1,4 @@
+.table-spacing th,
+.table-spacing td {
+  padding: 10px 20px; /* Điều chỉnh khoảng cách */
+}
