@@ -3,6 +3,7 @@ import {
   Container,
   Row,
   Col,
+  Button,
   Dropdown,
   FormControl,
   InputGroup,
@@ -32,12 +33,18 @@ const JobList: React.FC = () => {
     <MainLayout>
       <Container fluid className="job-post-container">
         <Row>
-          <Col style={{ paddingLeft: "0px" }}>
+          <Col style={{ paddingLeft: "0px", paddingRight: "0px" }}>
             <div className="content" style={{ width: "100%" }}>
               <div className="px-4 mt-3 mb-4">
-                <header className="header mb-3">
+                <div className="d-flex justify-content-between align-items-center mb-3">
                   <h1>Jobs</h1>
-                </header>
+                  <Button
+                    variant="primary"
+                    style={{ marginRight: "60px", fontWeight: "500" }}
+                  >
+                    Post a job
+                  </Button>
+                </div>
                 <div className="filter-bar">
                   <InputGroup style={{ maxWidth: "400px" }}>
                     <InputGroup.Text>
@@ -48,8 +55,9 @@ const JobList: React.FC = () => {
                       <Dropdown.Toggle
                         variant="outline-secondary"
                         id="dropdown-basic"
+                        bsPrefix="custom-dropdown-toggle"
                       >
-                        ▼
+                        <i className="bi bi-chevron-down"></i>
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         <Dropdown.Item href="#">Option 1</Dropdown.Item>
@@ -66,18 +74,72 @@ const JobList: React.FC = () => {
               >
                 <thead style={{ backgroundColor: "#D9D9D9" }}>
                   <tr>
-                    <th>
+                    <th style={{ backgroundColor: "#D9D9D9" }}>
                       <input type="checkbox" />
                     </th>
-                    <th>Job title ⇵</th>
-                    <th>Candidates</th>
-                    <th>Date posted ⇧</th>
-                    <th>Job status ⇩</th>
+                    <th
+                      style={{
+                        backgroundColor: "#D9D9D9",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "2px",
+                      }}
+                    >
+                      Job title{" "}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className="lucide lucide-chevrons-up-down"
+                      >
+                        <path d="m7 15 5 5 5-5" />
+                        <path d="m7 9 5-5 5 5" />
+                      </svg>
+                    </th>
+                    <th style={{ backgroundColor: "#D9D9D9" }}>Candidates</th>
+                    <th
+                      style={{
+                        backgroundColor: "#D9D9D9",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "2px",
+                      }}
+                    >
+                      Date posted
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className="lucide lucide-chevrons-up-down"
+                      >
+                        <path d="m7 15 5 5 5-5" />
+                        <path d="m7 9 5-5 5 5" />
+                      </svg>
+                    </th>
+                    <th style={{ backgroundColor: "#D9D9D9" }}>
+                      Job status
+                      <i
+                        className="bi bi-chevron-down"
+                        style={{ fontSize: "12px" }}
+                      ></i>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>
+                    <td style={{ height: "130px" }}>
                       <input type="checkbox" />
                     </td>
                     <td>
@@ -97,12 +159,47 @@ const JobList: React.FC = () => {
                         Ho Chi Minh City
                       </p>
                     </td>
-                    <td>-</td>
+                    <td>
+                      <div
+                        style={{
+                          backgroundColor: "#FFF5F5",
+                          padding: "10px",
+                          borderRadius: "5px",
+                          marginTop: "10px",
+                          maxWidth: "300px",
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: "10px",
+                          height: "100px",
+                        }}
+                      >
+                        <i
+                          className="bi bi-info-circle-fill"
+                          style={{
+                            color: "#D9534F",
+                            fontSize: "20px",
+                          }}
+                        ></i>
+                        <div style={{ flexGrow: 1 }}>
+                          <p
+                            style={{
+                              fontWeight: "bold",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            Your job posting is incomplete.
+                          </p>
+                          <button className="complete-btn btn btn-primary">
+                            Finish job posting
+                          </button>
+                        </div>
+                      </div>
+                    </td>
                     <td>-</td>
                     <td>{jobStatus.softwareEngineer}</td>
                   </tr>
                   <tr>
-                    <td>
+                    <td style={{ height: "130px" }}>
                       <input type="checkbox" defaultChecked />
                     </td>
                     <td>
@@ -123,9 +220,93 @@ const JobList: React.FC = () => {
                       </p>
                     </td>
                     <td>
-                      <div className="candidates">
-                        <span>1 Applicants</span>
-                        <span>0 Awaiting</span>
+                      <div
+                        style={{
+                          backgroundColor: "#F3F2F1",
+                          padding: "10px",
+                          borderRadius: "5px",
+                          marginTop: "10px",
+                          maxWidth: "300px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          height: "100px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            flexDirection: "column",
+                            paddingLeft: "10px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              position: "relative",
+                            }}
+                          >
+                            <i className="bi bi-person"></i>
+                            <span
+                              style={{
+                                position: "absolute",
+                                top: "-4px",
+                                right: "-5px",
+                                fontSize: "12px",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              1
+                            </span>
+                          </div>
+                          <p
+                            style={{
+                              fontWeight: "bold",
+                              textDecoration: "underline",
+                            }}
+                          >
+                            Applicants
+                          </p>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            flexDirection: "column",
+                            paddingRight: "40px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              position: "relative",
+                            }}
+                          >
+                            <i className="bi bi-hourglass-split"></i>
+                            <span
+                              style={{
+                                position: "absolute",
+                                top: "-4px",
+                                right: "-7px",
+                                fontSize: "12px",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              0
+                            </span>
+                          </div>
+                          <p
+                            style={{
+                              fontWeight: "bold",
+                              textDecoration: "underline",
+                            }}
+                          >
+                            Awaiting
+                          </p>
+                        </div>
                       </div>
                     </td>
                     <td>
@@ -138,7 +319,7 @@ const JobList: React.FC = () => {
                         onChange={(e) =>
                           handleStatusChange("aiEngineering", e.target.value)
                         }
-                        className="form-select"
+                        style={{ padding: "5px", width: "100%" }}
                       >
                         <option value="Closed">Closed</option>
                         <option value="Paused">Paused</option>
