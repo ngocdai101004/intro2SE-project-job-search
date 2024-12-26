@@ -16,6 +16,18 @@
   align-items: center;
 }
 
+.sidebar-item-content {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-item .icon-left {
+  font-size: 16px;
+  color: inherit;
+  margin-right: 8px;
+  margin-bottom: 4px;
+}
+
 .sidebar-item .label {
   flex-grow: 1;
   text-align: left;
@@ -24,6 +36,7 @@
 .sidebar-item .icon-right {
   font-size: 14px;
   color: inherit;
+  margin-left: 10px;
 }
 
 .sidebar-item.active {
@@ -31,6 +44,6 @@
   color: #ffffff;
 }
 
-.sidebar-item:hover {
+.sidebar-item:not(.active):hover {
   background-color: #e0e0e0;
 }
