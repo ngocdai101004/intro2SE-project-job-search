@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SideBar.css"; // Thêm CSS để xử lý giao diện
-import { FaArrowRight } from "react-icons/fa";
+import { FaChevronRight, FaPlus, FaBriefcase, FaUser } from "react-icons/fa";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface SidebarItemProps {
   label: string;
   isActive: boolean;
   onClick: () => void;
   showIcon?: boolean;
+  icon: React.ReactNode;
+  link: string;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({
@@ -14,26 +17,61 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   isActive,
   onClick,
   showIcon,
+  icon,
 }) => {
   return (
     <div
       className={`sidebar-item ${isActive ? "active" : ""}`}
       onClick={onClick}
     >
-      <span>{label}</span>
-      {showIcon && <FaArrowRight className="icon" />}
+      <div className="sidebar-item-content">
+        <div className="icon-left">{icon}</div>
+        <span style={{ fontWeight: "500" }}>{label}</span>
+      </div>
+      {showIcon && <FaChevronRight className="icon-right" />}
     </div>
   );
 };
 
 const SideBar: React.FC = () => {
   const [activeItem, setActiveItem] = useState("Jobs");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
-    { label: "Create New", showIcon: true },
-    { label: "Jobs", showIcon: true },
-    { label: "Candidates", showIcon: false },
+    {
+      label: "Create New",
+      showIcon: true,
+      icon: <FaPlus />,
+      link: "/my-company/create-job-post",
+    },
+    {
+      label: "Jobs",
+      showIcon: true,
+      icon: <FaBriefcase />,
+      link: "/my-company/job-list",
+    },
+    {
+      label: "Candidates",
+      showIcon: false,
+      icon: <FaUser />,
+      link: "/my-company/create-job-post",
+    },
   ];
+
+  useEffect(() => {
+    const currentItem = menuItems.find(
+      (item) => item.link === location.pathname
+    );
+    if (currentItem) {
+      setActiveItem(currentItem.label);
+    }
+  }, [location, menuItems]);
+
+  const handleItemClick = (link: string, label: string) => {
+    setActiveItem(label);
+    navigate(link);
+  };
 
   return (
     <div className="sidebar">
@@ -42,8 +80,10 @@ const SideBar: React.FC = () => {
           key={item.label}
           label={item.label}
           isActive={activeItem === item.label}
-          onClick={() => setActiveItem(item.label)}
+          onClick={() => handleItemClick(item.link, item.label)}
           showIcon={item.showIcon}
+          icon={item.icon}
+          link={item.link}
         />
       ))}
     </div>
