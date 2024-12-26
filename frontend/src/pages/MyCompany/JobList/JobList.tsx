@@ -72,63 +72,53 @@ const JobList: React.FC = () => {
                 className="job-table table table-spacing"
                 style={{ width: "100%" }}
               >
-                <thead style={{ backgroundColor: "#D9D9D9" }}>
+                <thead>
                   <tr>
-                    <th style={{ backgroundColor: "#D9D9D9" }}>
+                    <th>
                       <input type="checkbox" />
                     </th>
-                    <th
-                      style={{
-                        backgroundColor: "#D9D9D9",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "2px",
-                      }}
-                    >
-                      Job title{" "}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        className="lucide lucide-chevrons-up-down"
-                      >
-                        <path d="m7 15 5 5 5-5" />
-                        <path d="m7 9 5-5 5 5" />
-                      </svg>
+                    <th>
+                      <div className="title-icon">
+                        Job title{" "}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          className="lucide lucide-chevrons-up-down"
+                        >
+                          <path d="m7 15 5 5 5-5" />
+                          <path d="m7 9 5-5 5 5" />
+                        </svg>
+                      </div>
                     </th>
-                    <th style={{ backgroundColor: "#D9D9D9" }}>Candidates</th>
-                    <th
-                      style={{
-                        backgroundColor: "#D9D9D9",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "2px",
-                      }}
-                    >
-                      Date posted
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        className="lucide lucide-chevrons-up-down"
-                      >
-                        <path d="m7 15 5 5 5-5" />
-                        <path d="m7 9 5-5 5 5" />
-                      </svg>
+                    <th>Candidates</th>
+                    <th>
+                      <div className="title-icon">
+                        Date posted
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          className="lucide lucide-chevrons-up-down"
+                        >
+                          <path d="m7 15 5 5 5-5" />
+                          <path d="m7 9 5-5 5 5" />
+                        </svg>
+                      </div>
                     </th>
-                    <th style={{ backgroundColor: "#D9D9D9" }}>
+                    <th>
                       Job status
                       <i
                         className="bi bi-chevron-down"
@@ -139,19 +129,11 @@ const JobList: React.FC = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td style={{ height: "130px" }}>
+                    <td>
                       <input type="checkbox" />
                     </td>
                     <td>
-                      <span
-                        className="job-title"
-                        style={{
-                          fontWeight: "bold",
-                          textDecoration: "underline",
-                        }}
-                      >
-                        Software engineer
-                      </span>
+                      <span className="job-title">Software engineer</span>
                       <p
                         className="location"
                         style={{ fontSize: "12px", opacity: 0.7 }}
@@ -160,19 +142,7 @@ const JobList: React.FC = () => {
                       </p>
                     </td>
                     <td>
-                      <div
-                        style={{
-                          backgroundColor: "#FFF5F5",
-                          padding: "10px",
-                          borderRadius: "5px",
-                          marginTop: "10px",
-                          maxWidth: "300px",
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: "10px",
-                          height: "100px",
-                        }}
-                      >
+                      <div className="candidates-incomplete">
                         <i
                           className="bi bi-info-circle-fill"
                           style={{
@@ -199,7 +169,7 @@ const JobList: React.FC = () => {
                     <td>{jobStatus.softwareEngineer}</td>
                   </tr>
                   <tr>
-                    <td style={{ height: "130px" }}>
+                    <td>
                       <input type="checkbox" defaultChecked />
                     </td>
                     <td>
@@ -220,92 +190,26 @@ const JobList: React.FC = () => {
                       </p>
                     </td>
                     <td>
-                      <div
-                        style={{
-                          backgroundColor: "#F3F2F1",
-                          padding: "10px",
-                          borderRadius: "5px",
-                          marginTop: "10px",
-                          maxWidth: "300px",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          height: "100px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            flexDirection: "column",
-                            paddingLeft: "10px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              position: "relative",
-                            }}
-                          >
+                      <div className="candidates-complete">
+                        <div className="candidates-applicants">
+                          <div className="icon-number">
                             <i className="bi bi-person"></i>
-                            <span
-                              style={{
-                                position: "absolute",
-                                top: "-4px",
-                                right: "-5px",
-                                fontSize: "12px",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              1
-                            </span>
+                            <span>1</span>
                           </div>
-                          <p
-                            style={{
-                              fontWeight: "bold",
-                              textDecoration: "underline",
-                            }}
-                          >
-                            Applicants
-                          </p>
+                          <p>Applicants</p>
                         </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            flexDirection: "column",
-                            paddingRight: "40px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              position: "relative",
-                            }}
-                          >
+                        <div className="candidates-awaiting">
+                          <div className="icon-number">
                             <i className="bi bi-hourglass-split"></i>
                             <span
                               style={{
-                                position: "absolute",
-                                top: "-4px",
                                 right: "-7px",
-                                fontSize: "12px",
-                                fontWeight: "bold",
                               }}
                             >
                               0
                             </span>
                           </div>
-                          <p
-                            style={{
-                              fontWeight: "bold",
-                              textDecoration: "underline",
-                            }}
-                          >
-                            Awaiting
-                          </p>
+                          <p>Awaiting</p>
                         </div>
                       </div>
                     </td>
