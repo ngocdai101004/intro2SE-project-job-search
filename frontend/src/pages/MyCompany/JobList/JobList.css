@@ -1,0 +1,79 @@
+.job-table th .job-table td {
+  padding: 10px 20px;
+}
+
+.job-table thead th {
+  background-color: #d9d9d9;
+}
+
+.job-table thead .title-icon {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.job-table tbody td {
+  height: 130px;
+}
+
+.job-table tbody .job-title {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.job-table .candidates-incomplete {
+  background-color: #fff5f5;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  max-width: 300px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  height: 100px;
+}
+
+.job-table .candidates-complete {
+  background-color: #f3f2f1;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  max-width: 300px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+}
+
+.candidates-complete .candidates-applicants {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding-left: 10px;
+}
+
+.candidates-complete .icon-number {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.candidates-complete .icon-number span {
+  position: absolute;
+  top: -4px;
+  right: -5px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.candidates-complete p {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.candidates-complete .candidates-awaiting {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding-right: 40px;
+}
