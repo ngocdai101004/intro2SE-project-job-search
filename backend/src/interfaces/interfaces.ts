@@ -114,3 +114,10 @@ export interface ICompany {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface IVerifyAdminRequest extends IVerifiedRequest {
+  body: IVerifiedRequest["body"] & {
+    company_id: string;
+    isAdmin: boolean;
+  };
+}

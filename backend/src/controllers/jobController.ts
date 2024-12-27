@@ -4,7 +4,8 @@ import Job from "../models/jobModel";
 // Create a new job
 export const createJob = async (req: Request, res: Response) => {
   try {
-    const { userID, ...jobData } = req.body;
+    const { userID, isAdmin, ...jobData } = req.body;
+
     const job = await Job.create({ ...jobData, owner_id: userID });
     res.status(201).json({
       message: "Job created successfully",
