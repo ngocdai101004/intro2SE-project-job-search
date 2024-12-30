@@ -412,14 +412,14 @@ export const userInfo = [
         salary_expectation: 95000,
       },
       {
-        job_title: "Senior Developer",
-        industry: "Finance",
+        job_title: "Backend Developer",
+        industry: "Tech",
         relocate_preference: "No",
         salary_expectation: 120000,
       },
       {
-        job_title: "Tech Lead",
-        industry: "Healthcare",
+        job_title: "Frontend Developer",
+        industry: "Tech",
         relocate_preference: "Yes",
         salary_expectation: 110000,
       },
