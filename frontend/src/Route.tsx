@@ -41,6 +41,11 @@ const router = createBrowserRouter([
     path: "/company-list",
     element: <CompanyList />,
   },
+
+  {
+    path: "/company/:company_id",
+    element: <Company />,
+  },
   // {
   //   path: "/home",
   //   element: <Home />,

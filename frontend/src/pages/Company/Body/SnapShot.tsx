@@ -1,9 +1,8 @@
 import { Card, Row, Col, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ICompany from "../../../interfaces/company";
+import ICompany from "../../../interfaces/ICompany";
 
-
-const Snapshot: React.FC<{ companyData: ICompany}> = ({ companyData }) => {
+const Snapshot: React.FC<{ companyData: ICompany }> = ({ companyData }) => {
   return (
     <div
       className="container mt-4"
@@ -60,9 +59,7 @@ const Snapshot: React.FC<{ companyData: ICompany}> = ({ companyData }) => {
             </div>
           </Col>
         </Row>
-        <p style={{ fontSize: "0.85rem" }}>
-          {companyData.short_description}
-        </p>
+        <p style={{ fontSize: "0.85rem" }}>{companyData.short_description}</p>
 
         <h4 className="mt-4 mb-3" style={{ fontSize: "1.2rem" }}>
           Job near you
@@ -76,9 +73,7 @@ const Snapshot: React.FC<{ companyData: ICompany}> = ({ companyData }) => {
               <p className="text-muted" style={{ fontSize: "0.85rem" }}>
                 Ho Chi Minh, Viet Nam
               </p>
-              <small style={{ fontSize: "0.75rem" }}>
-                25 days ago
-              </small>
+              <small style={{ fontSize: "0.75rem" }}>25 days ago</small>
               <Button variant="primary" className="mt-3">
                 View jobs
               </Button>
@@ -92,9 +87,7 @@ const Snapshot: React.FC<{ companyData: ICompany}> = ({ companyData }) => {
               <p className="text-muted" style={{ fontSize: "0.85rem" }}>
                 Ho Chi Minh, Viet Nam
               </p>
-              <small style={{ fontSize: "0.75rem" }}>
-                30 days ago
-              </small>
+              <small style={{ fontSize: "0.75rem" }}>30 days ago</small>
               <Button variant="primary" className="mt-3">
                 View jobs
               </Button>
@@ -108,9 +101,7 @@ const Snapshot: React.FC<{ companyData: ICompany}> = ({ companyData }) => {
               <p className="text-muted" style={{ fontSize: "0.85rem" }}>
                 Ho Chi Minh, Viet Nam
               </p>
-              <small style={{ fontSize: "0.75rem" }}>
-                25 days ago
-              </small>
+              <small style={{ fontSize: "0.75rem" }}>25 days ago</small>
               <Button variant="primary" className="mt-3">
                 View jobs
               </Button>

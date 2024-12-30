@@ -69,16 +69,6 @@ const companySchema = new mongoose.Schema(
       required: true,
     },
 
-    number_of_employees: {
-      type: Number,
-      required: true,
-    },
-
-    number_of_followers: {
-      type: Number,
-      default: 0, // Optional default value
-    },
-
     legal_document_url: String,
 
     reviews: [

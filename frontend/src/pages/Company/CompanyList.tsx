@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Container, ListGroup } from "react-bootstrap";
 import axiosInstance from "../../common/axiosInstance";
 import MyHeader from "../../components/MyHeader";
-import ICompany from "../../interfaces/company";
+import ICompany from "../../interfaces/ICompany";
 import { useNavigate } from "react-router-dom";
 
 const CompanyList = () => {
