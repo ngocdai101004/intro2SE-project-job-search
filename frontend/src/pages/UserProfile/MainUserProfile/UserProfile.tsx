@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const UserProfile: React.FC = () => {
+  const navigate = useNavigate();
   const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
   const { userID } = useParams<{ userID: string }>();
   const [user, setUser] = useState<IUser>({});
@@ -29,6 +30,7 @@ const UserProfile: React.FC = () => {
           response1 = await axiosInstance.get("/user/profile");
           response2 = await axiosInstance.get("/user/profile/info");
           setIsOwnProfile(true);
+
         }
         else {
           response1 = await axiosInstance.get("/user/" + userID + "/profile");
@@ -37,14 +39,17 @@ const UserProfile: React.FC = () => {
         setUser(response1.data.data.user);
         setUserInfo(response2.data.data.userInfo);
       } catch (error) {
+        navigate("/signin");
         console.error("Error fetching user data:", error);
       }
     };
     fetchData();
-  }, [userID]);
+  }, [userID, navigate]);
 
-  const navigate = useNavigate();
+  console.log("User Data in UserProfile:", userInfo);
+
   useEffect(() => {
+    
     if (myActiveKey === "/job-search-cv") {
     const currentPath = window.location.pathname.split("/snapshot")[0];
       navigate(currentPath + myActiveKey);
@@ -62,7 +67,7 @@ const UserProfile: React.FC = () => {
         overflow: "hidden",
       }}
     >
-      <MyHeader mydefaultActiveKey="/user" />
+      <MyHeader mydefaultActiveKey="/user"/>
       <UserHeader  myState={myActiveKey} setMyState={setMyActiveKey} userData={
           {
             user: user,

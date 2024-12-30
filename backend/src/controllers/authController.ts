@@ -19,7 +19,7 @@ const checkUser = async (req: IVerifiedRequest, res: Response) => {
   if (req.body.isVerified) {
     res.status(200).json({ message: "User is verified" });
   } else {
-    res.status(200).json({ message: "User is not verified" });
+    res.status(400).json({ message: "User is not verified" });
   }
 };
 
