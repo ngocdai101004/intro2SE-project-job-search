@@ -57,6 +57,10 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: new Date("1990-01-01"),
     },
+    avatar: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

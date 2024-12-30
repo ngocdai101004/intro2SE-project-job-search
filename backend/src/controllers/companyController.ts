@@ -8,7 +8,7 @@ export const createCompany = async (req: Request, res: Response) => {
     const company = await Company.create({ ...companyData, owner_id: userID });
     res.status(201).json({
       message: "Company created successfully",
-      data: company,
+      data: { company },
     });
   } catch (error) {
     res.status(400).json({ message: (error as any).message, data: {} });
@@ -55,7 +55,7 @@ export const updateCompany = async (req: Request, res: Response) => {
     );
     res.status(200).json({
       message: "Company updated successfully",
-      data: company,
+      data: { company },
     });
     return;
   } catch (error) {
@@ -77,7 +77,7 @@ export const getCompany = async (req: Request, res: Response) => {
     }
     res.status(200).json({
       message: "Company retrieved successfully",
-      data: company,
+      data: { company },
     });
   } catch (error) {
     res.status(400).json({
@@ -138,9 +138,10 @@ export const followCompany = async (req: Request, res: Response) => {
       { $push: { followers: userID } },
       { new: true }
     );
-    res
-      .status(200)
-      .json({ message: "You are now following this company", data: company });
+    res.status(200).json({
+      message: "You are now following this company",
+      data: { company },
+    });
   } catch (error) {
     res.status(400).json({ message: (error as any).message, data: {} });
   }
@@ -258,7 +259,7 @@ export const getCompanyReviews = async (req: Request, res: Response) => {
     }
     res.status(200).json({
       message: "Reviews retrieved successfully",
-      data: company.reviews,
+      data: { reviews: company.reviews },
     });
   } catch (error) {
     res.status(400).json({ message: (error as any).message, data: {} });

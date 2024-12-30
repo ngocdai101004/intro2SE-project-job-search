@@ -29,8 +29,7 @@ function Company() {
     };
     fetchData();
   }, []);
-  console.log("Company data State:", companyData);
-
+  console.log("myActiveKey:", myActiveKey);
   const renderContent = () => {
     switch (myActiveKey) {
       case "/snapshot":
