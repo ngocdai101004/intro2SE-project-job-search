@@ -14,6 +14,8 @@ import AddPaysAndBenefits from "./pages/MyCompany/AddPaysAndBenefits/AddPaysAndB
 import DescribeJob from "./pages/MyCompany/DescribeJob/DescribeJob.tsx";
 import PreviewJob from "./pages/MyCompany/PreviewJob/PreviewJob.tsx";
 import JobList from "./pages/MyCompany/JobList/JobList.tsx";
+import UserProfile from "./pages/UserProfile/MainUserProfile/UserProfile.tsx";
+import JobSearchCV from "./pages/UserProfile/JobSearchCV/JobSearchCV.tsx";
 
 const router = createBrowserRouter([
   {
@@ -70,10 +72,34 @@ const router = createBrowserRouter([
     path: "/my-company/job-list",
     element: <JobList />,
   },
-  // {
-  //   path: "/home",
-  //   element: <Home />,
-  // },
+  {
+    path: "/user/:userID/profile",
+    element: <UserProfile />,
+  },
+  {
+    path: "/user/:userID/profile/snapshot",
+    element: <UserProfile />,
+  },
+  {
+    path: "/user/:userID/profile/job-search-cv",
+    element: <JobSearchCV />,
+  },
+  {
+    path : "/user/profile/job-search-cv",
+    element: <JobSearchCV />,
+  },
+  {
+    path: "/user/profile",
+    element: <UserProfile />,
+  },
+  {
+    path: "/user/profile/snapshot",
+    element: <UserProfile />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
+  },
 
   {
     element: <ProtectedRoute />,

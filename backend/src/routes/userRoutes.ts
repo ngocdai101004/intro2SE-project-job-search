@@ -42,12 +42,14 @@ import {
 
 const router = Router();
 
+router.get("/:userID/profile", getUser);
 router.get("/profile", verifyUser, getUser);
 router.patch("/profile", verifyUser, updateUser);
 router.delete("/profile", verifyUser, deleteUser);
 
 router.post("/profile/info", verifyUser, createUserInfo);
 router.get("/profile/info", verifyUser, getUserInfo);
+router.get("/:userID/profile/info", getUserInfo);
 router.put("/profile/info", verifyUser, updateUserInfo);
 router.delete("/profile/info", verifyUser, deleteUserInfo);
 

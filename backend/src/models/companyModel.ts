@@ -105,6 +105,10 @@ const companySchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    avatar: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

@@ -66,3 +66,58 @@ export interface IGetUserProfileRequest extends Request {
     userID: string;
   };
 }
+
+export interface IJob {
+  company_id: string;
+  status: "open" | "closed" | "draft";
+  title: string;
+  number_of_peoples: number;
+  type: "full-time" | "part-time" | "contract" | "internship";
+  location_type: "remote" | "on-site" | "hybrid";
+  description: string;
+  salary: number;
+  emails?: string;
+  requirements?: string[];
+  deadline: Date;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ICompany {
+  owner_id: string;
+  admin_id: string[];
+  company_name: string;
+  address: {
+    district: string;
+    city_state: string;
+    zip_code: string;
+    country: string;
+  };
+  description: {
+    company_size: number[];
+    industry: string;
+    headquarters: string;
+    links?: string[];
+    founded: Date;
+    specialities?: string[];
+  };
+  short_description: string;
+  number_of_employees: number;
+  number_of_followers?: number;
+  legal_document_url?: string;
+  reviews: {
+    user_id: string;
+    rating: 1 | 2 | 3 | 4 | 5;
+    review?: string;
+  }[];
+  followers: string[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface IVerifyAdminRequest extends IVerifiedRequest {
+  body: IVerifiedRequest["body"] & {
+    company_id: string;
+    isAdmin: boolean;
+  };
+}

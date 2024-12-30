@@ -69,7 +69,7 @@ export default function MyHeader({ mydefaultActiveKey }: MyHeaderProps) {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="link-1" href="/signin" className="text-white">
+              <Nav.Link eventKey="link-1" href="/user/profile" className="text-white">
                 <i className="bi bi-person text-white fs-5 me-2"></i>
               </Nav.Link>
             </Nav.Item>
