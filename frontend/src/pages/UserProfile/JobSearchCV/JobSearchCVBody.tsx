@@ -9,6 +9,7 @@ interface UserMainProfileProps {
         user: IUser;
         userInfo: IUserInfo;
     };
+    isOwnProfile?: boolean;
 }
 
 interface ICompanyReviewer {

@@ -16,20 +16,21 @@ import { useNavigate } from 'react-router-dom';
 const UserProfile: React.FC = () => {
   const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
   const { userID } = useParams<{ userID: string }>();
-
   const [user, setUser] = useState<IUser>({});
   const [userInfo, setUserInfo] = useState<IUserInfo>({});
+  const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
         let response1;
         let response2;
+        
         if (!userID) {
           response1 = await axiosInstance.get("/user/profile");
           response2 = await axiosInstance.get("/user/profile/info");
+          setIsOwnProfile(true);
         }
         else {
-          console.log("User ID:", "/user/" + userID + "/profile");
           response1 = await axiosInstance.get("/user/" + userID + "/profile");
           response2 = await axiosInstance.get("/user/" + userID + "/profile/info");
         }
@@ -41,18 +42,16 @@ const UserProfile: React.FC = () => {
     };
     fetchData();
   }, [userID]);
-  console.log("User data State:", user);
-  console.log("User Info State:", userInfo);
 
   const navigate = useNavigate();
-
   useEffect(() => {
     if (myActiveKey === "/job-search-cv") {
-      navigate("/user/" + userID + "/profile/job-search-cv");
+    const currentPath = window.location.pathname.split("/snapshot")[0];
+      navigate(currentPath + myActiveKey);
     }
   }, [myActiveKey, navigate, userID]);
-  
-  
+
+  console.log("User Data in UserProfile:", userInfo.ready_to_work);
   return (
     <div
       className="d-flex flex-column"
@@ -73,9 +72,13 @@ const UserProfile: React.FC = () => {
         <UserMainProfile  userData={
           {
             user: user,
-            userInfo: userInfo
+            userInfo: userInfo,
           }
-        }/>;
+        }
+        setUser = {setUser}
+        setUserInfo = {setUserInfo}
+        isOwnProfile={isOwnProfile}
+        />;
     </div>
   );
 }

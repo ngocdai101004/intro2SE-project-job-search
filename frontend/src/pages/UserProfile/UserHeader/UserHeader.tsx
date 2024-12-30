@@ -16,10 +16,7 @@ interface UserHeaderProps {
 const UserHeader = ({ myState, setMyState, userData }: UserHeaderProps) => {
   const myActiveKey = myState || "/snapshot";
   const setMyActiveKey = setMyState || (() => {});
-  console.log("User Main Profile Data:", userData);
-  console.log("userData.user.last_name", userData.user.last_name);
-
-
+  
   return (
     <div className="bg-cyan py-3 pb-0">
       <div className="container">

@@ -9,6 +9,9 @@ interface UserMainProfileProps {
         user: IUser;
         userInfo: IUserInfo;
     };
+    setUser?: React.Dispatch<React.SetStateAction<IUser>>;
+    setUserInfo: React.Dispatch<React.SetStateAction<IUserInfo>>;
+    isOwnProfile?: boolean;
 }
 
 interface ICompanyReviewer {
@@ -16,11 +19,12 @@ interface ICompanyReviewer {
     avatar: string;
     content: string;
     rating: number;
-  };
+};
 
-const UserMainProfile = ({ userData }: UserMainProfileProps) => {
+const UserMainProfile = ({ userData, setUserInfo, isOwnProfile }: UserMainProfileProps) => {
+    const [reviewerList, setReviewerList] = useState<ICompanyReviewer[]>([]);
+    let readyToWork = userData.userInfo.ready_to_work ?? false;
 
-const [reviewerList, setReviewerList] = useState<ICompanyReviewer[]>([]);
     useEffect(() => {
         const fetchData = async () => {
             const tempReviewerList: ICompanyReviewer[] = [];
@@ -28,7 +32,6 @@ const [reviewerList, setReviewerList] = useState<ICompanyReviewer[]>([]);
                 for (let i = 0; i < userData.userInfo.review.length; i++) {
                     try {
                         const response = await axiosInstance.get("/company/" + userData.userInfo.review[i].reviewer);
-                        console.log("Reviewer Data:", response.data.data.company);
                         tempReviewerList.push({
                             name: response.data.data.company.company_name || "Anonymous",
                             avatar: response.data.data.company.avatar || "company-avatar.jpg",
@@ -44,6 +47,17 @@ const [reviewerList, setReviewerList] = useState<ICompanyReviewer[]>([]);
         };
         fetchData();
     }, [userData.userInfo.review]);
+
+    const handleReadyToWorkChange = async () => {
+        const newReadyToWork = !readyToWork;
+        readyToWork = newReadyToWork;
+        setUserInfo((prev) => ({ ...prev, ready_to_work: newReadyToWork }));
+        try {
+            await axiosInstance.put(`/user/profile/info`, { ready_to_work: newReadyToWork });
+        } catch (error) {
+            console.error("Error updating ready to work status:", error);
+        }
+    };
 
     return (
         <div
@@ -99,38 +113,44 @@ const [reviewerList, setReviewerList] = useState<ICompanyReviewer[]>([]);
                     <Card className="p-3 mb-3 border-0">
                         <h5>Ready to Work</h5>
                         <div className="border rounded p-3">
-                        <div className="d-flex align-items-center">
-                            <p className="mb-0">I'm available to start immediately</p>
-                            <div className="form-check form-switch ms-3">
-                                <input className="form-check-input" type="checkbox" id="readyToWorkSwitch" />
-                                <label className="form-check-label" htmlFor="readyToWorkSwitch"></label>
+                            <div className="d-flex align-items-center">
+                                <p className="mb-0">I'm available to start immediately</p>
+                                <div className="form-check form-switch ms-3">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id="readyToWorkSwitch"
+                                        checked={readyToWork}
+                                        onChange={handleReadyToWorkChange}
+                                        disabled={!isOwnProfile}
+                                    />
+                                    <label className="form-check-label" htmlFor="readyToWorkSwitch"></label>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </Card>
                     <hr />
                     <Card className="p-3 mb-3 border-0">
                         <h5>Reviews</h5>
                         <div className="border rounded p-3">
-                            {/* Content for Reviews */}
-                        {reviewerList.length > 0 ? (
-                            reviewerList.map((reviewer, index) => (
-                                <div key={index} className="d-flex mb-3">
-                                    <img
-                                        src={reviewer.avatar || "company-avatar.jpg"}
-                                        alt={reviewer.name}
-                                        className="rounded-circle me-3"
-                                        style={{ width: "30px", height: "30px" }}
-                                    />
-                                    <div>
-                                        <h6>{reviewer.name}</h6>
-                                        <p>{reviewer.content}</p>
+                            {reviewerList.length > 0 ? (
+                                reviewerList.map((reviewer, index) => (
+                                    <div key={index} className="d-flex mb-3">
+                                        <img
+                                            src={reviewer.avatar || "company-avatar.jpg"}
+                                            alt={reviewer.name}
+                                            className="rounded-circle me-3"
+                                            style={{ width: "30px", height: "30px" }}
+                                        />
+                                        <div>
+                                            <h6>{reviewer.name}</h6>
+                                            <p>{reviewer.content}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No reviews available</p>
-                        )}
+                                ))
+                            ) : (
+                                <p>No reviews available</p>
+                            )}
                         </div>
                     </Card>
                 </Col>
