@@ -16,11 +16,39 @@ const companySchema = new mongoose.Schema(
       },
     ],
 
+    // Header
     company_name: {
       type: String,
       required: true,
     },
 
+    sumRating: {
+      type: Number,
+      default: 0,
+    },
+
+    applicant: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
+    employees: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
+    // Snapshot
     address: {
       district: {
         type: String,
@@ -69,18 +97,9 @@ const companySchema = new mongoose.Schema(
       required: true,
     },
 
-    number_of_employees: {
-      type: Number,
-      required: true,
-    },
-
-    number_of_followers: {
-      type: Number,
-      default: 0, // Optional default value
-    },
-
     legal_document_url: String,
 
+    // Reviews
     reviews: [
       {
         user_id: {
@@ -99,10 +118,15 @@ const companySchema = new mongoose.Schema(
       },
     ],
 
-    followers: [
+    // Reviews
+    qa: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        question: {
+          type: String,
+        },
+        answer: {
+          type: String,
+        },
       },
     ],
     avatar: {

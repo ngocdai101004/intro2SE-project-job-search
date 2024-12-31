@@ -16,6 +16,7 @@ import PreviewJob from "./pages/MyCompany/PreviewJob/PreviewJob.tsx";
 import JobList from "./pages/MyCompany/JobList/JobList.tsx";
 import UserProfile from "./pages/UserProfile/MainUserProfile/UserProfile.tsx";
 import JobSearchCV from "./pages/UserProfile/JobSearchCV/JobSearchCV.tsx";
+import CompanyList from "./pages/Company/CompanyList.tsx";
 
 const router = createBrowserRouter([
   {
@@ -41,9 +42,15 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/company",
+    path: "/company-list",
+    element: <CompanyList />,
+  },
+
+  {
+    path: "/company/:company_id/:active_key",
     element: <Company />,
   },
+
   {
     path: "/my-company/create-job-post",
     element: <CreateJobPost />,
@@ -85,7 +92,7 @@ const router = createBrowserRouter([
     element: <JobSearchCV />,
   },
   {
-    path : "/user/profile/job-search-cv",
+    path: "/user/profile/job-search-cv",
     element: <JobSearchCV />,
   },
   {

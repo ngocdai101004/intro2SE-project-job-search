@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Nav, Row, Image } from "react-bootstrap";
-import ICompany from "../../../interfaces/company";
+import ICompany from "../../../interfaces/interfaces";
 
 interface CompanyHeaderProps {
   myState?: string;
@@ -8,9 +8,25 @@ interface CompanyHeaderProps {
   companyData: ICompany;
 }
 
-const CompanyHeader = ({ myState, setMyState, companyData }: CompanyHeaderProps) => {
+const CompanyHeader = ({
+  myState,
+  setMyState,
+  companyData,
+}: CompanyHeaderProps) => {
   const myActiveKey = myState || "/snapshot";
+  const [companyRating, setCompanyRating] = useState(0);
   const setMyActiveKey = setMyState || (() => {});
+
+  useEffect(() => {
+    const rating =
+      companyData.reviews.length == 0
+        ? 0
+        : Math.max(
+            Math.min(companyData.sumRating / companyData.reviews.length, 5),
+            0
+          );
+    setCompanyRating(rating);
+  }, [companyData]);
 
   return (
     <div className="bg-cyan py-3 pb-0">
@@ -30,12 +46,16 @@ const CompanyHeader = ({ myState, setMyState, companyData }: CompanyHeaderProps)
                 />
               </Col>
               <Col className="d-flex flex-column justify-content-center">
-                <h5 className="mb-1">{companyData.company_name || "Fusodoya Company"}</h5>
+                <h5 className="mb-1">
+                  {companyData.company_name || "Fusodoya Company"}
+                </h5>
                 <div className="d-flex align-items-center mb-1">
-                  <span className="me-2 text-primary fw-bold">4.0</span>
+                  <span className="me-2 text-primary fw-bold">
+                    {companyRating.toFixed(2)}
+                  </span>
                   <div className="text-warning">
-                    {"★".repeat(4)}
-                    {"☆"}
+                    {"★".repeat(Math.floor(companyRating))}
+                    {"☆".repeat(5 - Math.floor(companyRating))}
                   </div>
                   <small className="text-muted ms-2">2.0k reviews</small>
                 </div>
@@ -62,7 +82,10 @@ const CompanyHeader = ({ myState, setMyState, companyData }: CompanyHeaderProps)
             </Row>
             <Row>
               <Col xs="auto" className="d-flex justify-content-center">
-                <small className="text-muted"> {companyData.followers?.length} followers</small>
+                <small className="text-muted">
+                  {" "}
+                  {companyData.followers?.length} followers
+                </small>
               </Col>
               <Col xs="auto" className="d-flex justify-content-center">
                 <small className="text-muted">1K-5K employees </small>
@@ -85,7 +108,7 @@ const CompanyHeader = ({ myState, setMyState, companyData }: CompanyHeaderProps)
               <Nav.Item className="me-2 me-md-5">
                 <Nav.Link
                   eventKey="/snapshot"
-                  href=""
+                  href="snapshot"
                   className="text-dark fs-5"
                 >
                   Snapshot
@@ -93,7 +116,11 @@ const CompanyHeader = ({ myState, setMyState, companyData }: CompanyHeaderProps)
               </Nav.Item>
 
               <Nav.Item className="me-2 me-md-5">
-                <Nav.Link eventKey="/jobs" href="" className="text-dark fs-5">
+                <Nav.Link
+                  eventKey="/jobs"
+                  href={"jobs"}
+                  className="text-dark fs-5"
+                >
                   Jobs
                 </Nav.Link>
               </Nav.Item>
@@ -101,7 +128,7 @@ const CompanyHeader = ({ myState, setMyState, companyData }: CompanyHeaderProps)
               <Nav.Item className="me-2 me-md-5">
                 <Nav.Link
                   eventKey="/reviews"
-                  href=""
+                  href="reviews"
                   className="text-dark fs-5"
                 >
                   Reviews
@@ -109,7 +136,7 @@ const CompanyHeader = ({ myState, setMyState, companyData }: CompanyHeaderProps)
               </Nav.Item>
 
               <Nav.Item className="me-2 me-md-5">
-                <Nav.Link eventKey="/qa" href="" className="text-dark fs-5">
+                <Nav.Link eventKey="/qa" href="qa" className="text-dark fs-5">
                   Q&A
                 </Nav.Link>
               </Nav.Item>
@@ -120,5 +147,4 @@ const CompanyHeader = ({ myState, setMyState, companyData }: CompanyHeaderProps)
     </div>
   );
 };
-
 export default CompanyHeader;

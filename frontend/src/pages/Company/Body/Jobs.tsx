@@ -2,58 +2,36 @@ import { useEffect, useState } from "react";
 import { Col, Row, ListGroup } from "react-bootstrap";
 import axiosInstance from "../../../common/axiosInstance";
 import JobDetail from "./JobDetail";
+import { IJob } from "../../../interfaces/interfaces";
 
-interface iJobDescription {
-  id: number;
-  title: string;
-  location: string;
-  date: string;
-  description: string;
-  requirements: string[];
-  employmentType: string; // e.g., Full-time, Part-time
-  workMode: string; // e.g., On-site, Remote
-  applicantCount: number; // Số lượng ứng viên
-  level: string; // e.g., Internship, Entry-level, Mid-level, Senior-level
+interface JobsProps {
+  company_id: string;
 }
 
-const jobInstance = {
-  id: 1,
-  title: "Associate Machine Learning Engineer, Zalopay Hehehe",
-  location: "Ho Chi Minh, Viet Nam",
-  date: "25 days ago",
-  description:
-    "Zalopay is looking for an Associate Machine Learning Engineer to join our team. You will be responsible for developing machine learning models and deploying them to production.",
-  requirements: [
-    "Bachelor's degree in Computer Science or related field",
-    "Experience with Python and machine learning libraries",
-    "Experience with cloud computing platforms",
-  ],
-  employmentType: "Full-time", // Loại hình việc làm
-  workMode: "On-site", // Hình thức làm việc
-  applicantCount: 150, // Số lượng ứng viên
-  level: "Internship", // Cấp độ công việc
-};
-
-const Jobs = () => {
-  const [jobs, setJobs] = useState(
-    Array(10)
-      .fill(jobInstance)
-      .map((job, index) => ({ ...job, id: index }))
-  );
-  const [selectedJob, setSelectedJob] = useState<iJobDescription | null>(null);
+const Jobs = ({ company_id }: JobsProps) => {
+  const [jobs, setJobs] = useState<IJob[]>([]);
+  const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
 
   const fetchJobs = async () => {
+    // setLoading(true);
+    // setError(null); // Reset error state
     try {
-      const res = await axiosInstance.get("/jobs");
-      setJobs(res.data);
+      const response = await axiosInstance.get(`/job?company_id=${company_id}`); // Sử dụng company_id từ URL
+      setJobs(response.data.data.jobs);
+      console.log(response.data.data);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching company data:", error);
+      // setError("Failed to fetch company data. Please try again later.");
+    } finally {
+      // setLoading(false);
     }
   };
 
   useEffect(() => {
+    console.log(company_id);
     fetchJobs();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [company_id]);
 
   return (
     <div className="container">
@@ -74,7 +52,7 @@ const Jobs = () => {
           <ListGroup>
             {jobs.map((job) => (
               <ListGroup.Item
-                key={job.id}
+                key={job ? job._id : "jobID"}
                 action
                 onClick={() => {
                   setSelectedJob(job);
@@ -84,7 +62,7 @@ const Jobs = () => {
                   borderRadius: "8px",
                   marginBottom: "0.5rem",
                   backgroundColor:
-                    selectedJob?.id === job.id ? "#e7f3ff" : "#f8f9fa",
+                    selectedJob?._id === job._id ? "#e7f3ff" : "#f8f9fa",
                   cursor: "pointer",
                 }}
               >
@@ -92,10 +70,10 @@ const Jobs = () => {
                   {job.title}
                 </div>
                 <div className="text-muted" style={{ fontSize: "13px" }}>
-                  {job.location}
+                  {job.description}
                 </div>
                 <div className="text-muted" style={{ fontSize: "13px" }}>
-                  {job.date}
+                  {job.createdAt}
                 </div>
               </ListGroup.Item>
             ))}
