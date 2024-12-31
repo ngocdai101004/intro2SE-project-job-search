@@ -4,7 +4,7 @@ import { verifyAdmin } from "../middlewares/verifyAdmin";
 
 import {
   createJob,
-  getAllJobs,
+  getJobs,
   getJobByID,
   getRecommendedJobs,
 } from "../controllers/jobController";
@@ -12,7 +12,7 @@ import {
 const router = Router();
 
 router.post("/create", verifyUser, verifyAdmin, createJob);
-router.get("/all", getAllJobs);
+router.get("/", getJobs);
 router.get("/recommended", verifyUser, getRecommendedJobs);
 router.get("/:jobID", getJobByID);
 

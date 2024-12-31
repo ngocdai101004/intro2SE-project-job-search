@@ -19,10 +19,18 @@ export const createJob = async (req: Request, res: Response) => {
   }
 };
 
-// Get all jobs
-export const getAllJobs = async (req: Request, res: Response) => {
+// Get jobs by query params
+export const getJobs = async (req: Request, res: Response) => {
   try {
-    const jobs = await Job.find();
+    const { company_id } = req.query;
+
+    let jobs;
+    if (company_id) {
+      jobs = await Job.find({ company_id: company_id });
+    } else {
+      jobs = await Job.find();
+    }
+
     res.status(200).json({
       message: "Jobs fetched successfully",
       data: { jobs },
