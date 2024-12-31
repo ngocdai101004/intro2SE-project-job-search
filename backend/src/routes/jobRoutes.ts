@@ -1,8 +1,11 @@
 import { Router } from "express";
-import { findJobsByCompanyId } from "../controllers/jobController";
+import { verifyUser } from "../middlewares/verifyUser";
+import { verifyAdmin } from "../middlewares/verifyAdmin";
+import { createJob, getJobs } from "../controllers/jobController";
 
 const router = Router();
 
-router.get("/company/:company_id/jobs", (req, res, next) => {
-  findJobsByCompanyId(req, res).catch(next);
-});
+router.post("/create", verifyUser, verifyAdmin, createJob);
+router.get("/", getJobs);
+
+export default router;

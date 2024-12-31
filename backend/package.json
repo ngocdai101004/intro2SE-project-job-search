@@ -23,7 +23,8 @@
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.4",
-    "nodemailer": "^6.9.16"
+    "nodemailer": "^6.9.16",
+    "react-icons": "^5.4.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

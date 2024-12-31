@@ -17,37 +17,18 @@ const router = Router();
 
 router.post("/", verifyUser, createCompany);
 
-router.get("/", (req, res, next) => {
-  getAllCompanies(req, res).catch(next);
-});
+router.get("/", getAllCompanies);
+router.put("/:companyID", verifyUser, updateCompany);
 
-router.put("/:companyID", verifyUser, (req, res, next) => {
-  updateCompany(req, res).catch(next);
-});
-router.get("/:companyID", (req, res, next) => {
-  getCompany(req, res).catch(next);
-});
-router.delete("/:companyID", verifyUser, (req, res, next) => {
-  deleteCompany(req, res).catch(next);
-});
+router.get("/:companyID", getCompany);
+router.delete("/:companyID", verifyUser, deleteCompany);
 
-router.post("/:companyID/follow", verifyUser, (req, res, next) => {
-  followCompany(req, res).catch(next);
-});
-router.post("/:companyID/unfollow", verifyUser, (req, res, next) => {
-  unfollowCompany(req, res).catch(next);
-});
+router.post("/:companyID/follow", verifyUser, followCompany);
+router.post("/:companyID/unfollow", verifyUser, unfollowCompany);
 
-router.post("/:companyID/review", verifyUser, (req, res, next) => {
-  reviewCompany(req, res).catch(next);
-});
+router.post("/:companyID/review", verifyUser, reviewCompany);
+router.delete("/:companyID/review", verifyUser, deleteCompanyReview);
 
-router.delete("/:companyID/review", verifyUser, (req, res, next) => {
-  deleteCompanyReview(req, res).catch(next);
-});
-
-router.get("/:companyID/reviews", (req, res, next) => {
-  getCompanyReviews(req, res).catch(next);
-});
+router.get("/:companyID/reviews", getCompanyReviews);
 
 export default router;

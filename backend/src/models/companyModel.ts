@@ -129,6 +129,10 @@ const companySchema = new mongoose.Schema(
         },
       },
     ],
+    avatar: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

@@ -86,7 +86,22 @@ const userInfoSchema = new mongoose.Schema(
 
     skills: [String],
 
-    certifications: [String],
+    certifications: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        issuing_organization: {
+          type: String,
+          required: true,
+        },
+        issue_date: {
+          type: Date,
+          required: true,
+        },
+      },
+    ],
 
     job_preferences: [
       {

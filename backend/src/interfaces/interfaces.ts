@@ -137,4 +137,9 @@ interface ICompany {
   qa: IQA[];
 }
 
-export default ICompany;
+export interface IVerifyAdminRequest extends IVerifiedRequest {
+  body: IVerifiedRequest["body"] & {
+    company_id: string;
+    isAdmin: boolean;
+  };
+}

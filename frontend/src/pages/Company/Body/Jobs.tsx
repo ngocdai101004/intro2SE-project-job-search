@@ -4,42 +4,20 @@ import axiosInstance from "../../../common/axiosInstance";
 import JobDetail from "./JobDetail";
 import { IJob } from "../../../interfaces/interfaces";
 
-const jobInstance = {
-  id: 1,
-  title: "Associate Machine Learning Engineer, Zalopay Hehehe",
-  location: "Ho Chi Minh, Viet Nam",
-  date: "25 days ago",
-  description:
-    "Zalopay is looking for an Associate Machine Learning Engineer to join our team. You will be responsible for developing machine learning models and deploying them to production.",
-  requirements: [
-    "Bachelor's degree in Computer Science or related field",
-    "Experience with Python and machine learning libraries",
-    "Experience with cloud computing platforms",
-  ],
-  employmentType: "Full-time", // Loại hình việc làm
-  workMode: "On-site", // Hình thức làm việc
-  applicantCount: 150, // Số lượng ứng viên
-  level: "Internship", // Cấp độ công việc
-};
-
 interface JobsProps {
   company_id: string;
 }
 
 const Jobs = ({ company_id }: JobsProps) => {
-  const [jobs, setJobs] = useState(
-    Array(10)
-      .fill(jobInstance)
-      .map((job, index) => ({ ...job, id: index }))
-  );
+  const [jobs, setJobs] = useState<IJob[]>([]);
   const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
 
   const fetchJobs = async () => {
     // setLoading(true);
     // setError(null); // Reset error state
     try {
-      const response = await axiosInstance.get(`/company/${company_id}/jobs`); // Sử dụng company_id từ URL
-      setJobs(response.data.data);
+      const response = await axiosInstance.get(`/job?company_id=${company_id}`); // Sử dụng company_id từ URL
+      setJobs(response.data.data.jobs);
       console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching company data:", error);
@@ -50,9 +28,10 @@ const Jobs = ({ company_id }: JobsProps) => {
   };
 
   useEffect(() => {
+    console.log(company_id);
     fetchJobs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [company_id]);
 
   return (
     <div className="container">
@@ -73,7 +52,7 @@ const Jobs = ({ company_id }: JobsProps) => {
           <ListGroup>
             {jobs.map((job) => (
               <ListGroup.Item
-                key={job.id}
+                key={job ? job._id : "jobID"}
                 action
                 onClick={() => {
                   setSelectedJob(job);
@@ -91,10 +70,10 @@ const Jobs = ({ company_id }: JobsProps) => {
                   {job.title}
                 </div>
                 <div className="text-muted" style={{ fontSize: "13px" }}>
-                  {job.location}
+                  {job.description}
                 </div>
                 <div className="text-muted" style={{ fontSize: "13px" }}>
-                  {job.date}
+                  {job.createdAt}
                 </div>
               </ListGroup.Item>
             ))}

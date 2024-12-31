@@ -5,8 +5,13 @@ import UserInfo from "../models/userInfoModel";
 // Get user
 const getUser = async (req: Request, res: Response) => {
   try {
-    const { userID } = req.body;
-    const user = await User.findById(userID).select("-password");
+    let { userID } = req.params as { userID: string };
+    if (!userID) {
+      userID = req.body.userID;
+    }
+    const user = await User.findById(userID).select(
+      "-password -verification_code -__v -createdAt -updatedAt"
+    );
     if (user) {
       res.status(200).json({ message: "User found", data: { user } });
     } else {
@@ -92,7 +97,10 @@ const createUserInfo = async (req: Request, res: Response) => {
 // Get user info
 const getUserInfo = async (req: Request, res: Response) => {
   try {
-    const { userID } = req.body;
+    let { userID } = req.params as { userID: string };
+    if (!userID) {
+      userID = req.body.userID;
+    }
     const userInfo = await UserInfo.findOne({ user_id: userID }).populate(
       "user_id"
     );

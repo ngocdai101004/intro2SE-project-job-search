@@ -2,7 +2,6 @@ import { Router } from "express";
 import { verifyUser } from "../middlewares/verifyUser";
 import { slowdownRequest } from "../utils/slowdownRequest";
 import { checkSchema } from "express-validator";
-import { createUserValidationSchema } from "../utils/validationSchema";
 
 import {
   checkUser,

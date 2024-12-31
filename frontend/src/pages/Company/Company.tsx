@@ -87,7 +87,7 @@ function Company() {
     setError(null); // Reset error state
     try {
       const response = await axiosInstance.get(`/company/${company_id}`); // Sử dụng company_id từ URL
-      setCompanyData(response.data.data);
+      setCompanyData(response.data.data.company);
     } catch (error) {
       console.error("Error fetching company data:", error);
       setError("Failed to fetch company data. Please try again later.");
@@ -119,7 +119,7 @@ function Company() {
       case "/snapshot":
         return companyData ? <Snapshot companyData={companyData} /> : null;
       case "/jobs":
-        return <Jobs company_id={"" + { company_id }} />;
+        return <Jobs company_id={company_id || ""} />;
       case "/reviews":
         return <Reviews />;
       case "/qa":
