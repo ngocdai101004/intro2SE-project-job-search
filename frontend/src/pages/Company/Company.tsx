@@ -103,6 +103,7 @@ function Company() {
     if (active_key) {
       setMyActiveKey("/" + active_key);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Chạy lại khi company_id thay đổi
 
   const renderContent = () => {

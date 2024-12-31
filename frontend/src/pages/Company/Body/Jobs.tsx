@@ -40,6 +40,7 @@ const Jobs = ({ company_id }: JobsProps) => {
     try {
       const response = await axiosInstance.get(`/company/${company_id}/jobs`); // Sử dụng company_id từ URL
       setJobs(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching company data:", error);
       // setError("Failed to fetch company data. Please try again later.");
@@ -50,6 +51,7 @@ const Jobs = ({ company_id }: JobsProps) => {
 
   useEffect(() => {
     fetchJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
