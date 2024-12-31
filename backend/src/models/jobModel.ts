@@ -54,6 +54,11 @@ const jobSchema = new mongoose.Schema(
       type: [String], // Array of strings
     },
 
+    open_time: {
+      type: Date,
+      required: true,
+    },
+
     deadline: {
       type: Date,
       required: true,

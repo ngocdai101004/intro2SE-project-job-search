@@ -8,9 +8,10 @@ import { useEffect } from "react";
 
 interface MyHeaderProps {
   mydefaultActiveKey: string;
+  className?: string;
 }
 
-export default function MyHeader({ mydefaultActiveKey }: MyHeaderProps) {
+export default function MyHeader({ mydefaultActiveKey, className}: MyHeaderProps) {
   const [myActiveKey, setMyActiveKey] = React.useState(
     mydefaultActiveKey || "/home"
   );
@@ -49,7 +50,7 @@ export default function MyHeader({ mydefaultActiveKey }: MyHeaderProps) {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <nav className={`navbar navbar-expand-lg navbar-dark bg-primary shadow-sm ${className}`}>
       <div
         className="w-100 d-flex justify-content-between align-items-center px-3"
         style={{ padding: "0 0" }}
