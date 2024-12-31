@@ -90,17 +90,21 @@ interface IReview {
   date: Date;
 }
 
-interface IJob {
-  id: string;
+export interface IJob {
+  _id: string;
+  company_id: string;
+  status: "open" | "closed" | "draft";
   title: string;
-  location: string;
-  date: string;
+  number_of_peoples: number;
+  type: "full-time" | "part-time" | "contract" | "internship";
+  location_type: "remote" | "on-site" | "hybrid";
   description: string;
-  requirements: string[];
-  employmentType: string; // e.g., Full-time, Part-time
-  workMode: string; // e.g., On-site, Remote
-  applicantCount: number; // Số lượng ứng viên
-  level: string; // e.g., Internship, Entry-level, Mid-level, Senior-level
+  salary: number;
+  emails?: string;
+  requirements?: string[];
+  deadline: Date;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface IQA {
@@ -125,9 +129,6 @@ interface ICompany {
   description: Description;
   short_description: string;
   legal_document_url?: string;
-
-  // Jobs
-  jobs: IJob[];
 
   // Reviews
   reviews: IReview[];

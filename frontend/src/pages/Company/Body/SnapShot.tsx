@@ -1,6 +1,6 @@
 import { Card, Row, Col, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ICompany from "../../../interfaces/ICompany";
+import ICompany from "../../../interfaces/interfaces";
 
 const Snapshot: React.FC<{ companyData: ICompany }> = ({ companyData }) => {
   return (

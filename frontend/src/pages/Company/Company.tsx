@@ -6,7 +6,7 @@ import CompanyHeader from "./Header/CompanyHeader";
 import Jobs from "./Body/Jobs";
 import Reviews from "./Body/Reviews";
 import axiosInstance from "../../common/axiosInstance";
-import ICompany from "../../interfaces/ICompany";
+import ICompany from "../../interfaces/interfaces";
 import { Spinner, Alert } from "react-bootstrap";
 
 const QA = () => (
@@ -33,53 +33,6 @@ const exampleCompany: ICompany = {
     specialities: ["Software Development", "Cloud Computing", "AI Solutions"],
   },
   short_description: "A leader in innovative tech solutions.",
-  jobs: [
-    {
-      id: "101",
-      title: "Software Engineer",
-      location: "San Francisco, CA",
-      date: "2024-01-10",
-      description: "Develop and maintain software applications.",
-      requirements: [
-        "3+ years in software development",
-        "Proficiency in JavaScript, Python",
-      ],
-      employmentType: "Full-time",
-      workMode: "Hybrid",
-      applicantCount: 25,
-      level: "Mid-level",
-    },
-    {
-      id: "102",
-      title: "Data Scientist",
-      location: "San Francisco, CA",
-      date: "2024-01-15",
-      description: "Analyze large datasets to generate business insights.",
-      requirements: [
-        "Strong Python skills",
-        "Experience with machine learning models",
-      ],
-      employmentType: "Full-time",
-      workMode: "On-site",
-      applicantCount: 30,
-      level: "Senior-level",
-    },
-    {
-      id: "103",
-      title: "UX Designer",
-      location: "San Francisco, CA",
-      date: "2024-01-20",
-      description: "Design user-friendly interfaces for web and mobile apps.",
-      requirements: [
-        "Experience in UX/UI design",
-        "Knowledge of design tools like Figma",
-      ],
-      employmentType: "Part-time",
-      workMode: "Remote",
-      applicantCount: 15,
-      level: "Entry-level",
-    },
-  ],
   reviews: [
     {
       user_id: "user123",
@@ -121,32 +74,36 @@ const exampleCompany: ICompany = {
 
 function Company() {
   const { company_id } = useParams<{ company_id: string }>(); // Lấy company_id từ URL
+  const { active_key } = useParams<{ active_key: string }>(); // Lấy active_key từ URL
+
   const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
 
   const [companyData, setCompanyData] = useState<ICompany>(exampleCompany);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null); // Reset error state
-      try {
-        const response = await axiosInstance.get(`/company/${company_id}`); // Sử dụng company_id từ URL
-        setCompanyData(response.data.data);
-        console.log("set company data successful!");
-      } catch (error) {
-        console.error("Error fetching company data:", error);
-        setError("Failed to fetch company data. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null); // Reset error state
+    try {
+      const response = await axiosInstance.get(`/company/${company_id}`); // Sử dụng company_id từ URL
+      setCompanyData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching company data:", error);
+      setError("Failed to fetch company data. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (company_id) {
       fetchData(); // Gọi fetchData chỉ khi có company_id
     }
-  }, [company_id]); // Chạy lại khi company_id thay đổi
+    if (active_key) {
+      setMyActiveKey("/" + active_key);
+    }
+  }, []); // Chạy lại khi company_id thay đổi
 
   const renderContent = () => {
     if (loading) {
@@ -161,7 +118,7 @@ function Company() {
       case "/snapshot":
         return companyData ? <Snapshot companyData={companyData} /> : null;
       case "/jobs":
-        return <Jobs />;
+        return <Jobs company_id={"" + { company_id }} />;
       case "/reviews":
         return <Reviews />;
       case "/qa":

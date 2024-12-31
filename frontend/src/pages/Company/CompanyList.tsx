@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Container, ListGroup } from "react-bootstrap";
 import axiosInstance from "../../common/axiosInstance";
 import MyHeader from "../../components/MyHeader";
-import ICompany from "../../interfaces/ICompany";
+import ICompany from "../../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 
 const CompanyList = () => {
@@ -36,7 +36,7 @@ const CompanyList = () => {
               key={company._id}
               action
               onClick={() => {
-                navigate("/company/" + company._id);
+                navigate("/company/" + company._id + "/snapshot");
               }}
               style={{
                 border: "1px solid lightgray",

@@ -1,10 +1,11 @@
 import { ObjectId } from "mongodb";
+import { users } from "./users";
 
 export const companies = [
   {
     _id: new ObjectId(),
-    owner_id: new ObjectId(),
-    admin_id: [new ObjectId()],
+    owner_id: users[0]._id,
+    admin_id: [users[1]._id, users[2]._id],
     company_name: "TechVibes Inc.",
     sumRating: 14,
     followers: [new ObjectId(), new ObjectId(), new ObjectId()],
@@ -110,10 +111,10 @@ export const companies = [
   },
   {
     _id: new ObjectId(),
-    owner_id: new ObjectId(),
-    admin_id: [new ObjectId()],
+    owner_id: users[1]._id,
+    admin_id: [users[0]._id, users[2]._id],
     company_name: "GreenTech Solutions",
-    sumRating: 13,
+    sumRating: 11,
     followers: [new ObjectId(), new ObjectId()],
     address: {
       district: "Downtown",
@@ -214,10 +215,10 @@ export const companies = [
   },
   {
     _id: new ObjectId(),
-    owner_id: new ObjectId(),
-    admin_id: [new ObjectId()],
+    owner_id: users[2]._id,
+    admin_id: [users[1]._id, users[0]._id],
     company_name: "EduGlobal",
-    sumRating: 14,
+    sumRating: 7,
     followers: [new ObjectId(), new ObjectId()],
     address: {
       district: "West End",

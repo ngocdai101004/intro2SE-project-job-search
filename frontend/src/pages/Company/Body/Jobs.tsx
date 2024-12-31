@@ -2,19 +2,7 @@ import { useEffect, useState } from "react";
 import { Col, Row, ListGroup } from "react-bootstrap";
 import axiosInstance from "../../../common/axiosInstance";
 import JobDetail from "./JobDetail";
-
-interface iJobDescription {
-  id: number;
-  title: string;
-  location: string;
-  date: string;
-  description: string;
-  requirements: string[];
-  employmentType: string; // e.g., Full-time, Part-time
-  workMode: string; // e.g., On-site, Remote
-  applicantCount: number; // Số lượng ứng viên
-  level: string; // e.g., Internship, Entry-level, Mid-level, Senior-level
-}
+import { IJob } from "../../../interfaces/interfaces";
 
 const jobInstance = {
   id: 1,
@@ -34,20 +22,29 @@ const jobInstance = {
   level: "Internship", // Cấp độ công việc
 };
 
-const Jobs = () => {
+interface JobsProps {
+  company_id: string;
+}
+
+const Jobs = ({ company_id }: JobsProps) => {
   const [jobs, setJobs] = useState(
     Array(10)
       .fill(jobInstance)
       .map((job, index) => ({ ...job, id: index }))
   );
-  const [selectedJob, setSelectedJob] = useState<iJobDescription | null>(null);
+  const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
 
   const fetchJobs = async () => {
+    // setLoading(true);
+    // setError(null); // Reset error state
     try {
-      const res = await axiosInstance.get("/jobs");
-      setJobs(res.data);
+      const response = await axiosInstance.get(`/company/${company_id}/jobs`); // Sử dụng company_id từ URL
+      setJobs(response.data.data);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching company data:", error);
+      // setError("Failed to fetch company data. Please try again later.");
+    } finally {
+      // setLoading(false);
     }
   };
 
@@ -84,7 +81,7 @@ const Jobs = () => {
                   borderRadius: "8px",
                   marginBottom: "0.5rem",
                   backgroundColor:
-                    selectedJob?.id === job.id ? "#e7f3ff" : "#f8f9fa",
+                    selectedJob?._id === job._id ? "#e7f3ff" : "#f8f9fa",
                   cursor: "pointer",
                 }}
               >
