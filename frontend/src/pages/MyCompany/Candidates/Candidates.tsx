@@ -4,8 +4,8 @@ import {
   Row,
   Col,
   Dropdown,
-  FormControl,
   InputGroup,
+  FormControl,
 } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import "./Candidates.css";
@@ -26,7 +26,7 @@ const Candidates: React.FC = () => {
                     <InputGroup.Text>
                       <i className="bi bi-filter"></i>
                     </InputGroup.Text>
-                    <FormControl placeholder="Filter and search candidates" />
+                    <FormControl placeholder="Sort by: Apply date (newest first)" />
                     <Dropdown>
                       <Dropdown.Toggle
                         variant="outline-secondary"
