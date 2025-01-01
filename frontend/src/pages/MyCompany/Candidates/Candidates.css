@@ -1,3 +1,12 @@
+.filter-bar #dropdown-basic {
+  border: 1px solid #dee2e6;
+  border-left: 0px;
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+  border-color: #dee2e6;
+  height: 100%;
+}
+
 .candidate-table th .candidate-table td {
   padding: 10px 20px;
 }
