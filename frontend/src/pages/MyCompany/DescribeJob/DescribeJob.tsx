@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
+import "./DescribeJob.css";
 
 const DescribeJob: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const DescribeJob: React.FC = () => {
                 style={{ maxWidth: "600px", width: "100%" }}
               >
                 <header className="header mb-3">
-                  <h1>Add Job Basics</h1>
+                  <h1>Describe the job</h1>
                   <hr />
                 </header>
 
@@ -38,17 +39,7 @@ const DescribeJob: React.FC = () => {
                       </span>
                     </strong>
                   </div>
-                  <div
-                    style={{
-                      border: "1px solid #ced4da",
-                      borderRadius: "4px",
-                      padding: "10px",
-                      minHeight: "100px",
-                      maxHeight: "280px",
-                      whiteSpace: "pre-wrap",
-                      overflowY: "auto",
-                    }}
-                  >
+                  <div className="job-description">
                     <p>
                       <strong>Responsibilities:</strong>
                     </p>
@@ -76,7 +67,7 @@ const DescribeJob: React.FC = () => {
                     </p>
                     <ul>
                       <li>
-                        2+ years of JavaScript (yes, it’s always JavaScript).
+                        2+ years of JavaScript (yes, it's always JavaScript).
                       </li>
                       <li>
                         Ability to write “Hello World” in any language when
