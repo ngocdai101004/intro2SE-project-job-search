@@ -14,6 +14,7 @@ import AddPaysAndBenefits from "./pages/MyCompany/AddPaysAndBenefits/AddPaysAndB
 import DescribeJob from "./pages/MyCompany/DescribeJob/DescribeJob.tsx";
 import PreviewJob from "./pages/MyCompany/PreviewJob/PreviewJob.tsx";
 import JobList from "./pages/MyCompany/JobList/JobList.tsx";
+import Candidates from "./pages/MyCompany/Candidates/Candidates.tsx";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
   {
     path: "/my-company/job-list",
     element: <JobList />,
+  },
+  {
+    path: "/my-company/candidates",
+    element: <Candidates />,
   },
   // {
   //   path: "/home",

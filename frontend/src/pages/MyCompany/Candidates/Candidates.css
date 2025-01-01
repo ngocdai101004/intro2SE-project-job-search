@@ -1,0 +1,47 @@
+.candidate-table th .candidate-table td {
+  padding: 10px 20px;
+}
+
+.candidate-table thead th {
+  background-color: #d9d9d9;
+}
+
+.candidate-table tbody td {
+  height: 130px;
+}
+
+.candidate-table tbody .candidate-name {
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+
+.candidate-table tbody .candidate-state {
+  background-color: #d9d9d9;
+  display: inline-block;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  text-align: center;
+  padding: 5px 12px;
+}
+
+.candidate-table tbody .candidate-intersted {
+  display: inline-block;
+}
+
+.candidate-intersted .icon {
+  border: 1px solid #000;
+  padding: 0px 8px;
+}
+
+.candidate-intersted .icon:nth-child(2) {
+  padding: 0px 10px;
+  border-left: none;
+  border-right: none;
+}
+
+.candidate-intersted .icon:hover {
+  background-color: #16c47f;
+  cursor: pointer;
+}
