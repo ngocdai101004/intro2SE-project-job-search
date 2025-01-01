@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./PreviewJob.css";
 
 const PreviewJob: React.FC = () => {
   const navigate = useNavigate();
@@ -9,61 +10,19 @@ const PreviewJob: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#e0e0e0",
-      }}
-    >
-      <div
-        style={{
-          width: "700px",
-          height: "550px",
-          padding: "20px",
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-          backgroundColor: "#fff",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+    <div className="preview-job">
+      <div className="preview-job-container">
         {/* Ảnh và tiêu đề */}
-        <div
-          style={{
-            position: "sticky",
-            top: 0,
-            backgroundColor: "#fff",
-            zIndex: 1,
-            paddingBottom: "10px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "5px",
-            }}
-          >
-            <img
-              src="/preview-job.png"
-              alt="Logo"
-              style={{
-                width: "40px",
-                height: "40px",
-                marginRight: "10px",
-              }}
-            />
+        <div className="preview-job-header">
+          <div className="preview-job-header-content">
+            <img src="/preview-job.png" alt="Logo" />
             <div>
               <strong>
-                <p style={{ fontSize: "20px", margin: 0, marginBottom: "1px" }}>
+                <p className="preview-job-header-content-title">
                   Job Post Review
                 </p>
               </strong>
-              <p style={{ fontSize: "12px", opacity: 0.6, margin: 0 }}>
+              <p className="preview-job-header-content-description">
                 The live post people view may look slightly different.
               </p>
             </div>
@@ -77,46 +36,22 @@ const PreviewJob: React.FC = () => {
           />
         </div>
 
-        <div
-          style={{
-            flex: 1,
-            padding: "10px",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "10px",
-            }}
-          >
-            <div>
+        <div className="preview-job-content">
+          <div className="preview-job-content-header">
+            <div className="preview-job-content-header-left">
               <strong>
-                <p style={{ fontSize: "20px", marginBottom: "8px" }}>
+                <p style={{ fontSize: "20px" }}>
                   Software Development Intern, Zalopay
                 </p>
               </strong>
-              <p style={{ marginBottom: "8px" }}>
+              <p>
                 Ho Chi Minh City, Vietnam · 25 days ago · Over 100 applicants
               </p>
-              <p style={{ marginBottom: "8px" }}>
+              <p>
                 <strong>On-site</strong> · Full-time · Internship
               </p>
             </div>
-            <button
-              style={{
-                padding: "12px 30px",
-                backgroundColor: "#007BFF",
-                color: "#fff",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-            >
+            <button className="preview-job-content-header-right">
               Apply Now
             </button>
           </div>
@@ -130,15 +65,9 @@ const PreviewJob: React.FC = () => {
             }}
           />
 
-          <div
-            style={{
-              maxHeight: "250px",
-              overflowY: "auto",
-              paddingRight: "10px",
-            }}
-          >
+          <div className="preview-job-content-description">
             <strong>
-              <p style={{ fontSize: "20px" }}>Responsibilities:</p>
+              <p>Responsibilities:</p>
             </strong>
             <ul>
               <li>
@@ -161,7 +90,7 @@ const PreviewJob: React.FC = () => {
             </ul>
 
             <strong>
-              <p style={{ fontSize: "20px" }}>Requirements:</p>
+              <p>Requirements:</p>
             </strong>
             <ul>
               <li>2+ years of JavaScript (yes, it’s always JavaScript).</li>
@@ -177,7 +106,7 @@ const PreviewJob: React.FC = () => {
             </ul>
 
             <strong>
-              <p style={{ fontSize: "20px" }}>Perks:</p>
+              <p>Perks:</p>
             </strong>
             <ul>
               <li>Flexible hours to match your nocturnal coding habits.</li>
@@ -191,20 +120,7 @@ const PreviewJob: React.FC = () => {
         </div>
 
         <button
-          style={{
-            padding: "8px 12px",
-            backgroundColor: "#fff",
-            color: "#000",
-            border: "1px solid #000",
-            fontWeight: "bold",
-            borderRadius: "8px",
-            cursor: "pointer",
-            marginTop: "10px",
-            display: "block",
-            marginLeft: "auto",
-            marginRight: "auto",
-            whiteSpace: "nowrap",
-          }}
+          className="preview-job-close"
           onClick={() => handleNavigation("/my-company/describe-job")}
         >
           Close Preview
