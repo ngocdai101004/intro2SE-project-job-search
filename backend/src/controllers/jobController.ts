@@ -42,15 +42,20 @@ export const getJobs = async (req: Request, res: Response) => {
   }
 };
 
-export const getJobsByCompanyId = async (req: Request, res: Response) => {
+// Controller lấy jobs theo companyId
+export const getJobsByCompanyId = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    // Lấy dữ liệu từ query
-    const { companyId } = req.params;
+    // Lấy dữ liệu từ params và query
+    const { companyId } = req.params; // Đổi tên tham số để đồng bộ với route
     const { page = 1, limit = 10 } = req.query;
 
-    // Kiểm tra company_id hợp lệ
-    if (!mongoose.Types.ObjectId.isValid(companyId as string)) {
+    // Kiểm tra companyId hợp lệ
+    if (!mongoose.Types.ObjectId.isValid(companyId)) {
       res.status(400).json({ message: "Invalid company ID", data: [] });
+      return; // Thoát hàm nếu companyId không hợp lệ
     }
 
     // Tính toán phân trang
@@ -58,19 +63,16 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
     const pageSize = parseInt(limit as string, 10) || 10;
     const skip = (pageNumber - 1) * pageSize;
 
-    // Lọc theo công ty nếu có company_id
-    const filter = companyId ? { companyId } : {};
-
-    // Lấy danh sách công việc từ database
-    const jobs = await Job.find(filter)
+    // Truy vấn dữ liệu từ database
+    const jobs = await Job.find({ company_id: companyId })
       .skip(skip)
       .limit(pageSize)
-      .sort({ createdAt: -1 }); // Sắp xếp theo ngày tạo mới nhất
+      .sort({ createdAt: -1 });
 
     // Đếm tổng số công việc
-    const totalJobs = await Job.countDocuments(filter);
+    const totalJobs = await Job.countDocuments({ company_id: companyId });
 
-    // Trả về kết quả
+    // Trả về dữ liệu
     res.status(200).json({
       message: "Jobs fetched successfully",
       data: {
@@ -81,7 +83,7 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       message: (error as any).message || "Failed to fetch jobs",
       data: [],
     });

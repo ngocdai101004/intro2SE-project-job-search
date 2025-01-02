@@ -36,7 +36,7 @@ const DescribeJob: React.FC = () => {
 
     // Xử lý dữ liệu trước khi gửi lên backend
     const formattedData = {
-      company_id: "6769263f8133514e228544bd", // Thay bằng ID thực tế
+      company_id: "6776acea66277d8c90632d9f", // Thay bằng ID thực tế
       status: "open",
       title: jobData.title || "Untitled Job",
       number_of_peoples: jobData.number_of_peoples || 1,
@@ -55,18 +55,12 @@ const DescribeJob: React.FC = () => {
       open_time: new Date().toISOString(),
     };
 
-    console.log(formattedData);
-
-    // Xác thực dữ liệu trước khi gửi
-    if (
-      !formattedData.title ||
-      !formattedData.salary.min ||
-      !formattedData.salary.max ||
-      !formattedData.deadline
-    ) {
-      alert("Missing required fields. Please complete all steps.");
-      return;
-    }
+    console.log(
+      formattedData.title,
+      formattedData.salary.min,
+      formattedData.salary.max,
+      formattedData.deadline
+    );
 
     setLoading(true);
 
