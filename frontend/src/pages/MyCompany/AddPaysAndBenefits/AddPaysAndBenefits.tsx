@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
@@ -12,9 +12,40 @@ const AddPaysAndBenefits: React.FC = () => {
   const [maximumPay, setMaximumPay] = useState("");
   const [rate, setRate] = useState("per month");
 
-  const handleNavigation = (path: string) => {
-    navigate(path);
+  // Load dữ liệu từ localStorage khi render lại trang
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
+    if (savedData.payType) setPayType(savedData.payType);
+    if (savedData.minimumPay) setMinimumPay(savedData.minimumPay);
+    if (savedData.maximumPay) setMaximumPay(savedData.maximumPay);
+    if (savedData.rate) setRate(savedData.rate);
+  }, []);
+
+  // Lưu dữ liệu vào localStorage và chuyển tiếp
+  const handleSaveAndContinue = () => {
+    const currentData = {
+      payType,
+      salary: payType === "Fixed" ? minimumPay : `${minimumPay}-${maximumPay}`, // Xử lý format salary
+      rate,
+    };
+
+    // Lưu dữ liệu vào localStorage
+    const existingData = JSON.parse(
+      localStorage.getItem("jobPostData") || "{}"
+    );
+    localStorage.setItem(
+      "jobPostData",
+      JSON.stringify({ ...existingData, ...currentData })
+    );
+
+    // Chuyển đến trang tiếp theo
+    navigate("/my-company/add-job-description");
   };
+
+  const handleBack = () => {
+    navigate("/my-company/add-job-details");
+  };
+
   return (
     <MainLayout>
       <Container fluid className="job-post-container">
@@ -42,6 +73,7 @@ const AddPaysAndBenefits: React.FC = () => {
                       </Form.Label>
                     </strong>
                     <div className="d-flex gap-2 mb-5">
+                      {/* Chọn loại lương */}
                       <Form.Select
                         value={payType}
                         onChange={(e) => setPayType(e.target.value)}
@@ -49,6 +81,8 @@ const AddPaysAndBenefits: React.FC = () => {
                         <option value="Range">Range</option>
                         <option value="Fixed">Fixed</option>
                       </Form.Select>
+
+                      {/* Mức lương tối thiểu */}
                       <Form.Select
                         value={minimumPay}
                         onChange={(e) => setMinimumPay(e.target.value)}
@@ -59,16 +93,22 @@ const AddPaysAndBenefits: React.FC = () => {
                           </option>
                         ))}
                       </Form.Select>
-                      <Form.Select
-                        value={maximumPay}
-                        onChange={(e) => setMaximumPay(e.target.value)}
-                      >
-                        {[...Array(21)].map((_, i) => (
-                          <option key={i} value={i * 10000}>
-                            {i * 10000}
-                          </option>
-                        ))}
-                      </Form.Select>
+
+                      {/* Mức lương tối đa */}
+                      {payType === "Range" && (
+                        <Form.Select
+                          value={maximumPay}
+                          onChange={(e) => setMaximumPay(e.target.value)}
+                        >
+                          {[...Array(21)].map((_, i) => (
+                            <option key={i} value={i * 10000}>
+                              {i * 10000}
+                            </option>
+                          ))}
+                        </Form.Select>
+                      )}
+
+                      {/* Đơn vị lương */}
                       <Form.Select
                         value={rate}
                         onChange={(e) => setRate(e.target.value)}
@@ -84,20 +124,10 @@ const AddPaysAndBenefits: React.FC = () => {
 
                   {/* Button điều hướng */}
                   <div className="d-flex justify-content-between">
-                    <Button
-                      variant="secondary"
-                      onClick={() =>
-                        handleNavigation("/my-company/add-job-details")
-                      }
-                    >
+                    <Button variant="secondary" onClick={handleBack}>
                       ← Back
                     </Button>
-                    <Button
-                      variant="primary"
-                      onClick={() =>
-                        handleNavigation("/my-company/describe-job")
-                      }
-                    >
+                    <Button variant="primary" onClick={handleSaveAndContinue}>
                       Continue →
                     </Button>
                   </div>

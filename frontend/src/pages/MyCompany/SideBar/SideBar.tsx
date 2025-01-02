@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./SideBar.css"; // Thêm CSS để xử lý giao diện
 import { FaChevronRight, FaPlus, FaBriefcase, FaUser } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -9,7 +9,6 @@ interface SidebarItemProps {
   onClick: () => void;
   showIcon?: boolean;
   icon: React.ReactNode;
-  link: string;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({
@@ -34,9 +33,15 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 };
 
 const SideBar: React.FC = () => {
-  const [activeItem, setActiveItem] = useState("Jobs");
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Xác định mục active dựa trên pathname
+  const getActiveItem = () => {
+    if (location.pathname === "/my-company/job-list") return "Jobs";
+    if (location.pathname === "/my-company/candidates") return "Candidates";
+    return "Create New"; // Mặc định là Create New cho các đường dẫn khác
+  };
 
   const menuItems = [
     {
@@ -60,16 +65,11 @@ const SideBar: React.FC = () => {
   ];
 
   useEffect(() => {
-    const currentItem = menuItems.find(
-      (item) => item.link === location.pathname
-    );
-    if (currentItem) {
-      setActiveItem(currentItem.label);
-    }
-  }, [location, menuItems]);
+    // Cập nhật mục active khi URL thay đổi
+    getActiveItem();
+  }, [location]);
 
-  const handleItemClick = (link: string, label: string) => {
-    setActiveItem(label);
+  const handleItemClick = (link: string) => {
     navigate(link);
   };
 
@@ -79,11 +79,10 @@ const SideBar: React.FC = () => {
         <SidebarItem
           key={item.label}
           label={item.label}
-          isActive={activeItem === item.label}
-          onClick={() => handleItemClick(item.link, item.label)}
+          isActive={getActiveItem() === item.label} // Xác định mục active
+          onClick={() => handleItemClick(item.link)}
           showIcon={item.showIcon}
           icon={item.icon}
-          link={item.link}
         />
       ))}
     </div>
