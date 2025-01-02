@@ -7,52 +7,73 @@ import { IJob } from "../../interfaces/job.ts";
 import SearchBar from "./SearchBar"; // Import the SearchBar component
 import { Button } from "react-bootstrap";
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+// import remarkGfm from 'remark-gfm';
+// import Markdown from 'react-markdown'
 
 const Home = () => {
   // const navigate = useNavigate();
   const [jobs, setJobs] = useState<IJobCard[]>([]);
   const [selectedJob, setSelectedJob] = useState<IJobCard | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    let isMounted = true; 
-
-    const fetchJobs = async () => {
+    const checkAuth = async () => {
       try {
-        const jobsResponse = await axiosInstance.get('/job/all');
-        const jobList = jobsResponse.data.data.jobs || [];
-        const companiesResponse = await axiosInstance.get('/company');
-        const companies = companiesResponse.data.data || [];
-        const updatedJobs = jobList.map((job: IJob) => {
-          const company = companies.find((company: { _id: string }) => company._id === job.company_id);
-          return {
-            ...job,
-            company_name: company?.company_name,
-            company_avatar: company?.avatar,
-          };
-        });
-
-        if (isMounted) {
-          setJobs(updatedJobs);
+        const response = await axiosInstance.get('/auth/check');
+        if (response.status === 200) {
+          setIsAuthenticated(true);
         }
-        setSelectedJob(updatedJobs[0]);
       } catch (error: unknown) {
         console.log(error);
       }
     };
+    checkAuth();
+  }, []);
 
+  
+  useEffect(() => {
+    let isMounted = true;
+    let jobList = [];
+    const fetchJobs = async () => {
+      if (isAuthenticated) {
+        const recommendedJobsResponse = await axiosInstance.get('/job/recommended');
+        jobList = recommendedJobsResponse.data.data.jobs || [];
+      }
+      else {
+        const jobsResponse = await axiosInstance.get('/job');
+        jobList = jobsResponse.data.data.jobs || [];
+      }
+      const companiesResponse = await axiosInstance.get('/company');
+      const companies = companiesResponse.data.data || [];
+      const updatedJobs = jobList.map((job: IJob) => {
+        const company = companies.find((company: { _id: string }) => company._id === job.company_id);
+        return {
+          ...job,
+          company_name: company?.company_name,
+          company_avatar: company?.avatar,
+        };
+      });
+      if (isMounted) {
+        setJobs(updatedJobs);
+      }
+      setSelectedJob(updatedJobs[0]);
+  
+    };
     fetchJobs();
     return () => {
       isMounted = false; 
     };
-  }, []);
+  }, [isAuthenticated]);
 
+
+  console.log("Jobs:", jobs);
 
   const handleSearch = (searchTerm: string) => {
     // Implement your search logic here, e.g., filter jobs based on searchTerm
     console.log("Searching for:", searchTerm);
   };
 
+ 
   return (
     <div>
       <div className="d-flex flex-column min-vh-100">
@@ -133,9 +154,9 @@ const Home = () => {
                       </p>
                     </div>
                     <hr style={{ width: '100%', margin: '0' }} />
-                    <div className="card-text" style={{ whiteSpace: 'pre-wrap', fontSize: '14px', lineHeight: '1.5', marginTop: '10px' }}>
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {selectedJob.description}
+                    <div className="card-text" style={{ marginTop: '30px' }}>
+                      <ReactMarkdown className="card-text">
+                      {selectedJob.description}
                       </ReactMarkdown>
                     </div>
                     <div className="d-flex justify-content-end align-items-center" style={{ marginRight: '20px' }}>
