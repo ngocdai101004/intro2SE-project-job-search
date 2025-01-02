@@ -24,8 +24,8 @@ interface Description {
   specialities: string[];
 }
 
-interface IReview {
-  user_id: string;
+export interface IReview {
+  user_id?: string;
   rating: number;
   review: string;
   date: Date;
@@ -60,7 +60,6 @@ interface ICompany {
 
   // Header
   company_name: string;
-  sumRating: number;
   applicant?: string[];
   employees?: string[];
   followers?: string[];

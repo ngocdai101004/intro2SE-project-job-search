@@ -11,6 +11,7 @@ import {
   reviewCompany,
   deleteCompanyReview,
   getCompanyReviews,
+  isReviewed,
 } from "../controllers/companyController";
 
 const router = Router();
@@ -28,6 +29,7 @@ router.post("/:companyID/unfollow", verifyUser, unfollowCompany);
 
 router.post("/:companyID/review", verifyUser, reviewCompany);
 router.delete("/:companyID/review", verifyUser, deleteCompanyReview);
+router.get("/:companyID/isReviewed", verifyUser, isReviewed);
 
 router.get("/:companyID/reviews", getCompanyReviews);
 

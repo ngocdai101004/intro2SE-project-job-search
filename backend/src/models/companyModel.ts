@@ -112,6 +112,10 @@ const companySchema = new mongoose.Schema(
           required: true,
           enum: [1, 2, 3, 4, 5],
         },
+        date: {
+          type: Date,
+          default: Date.now,
+        },
         review: {
           type: String,
         },
