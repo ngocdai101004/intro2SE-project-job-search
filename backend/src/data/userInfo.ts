@@ -155,8 +155,6 @@ export const userInfo = [
           "Communication, Teamwork, Problem-Solving, Time Management, Leadership, Adaptability, Creativity, Critical Thinking, Decision Making, Emotional Intelligence, Conflict Resolution, Negotiation, Stress Management, Collaboration, Empathy, Active Listening, Presentation, Public Speaking, Networking, Mentoring, Coaching, Delegation, Feedback, Motivation, Influence, Persuasion, Decision Making, Problem Solving, Time Management, Adaptability, Creativity, Critical Thinking, Emotional Intelligence, Conflict Resolution, Negotiation, Stress Management, Collaboration, Empathy, Active Listening, Presentation, Public Speaking, Networking, Mentoring, Coaching, Delegation, Feedback, Motivation, Influence, Persuasion",
       },
     ],
-    short_bio:
-      "Passionate software engineer with 5+ years of experience in web development.",
     profile_picture: "https://example.com/profile.jpg",
     resume: ["https://example.com/resume.pdf"],
     summary:
@@ -313,8 +311,6 @@ export const userInfo = [
           "Communication, Teamwork, Problem-Solving, Time Management, Leadership, Adaptability, Creativity, Critical Thinking, Decision Making, Emotional Intelligence, Conflict Resolution, Negotiation, Stress Management, Collaboration, Empathy, Active Listening, Presentation, Public Speaking, Networking, Mentoring, Coaching, Delegation, Feedback, Motivation, Influence, Persuasion, Decision Making, Problem Solving, Time Management, Adaptability, Creativity, Critical Thinking, Emotional Intelligence, Conflict Resolution, Negotiation, Stress Management, Collaboration, Empathy, Active Listening, Presentation, Public Speaking, Networking, Mentoring, Coaching, Delegation, Feedback, Motivation, Influence, Persuasion",
       },
     ],
-    short_bio:
-      "Backend developer with 3+ years of experience in building scalable services.",
     profile_picture: "https://example.com/profile2.jpg",
     resume: ["https://example.com/resume2.pdf"],
     summary:
@@ -412,14 +408,14 @@ export const userInfo = [
         salary_expectation: 95000,
       },
       {
-        job_title: "Senior Developer",
-        industry: "Finance",
+        job_title: "Backend Developer",
+        industry: "Tech",
         relocate_preference: "No",
         salary_expectation: 120000,
       },
       {
-        job_title: "Tech Lead",
-        industry: "Healthcare",
+        job_title: "Frontend Developer",
+        industry: "Tech",
         relocate_preference: "Yes",
         salary_expectation: 110000,
       },
@@ -458,8 +454,6 @@ export const userInfo = [
           "Communication, Teamwork, Problem-Solving, Time Management, Leadership, Adaptability, Creativity, Critical Thinking, Decision Making, Emotional Intelligence, Conflict Resolution, Negotiation, Stress Management, Collaboration, Empathy, Active Listening, Presentation, Public Speaking, Networking, Mentoring, Coaching, Delegation, Feedback, Motivation, Influence, Persuasion, Decision Making, Problem Solving, Time Management, Adaptability, Creativity, Critical Thinking, Emotional Intelligence, Conflict Resolution, Negotiation, Stress Management, Collaboration, Empathy, Active Listening, Presentation, Public Speaking, Networking, Mentoring, Coaching, Delegation, Feedback, Motivation, Influence, Persuasion",
       },
     ],
-    short_bio:
-      "Full stack developer with 5+ years of experience in web development.",
     profile_picture: "https://example.com/profile3.jpg",
     resume: [
       "https://example.com/resume3.pdf",

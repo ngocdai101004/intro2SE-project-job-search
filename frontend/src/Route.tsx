@@ -14,7 +14,8 @@ import AddPaysAndBenefits from "./pages/MyCompany/AddPaysAndBenefits/AddPaysAndB
 import DescribeJob from "./pages/MyCompany/DescribeJob/DescribeJob.tsx";
 import PreviewJob from "./pages/MyCompany/PreviewJob/PreviewJob.tsx";
 import JobList from "./pages/MyCompany/JobList/JobList.tsx";
-import UserProfile from "./pages/UserProfile/MainUserProfile/UserProfile.tsx";
+import OwnUserProfile from "./pages/UserProfile/MainUserProfile/OwnUserProfile";
+import GuestUserProfile from "./pages/UserProfile/MainUserProfile/GuestUserProfile.tsx";
 import JobSearchCV from "./pages/UserProfile/JobSearchCV/JobSearchCV.tsx";
 import CompanyList from "./pages/Company/CompanyList.tsx";
 import Candidates from "./pages/MyCompany/Candidates/Candidates.tsx";
@@ -91,11 +92,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/user/:userID/profile",
-    element: <UserProfile />,
+    element: <GuestUserProfile />,
   },
   {
     path: "/user/:userID/profile/snapshot",
-    element: <UserProfile />,
+    element: <GuestUserProfile />,
   },
   {
     path: "/user/:userID/profile/job-search-cv",
@@ -107,20 +108,20 @@ const router = createBrowserRouter([
   },
   {
     path: "/user/profile",
-    element: <UserProfile />,
+    element: <OwnUserProfile />,
   },
   {
     path: "/user/profile/snapshot",
-    element: <UserProfile />,
+    element: <OwnUserProfile />,
   },
   {
     path: "/home",
     element: <Home />,
   },
-  // {
-  //   path: "/home",
-  //   element: <Home />,
-  // },
+  {
+    path: "/",
+    element: <Home />,
+  },
 
   {
     element: <ProtectedRoute />,

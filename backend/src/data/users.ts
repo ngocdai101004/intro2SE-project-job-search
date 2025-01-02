@@ -20,6 +20,7 @@ export const users = [
     gender: "male",
     date_of_birth: new Date("1990-01-01"),
     avatar: "/company-avatar.jpg",
+    short_bio: "Software Engineer with 10 years of experience.",
   },
   {
     _id: new ObjectId(),
@@ -38,6 +39,7 @@ export const users = [
     gender: "male",
     date_of_birth: new Date("1985-08-20"),
     avatar: "/company-avatar.jpg",
+    short_bio: "Experienced developer specializing in backend systems.",
   },
   {
     _id: new ObjectId(),
@@ -56,5 +58,6 @@ export const users = [
     gender: "male",
     date_of_birth: new Date("1985-08-20"),
     avatar: "/company-avatar.jpg",
+    short_bio: "Full-stack developer with a passion for coding.",
   },
 ];

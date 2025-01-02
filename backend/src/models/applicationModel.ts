@@ -4,13 +4,13 @@ const applicationSchema = new mongoose.Schema(
   {
     job_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Job", // Assuming this references a Job model
+      ref: "Job",
       required: true,
     },
 
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Assuming this references a User model
+      ref: "User",
       required: true,
     },
 

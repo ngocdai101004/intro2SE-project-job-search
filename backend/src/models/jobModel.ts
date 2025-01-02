@@ -42,8 +42,14 @@ const jobSchema = new mongoose.Schema(
     },
 
     salary: {
-      type: Number,
-      required: true,
+      min: {
+        type: Number,
+        required: true,
+      },
+      max: {
+        type: Number,
+        required: true,
+      },
     },
 
     emails: {
@@ -51,7 +57,20 @@ const jobSchema = new mongoose.Schema(
     },
 
     requirements: {
-      type: [String], // Array of strings
+      type: [String],
+    },
+
+    benefits: {
+      type: [String],
+    },
+
+    responsibilities: {
+      type: [String],
+    },
+
+    open_time: {
+      type: Date,
+      required: true,
     },
 
     deadline: {

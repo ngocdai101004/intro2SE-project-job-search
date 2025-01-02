@@ -17,6 +17,8 @@ const UserProfile: React.FC = () => {
 
   const [user, setUser] = useState<IUser>({});
   const [userInfo, setUserInfo] = useState<IUserInfo>({});
+  const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,6 +27,7 @@ const UserProfile: React.FC = () => {
         if (!userID) {
           response1 = await axiosInstance.get("/user/profile");
           response2 = await axiosInstance.get("/user/profile/info");
+          setIsOwnProfile(true);
         }
         else {
           console.log("User ID:", "/user/" + userID + "/profile");
@@ -42,7 +45,8 @@ const UserProfile: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (myActiveKey === "/snapshot") {
-      navigate("/user/" + userID + "/profile");
+      const currentPath = window.location.pathname.split("/job-search-cv")[0];
+      navigate(currentPath + myActiveKey);
     }
   }, [myActiveKey, navigate, userID]);
 
@@ -69,7 +73,9 @@ const UserProfile: React.FC = () => {
             user: user,
             userInfo: userInfo
           }
-        }/>;
+        }
+        isOwnProfile={isOwnProfile}
+        />;
     </div>
   );
 }

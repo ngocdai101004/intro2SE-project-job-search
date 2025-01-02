@@ -9,16 +9,25 @@ const DescribeJob: React.FC = () => {
   const navigate = useNavigate();
 
   // State để lưu dữ liệu hiển thị
-  const [responsibilities, setResponsibilities] = useState<string[]>([]);
-  const [requirements, setRequirements] = useState<string[]>([]);
+  const [description, setDescription] = useState<string>(""); // Mô tả công việc
+  const [benefits, setBenefits] = useState<string[]>([]); // Lợi ích
+  const [responsibilities, setResponsibilities] = useState<string[]>([]); // Trách nhiệm
+  const [requirements, setRequirements] = useState<string[]>([]); // Yêu cầu
+  const [salary, setSalary] = useState<{ min: string; max: string }>({
+    min: "",
+    max: "",
+  }); // Lương
   const [loading, setLoading] = useState(false); // Trạng thái loading
 
   // Load dữ liệu từ localStorage khi render lại trang
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
+    if (savedData.description) setDescription(savedData.description);
+    if (savedData.benefits) setBenefits(savedData.benefits);
     if (savedData.responsibilities)
       setResponsibilities(savedData.responsibilities);
     if (savedData.requirements) setRequirements(savedData.requirements);
+    if (savedData.salary) setSalary(savedData.salary);
   }, []);
 
   // Hàm xử lý khi bấm nút Continue
@@ -28,48 +37,46 @@ const DescribeJob: React.FC = () => {
     // Xử lý dữ liệu trước khi gửi lên backend
     const formattedData = {
       company_id: "6769263f8133514e228544bd", // Thay bằng ID thực tế
-      status: "open", // Mặc định trạng thái là 'open'
-      title: jobData.jobTitle || "Untitled Job",
-      number_of_peoples: parseInt(jobData.numPeople) || 1, // Chuyển thành số
-      type: jobData.type[0] || "full-time", // Lấy giá trị đầu tiên của mảng
-      location_type: "on-site", // Tạm thời hardcode hoặc lấy từ jobData
-      description: jobData.description || "No description provided.", // Mặc định nếu không có
-      salary:
-        jobData.payType === "Range"
-          ? parseInt(jobData.salary.split("-")[0]) // Lấy giá trị tối thiểu
-          : parseInt(jobData.salary), // Nếu là Fixed
-      rate: jobData.rate || "per month",
-      emails: "example@example.com", // Đặt email mặc định hoặc cho nhập
-      requirements: jobData.requirements || [],
-      responsibilities: jobData.responsibilities || [],
-      deadline: jobData.deadline || new Date().toISOString(), // Mặc định ngày hiện tại
+      status: "open",
+      title: jobData.title || "Untitled Job",
+      number_of_peoples: jobData.number_of_peoples || 1,
+      type: jobData.type[0] || "full-time",
+      location_type: jobData.locationType || "on-site",
+      description: description || "No description provided.",
+      salary: {
+        min: parseInt(salary.min) || 0,
+        max: parseInt(salary.max) || 0,
+      },
+      emails: "example@example.com",
+      requirements: requirements || [],
+      responsibilities: responsibilities || [],
+      benefits: benefits || [],
+      deadline: jobData.deadline || new Date().toISOString(),
+      open_time: new Date().toISOString(),
     };
 
-    // Kiểm tra dữ liệu đã định dạng
-    console.log("Formatted Data:", formattedData);
+    console.log(formattedData);
 
     // Xác thực dữ liệu trước khi gửi
     if (
       !formattedData.title ||
-      !formattedData.type ||
-      !formattedData.location_type ||
-      !formattedData.salary ||
+      !formattedData.salary.min ||
+      !formattedData.salary.max ||
       !formattedData.deadline
     ) {
       alert("Missing required fields. Please complete all steps.");
       return;
     }
 
-    setLoading(true); // Bật trạng thái loading
+    setLoading(true);
 
     try {
-      // Gửi dữ liệu lên API backend
       const response = await axiosInstance.post("/job/create", formattedData);
 
       alert("Job created successfully!");
       console.log(response.data);
 
-      // Xoá dữ liệu trong localStorage
+      // Xóa dữ liệu trong localStorage
       localStorage.removeItem("jobPostData");
 
       // Chuyển đến trang danh sách công việc
@@ -109,18 +116,31 @@ const DescribeJob: React.FC = () => {
 
                 {/* Hiển thị thông tin mô tả công việc */}
                 <div className="mb-3">
-                  <div className="mb-2">
-                    <strong>
-                      Job description{" "}
-                      <span className="required" style={{ color: "red" }}>
-                        *
-                      </span>
-                    </strong>
-                  </div>
                   <div className="job-description">
-                    <p>
-                      <strong>Responsibilities:</strong>
-                    </p>
+                    {/* Description */}
+                    <strong>
+                      <p>Description:</p>
+                    </strong>
+                    <p>{description || "No description provided."}</p>
+
+                    {/* Benefits */}
+                    <strong>
+                      <p>Benefits:</p>
+                    </strong>
+                    <ul>
+                      {benefits.length > 0 ? (
+                        benefits.map((item, index) => (
+                          <li key={index}>{item}</li>
+                        ))
+                      ) : (
+                        <li>No benefits added.</li>
+                      )}
+                    </ul>
+
+                    {/* Responsibilities */}
+                    <strong>
+                      <p>Responsibilities:</p>
+                    </strong>
                     <ul>
                       {responsibilities.length > 0 ? (
                         responsibilities.map((item, index) => (
@@ -131,9 +151,10 @@ const DescribeJob: React.FC = () => {
                       )}
                     </ul>
 
-                    <p>
-                      <strong>Requirements:</strong>
-                    </p>
+                    {/* Requirements */}
+                    <strong>
+                      <p>Requirements:</p>
+                    </strong>
                     <ul>
                       {requirements.length > 0 ? (
                         requirements.map((item, index) => (
@@ -168,7 +189,7 @@ const DescribeJob: React.FC = () => {
                     <Button
                       variant="primary"
                       onClick={handleSaveToDatabase}
-                      disabled={loading} // Vô hiệu hóa nút khi đang loading
+                      disabled={loading}
                     >
                       {loading ? "Saving..." : "Continue →"}
                     </Button>

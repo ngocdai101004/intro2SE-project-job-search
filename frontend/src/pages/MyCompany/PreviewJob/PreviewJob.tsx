@@ -46,6 +46,7 @@ const PreviewJob: React.FC = () => {
           />
         </div>
 
+        {/* Nội dung chính */}
         <div className="preview-job-content">
           <div className="preview-job-content-header">
             <div className="preview-job-content-header-left">
@@ -78,6 +79,29 @@ const PreviewJob: React.FC = () => {
           />
 
           <div className="preview-job-content-description">
+            {/* Description */}
+            <strong>
+              <p>Description:</p>
+            </strong>
+            <p style={{ fontSize: "1rem" }}>
+              {jobData.description || "No description provided."}
+            </p>
+
+            {/* Benefits */}
+            <strong>
+              <p>Benefits:</p>
+            </strong>
+            <ul>
+              {jobData.benefits && jobData.benefits.length > 0 ? (
+                jobData.benefits.map((item: string, index: number) => (
+                  <li key={index}>{item}</li>
+                ))
+              ) : (
+                <li>No benefits added.</li>
+              )}
+            </ul>
+
+            {/* Responsibilities */}
             <strong>
               <p>Responsibilities:</p>
             </strong>
@@ -89,6 +113,7 @@ const PreviewJob: React.FC = () => {
                 : "No responsibilities added."}
             </ul>
 
+            {/* Requirements */}
             <strong>
               <p>Requirements:</p>
             </strong>
@@ -99,18 +124,10 @@ const PreviewJob: React.FC = () => {
                   ))
                 : "No requirements added."}
             </ul>
-
-            <strong>
-              <p>Perks:</p>
-            </strong>
-            <ul>
-              <li>Flexible hours to match your lifestyle.</li>
-              <li>Supportive and collaborative work culture.</li>
-              <li>Competitive salary and benefits.</li>
-            </ul>
           </div>
         </div>
 
+        {/* Nút đóng preview */}
         <button
           className="preview-job-close"
           onClick={() => handleNavigation("/my-company/describe-job")}

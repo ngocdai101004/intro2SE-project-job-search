@@ -10,23 +10,39 @@ const AddPaysAndBenefits: React.FC = () => {
   const [payType, setPayType] = useState("Range");
   const [minimumPay, setMinimumPay] = useState("");
   const [maximumPay, setMaximumPay] = useState("");
-  const [rate, setRate] = useState("per month");
+  const [locationType, setLocationType] = useState("on-site"); // Loại vị trí làm việc
+  const [benefits, setBenefits] = useState<string[]>([""]); // Danh sách lợi ích
 
   // Load dữ liệu từ localStorage khi render lại trang
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
-    if (savedData.payType) setPayType(savedData.payType);
     if (savedData.minimumPay) setMinimumPay(savedData.minimumPay);
     if (savedData.maximumPay) setMaximumPay(savedData.maximumPay);
-    if (savedData.rate) setRate(savedData.rate);
+    if (savedData.locationType) setLocationType(savedData.locationType);
+    if (savedData.benefits) setBenefits(savedData.benefits);
   }, []);
+
+  // Thêm dòng mới cho lợi ích
+  const addBenefit = () => {
+    setBenefits([...benefits, ""]);
+  };
+
+  // Xử lý thay đổi nội dung cho lợi ích
+  const handleBenefitChange = (index: number, value: string) => {
+    const updated = [...benefits];
+    updated[index] = value;
+    setBenefits(updated);
+  };
 
   // Lưu dữ liệu vào localStorage và chuyển tiếp
   const handleSaveAndContinue = () => {
     const currentData = {
-      payType,
-      salary: payType === "Fixed" ? minimumPay : `${minimumPay}-${maximumPay}`, // Xử lý format salary
-      rate,
+      salary: {
+        min: minimumPay,
+        max: payType === "Fixed" ? minimumPay : maximumPay, // Nếu Fixed thì min = max
+      },
+      locationType,
+      benefits,
     };
 
     // Lưu dữ liệu vào localStorage
@@ -72,7 +88,7 @@ const AddPaysAndBenefits: React.FC = () => {
                         Pay
                       </Form.Label>
                     </strong>
-                    <div className="d-flex gap-2 mb-5">
+                    <div className="d-flex gap-2 mb-3">
                       {/* Chọn loại lương */}
                       <Form.Select
                         value={payType}
@@ -107,19 +123,48 @@ const AddPaysAndBenefits: React.FC = () => {
                           ))}
                         </Form.Select>
                       )}
-
-                      {/* Đơn vị lương */}
-                      <Form.Select
-                        value={rate}
-                        onChange={(e) => setRate(e.target.value)}
-                      >
-                        <option value="per hour">per hour</option>
-                        <option value="per day">per day</option>
-                        <option value="per week">per week</option>
-                        <option value="per month">per month</option>
-                        <option value="per year">per year</option>
-                      </Form.Select>
                     </div>
+                  </Form.Group>
+
+                  {/* Location Type Section */}
+                  <Form.Group className="mb-3">
+                    <strong>
+                      <Form.Label column sm={12} className="text-left">
+                        Work Location Type
+                      </Form.Label>
+                    </strong>
+                    <Form.Select
+                      value={locationType}
+                      onChange={(e) => setLocationType(e.target.value)}
+                    >
+                      <option value="remote">Remote</option>
+                      <option value="on-site">On-site</option>
+                      <option value="hybrid">Hybrid</option>
+                    </Form.Select>
+                  </Form.Group>
+
+                  {/* Benefits Section */}
+                  <Form.Group className="mb-3">
+                    <strong>
+                      <Form.Label column sm={12} className="text-left">
+                        Benefits
+                      </Form.Label>
+                    </strong>
+                    {benefits.map((benefit, index) => (
+                      <Form.Control
+                        key={index}
+                        type="text"
+                        placeholder={`Benefit ${index + 1}`}
+                        value={benefit}
+                        onChange={(e) =>
+                          handleBenefitChange(index, e.target.value)
+                        }
+                        className="mb-2"
+                      />
+                    ))}
+                    <Button variant="outline-secondary" onClick={addBenefit}>
+                      + Add Benefit
+                    </Button>
                   </Form.Group>
 
                   {/* Button điều hướng */}
