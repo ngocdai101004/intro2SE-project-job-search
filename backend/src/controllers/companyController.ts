@@ -196,6 +196,8 @@ export const reviewCompany = async (req: Request, res: Response) => {
       res.status(403).json({ message: "Please verify your account", data: {} });
       return;
     }
+
+    review.user_id = userID;
     if (company.reviews.some((r) => r.user_id.toString() === userID)) {
       // Update review
       await Company.updateOne(
@@ -243,6 +245,27 @@ export const deleteCompanyReview = async (req: Request, res: Response) => {
       message: "Review deleted successfully",
       data: {},
     });
+  } catch (error) {
+    res.status(400).json({ message: (error as any).message, data: {} });
+  }
+};
+
+// Check if user has reviewed a company
+export const isReviewed = async (req: Request, res: Response) => {
+  try {
+    const { companyID } = req.params;
+    const { userID } = req.body;
+    const company = await Company.findById(companyID);
+    if (!company) {
+      res.status(404).json({ message: "Company not found", data: {} });
+      return;
+    }
+    const isReviewed = company.reviews.some(
+      (r) => r.user_id.toString() === userID
+    );
+    res
+      .status(200)
+      .json({ message: "Review status retrieved", data: { isReviewed } });
   } catch (error) {
     res.status(400).json({ message: (error as any).message, data: {} });
   }
