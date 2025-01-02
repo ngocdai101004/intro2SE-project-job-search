@@ -53,7 +53,6 @@ console.log("Reviewer List:", reviewerList);
             className="container mt-4"
             style={{ overflow: "scroll", scrollbarWidth: "thin", height: "60vh" }}
         >
-            <h1>JOB SEARCH CV</h1>
             <Row className="mb-4">
                 <Col>
                     <Card className="p-3 mb-3 border-0">

@@ -1,3 +1,4 @@
+import IUser from "./user";
 export interface IReview {
   reviewer: string;
   content: string;
@@ -65,6 +66,23 @@ export interface IUserInfo {
   profile_picture?: string;
   resume?: string[];
   summary?: string;
+}
+
+export interface UserProfileProps {
+  userData: {
+    user: IUser;
+    userInfo: IUserInfo;
+  };
+  setUser?: React.Dispatch<React.SetStateAction<IUser>>;
+  setUserInfo: React.Dispatch<React.SetStateAction<IUserInfo>>;
+  isOwnProfile?: boolean;
+}
+
+export interface ICompanyReviewer {
+  name: string;
+  avatar: string;
+  content: string;
+  rating: number;
 }
 
 export default IUserInfo;

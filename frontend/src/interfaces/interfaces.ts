@@ -1,6 +1,3 @@
-import exp from "constants";
-import e, { Request } from "express";
-
 export interface IUser {
   userID: string;
   username: string;
@@ -9,62 +6,6 @@ export interface IUser {
   is_verified: boolean;
   verification_code: string;
   createdAt: string;
-}
-
-export interface IJwtPayload {
-  userID: string;
-  isVerified: boolean;
-}
-
-// IVerifiedRequest replacement
-export interface IVerifiedRequest extends Request {
-  body: {
-    userID: string;
-    isVerified: boolean;
-  };
-}
-
-export interface ILoginRequest extends Request {
-  body: {
-    email: string;
-    password: string;
-    // tuan: string;
-  };
-}
-
-export interface IRegisterRequest extends Request {
-  body: {
-    first_name: string;
-    last_name: string;
-    email: string;
-    password: string;
-  };
-}
-
-export interface IVerifyAccountRequest extends IVerifiedRequest {
-  body: IVerifiedRequest["body"] & {
-    code: string;
-  };
-}
-
-export interface IGetVerifyCodeRequest extends Request {
-  body: {
-    email: string;
-  };
-}
-
-export interface IResetPasswordRequest extends Request {
-  body: {
-    email: string;
-    password: string;
-    code: string;
-  };
-}
-
-export interface IGetUserProfileRequest extends Request {
-  body: {
-    userID: string;
-  };
 }
 
 interface Address {
@@ -83,8 +24,8 @@ interface Description {
   specialities: string[];
 }
 
-interface IReview {
-  user_id: string;
+export interface IReview {
+  user_id?: string;
   rating: number;
   review: string;
   date: Date;
@@ -119,7 +60,6 @@ interface ICompany {
 
   // Header
   company_name: string;
-  sumRating: number;
   applicant?: string[];
   employees?: string[];
   followers?: string[];
@@ -137,9 +77,4 @@ interface ICompany {
   qa: IQA[];
 }
 
-export interface IVerifyAdminRequest extends IVerifiedRequest {
-  body: IVerifiedRequest["body"] & {
-    company_id: string;
-    isAdmin: boolean;
-  };
-}
+export default ICompany;

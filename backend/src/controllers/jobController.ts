@@ -3,6 +3,7 @@ import Job from "../models/jobModel";
 import User from "../models/userModel";
 import UserInfo from "../models/userInfoModel";
 import stringSimilarity from "string-similarity";
+import mongoose from "mongoose";
 
 // Create a new job
 export const createJob = async (req: Request, res: Response) => {

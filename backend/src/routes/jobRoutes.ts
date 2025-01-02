@@ -1,4 +1,4 @@
-import e, { Router } from "express";
+import { Router } from "express";
 import { verifyUser } from "../middlewares/verifyUser";
 import { verifyAdmin } from "../middlewares/verifyAdmin";
 

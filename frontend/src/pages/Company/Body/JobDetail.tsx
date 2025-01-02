@@ -1,20 +1,8 @@
 import { Card, Button, Container, Col, Row } from "react-bootstrap";
-
-interface iJobDescription {
-  id: number;
-  title: string;
-  location: string;
-  date: string;
-  description: string;
-  requirements: string[];
-  employmentType: string; // e.g., Full-time, Part-time
-  workMode: string; // e.g., On-site, Remote
-  applicantCount: number; // Số lượng ứng viên
-  level: string; // e.g., Internship, Entry-level, Mid-level, Senior-level
-}
+import { IJob } from "../../../interfaces/interfaces";
 
 interface headerProps {
-  job: iJobDescription;
+  job: IJob;
 }
 
 const JobDetail = ({ job }: headerProps) => {
@@ -45,24 +33,24 @@ const JobDetail = ({ job }: headerProps) => {
           <Container className="mb-0" style={{ fontSize: "0.9rem" }}>
             <Row className="mb-3">
               <Col md="auto" className="me-3">
-                {job.location}
+                {job.description}
               </Col>
               <Col md="auto" className="me-3">
-                {job.date}
+                {job.createdAt}
               </Col>
               <Col md="auto" className="me-3">
-                Over {job.applicantCount} applicants
+                Over {job.number_of_peoples} applicants
               </Col>
             </Row>
             <Row>
               <Col md="auto" className="me-3">
-                {job.workMode}{" "}
+                {job.location_type}{" "}
               </Col>
               <Col md="auto" className="me-3">
-                {job.employmentType}{" "}
+                {job.type}{" "}
               </Col>
               <Col md="auto" className="me-3">
-                {job.level}{" "}
+                {job.title}{" "}
               </Col>
               <Col md="auto" className="ms-auto">
                 <Button variant="primary" style={{ fontSize: "0.9rem" }}>

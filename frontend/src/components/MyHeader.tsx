@@ -76,7 +76,7 @@ export default function MyHeader({ mydefaultActiveKey, className}: MyHeaderProps
             <Nav.Item>
               <Nav.Link
                 eventKey="/company"
-                href="/company"
+                href="/company-list"
                 className="text-white"
               >
                 Company
