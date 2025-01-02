@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PreviewJob.css";
 
 const PreviewJob: React.FC = () => {
   const navigate = useNavigate();
 
+  // State để lưu dữ liệu hiển thị
+  const [jobData, setJobData] = useState<any>({});
+
+  // Load dữ liệu từ localStorage khi render lại trang
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
+    setJobData(savedData);
+  }, []);
+
+  // Điều hướng trang
   const handleNavigation = (path: string) => {
     navigate(path);
   };
@@ -41,14 +51,16 @@ const PreviewJob: React.FC = () => {
             <div className="preview-job-content-header-left">
               <strong>
                 <p style={{ fontSize: "20px" }}>
-                  Software Development Intern, Zalopay
+                  {jobData.title || "Untitled Job"}
                 </p>
               </strong>
               <p>
-                Ho Chi Minh City, Vietnam · 25 days ago · Over 100 applicants
+                {jobData.advertiseLocation || "Location not specified"} · 25
+                days ago · Over 100 applicants
               </p>
               <p>
-                <strong>On-site</strong> · Full-time · Internship
+                <strong>{jobData.locationType || "Remote"}</strong> ·{" "}
+                {jobData.type?.join(", ") || "N/A"}
               </p>
             </div>
             <button className="preview-job-content-header-right">
@@ -70,51 +82,31 @@ const PreviewJob: React.FC = () => {
               <p>Responsibilities:</p>
             </strong>
             <ul>
-              <li>
-                Collaborate with teammates you may never see in person, bonding
-                over GIFs and memes.
-              </li>
-              <li>
-                Engage in ritualistic ceremonies, aka stand-ups, where you
-                promise to finish yesterday's tasks today.
-              </li>
-              <li>
-                Master the ancient art of code review, where you’ll say things
-                like, "This needs more comments" and "Why are there 1000 lines
-                in this function?"
-              </li>
-              <li>
-                Implement "cutting-edge" solutions that are actually held
-                together by duct tape and caffeine.
-              </li>
+              {jobData.responsibilities && jobData.responsibilities.length > 0
+                ? jobData.responsibilities.map(
+                    (item: string, index: number) => <li key={index}>{item}</li>
+                  )
+                : "No responsibilities added."}
             </ul>
 
             <strong>
               <p>Requirements:</p>
             </strong>
             <ul>
-              <li>2+ years of JavaScript (yes, it’s always JavaScript).</li>
-              <li>
-                Ability to write “Hello World” in any language when questioned
-                by non-tech relatives.
-              </li>
-              <li>
-                Familiarity with buzzwords like “synergy”, “blockchain”, and
-                “agile”.
-              </li>
-              <li>Must bring your own rubber duck for debugging.</li>
+              {jobData.requirements && jobData.requirements.length > 0
+                ? jobData.requirements.map((item: string, index: number) => (
+                    <li key={index}>{item}</li>
+                  ))
+                : "No requirements added."}
             </ul>
 
             <strong>
               <p>Perks:</p>
             </strong>
             <ul>
-              <li>Flexible hours to match your nocturnal coding habits.</li>
-              <li>
-                Infinite coffee, occasional snacks, and regular existential
-                crises.
-              </li>
-              <li>Payment in experience, and also money.</li>
+              <li>Flexible hours to match your lifestyle.</li>
+              <li>Supportive and collaborative work culture.</li>
+              <li>Competitive salary and benefits.</li>
             </ul>
           </div>
         </div>

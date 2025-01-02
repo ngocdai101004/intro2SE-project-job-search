@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,15 @@ const AddJobDetails: React.FC = () => {
   const [hasDeadline, setHasDeadline] = useState("no");
   const [deadlineDate, setDeadlineDate] = useState("");
 
+  // Load dữ liệu từ localStorage
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
+    if (savedData.jobTypes) setJobTypes(savedData.jobTypes);
+    if (savedData.hasDeadline) setHasDeadline(savedData.hasDeadline);
+    if (savedData.deadlineDate) setDeadlineDate(savedData.deadlineDate);
+  }, []);
+
+  // Hàm xử lý thay đổi checkbox
   const handleJobTypeChange = (type: string) => {
     setJobTypes((prev) =>
       prev.includes(type)
@@ -20,8 +29,24 @@ const AddJobDetails: React.FC = () => {
     );
   };
 
-  const handleNavigation = (path: string) => {
-    navigate(path);
+  // Lưu dữ liệu vào localStorage và tiếp tục
+  const handleSaveAndContinue = () => {
+    const currentData = {
+      type: jobTypes, // Chuyển thành 'type' phù hợp với model Job
+      deadline: hasDeadline === "yes" ? deadlineDate : null, // Format deadline
+    };
+
+    // Lưu dữ liệu vào localStorage
+    const existingData = JSON.parse(
+      localStorage.getItem("jobPostData") || "{}"
+    );
+    localStorage.setItem(
+      "jobPostData",
+      JSON.stringify({ ...existingData, ...currentData })
+    );
+
+    // Chuyển đến bước tiếp theo
+    navigate("/my-company/add-pays-and-benefits");
   };
 
   return (
@@ -54,22 +79,24 @@ const AddJobDetails: React.FC = () => {
                       </Form.Label>
                     </strong>
                     <div>
-                      {[
-                        "Full-time",
-                        "Part-time",
-                        "Temporary",
-                        "Internship",
-                        "Permanent",
-                      ].map((type) => (
-                        <div className="item-type" key={type}>
-                          <Form.Check
-                            type="checkbox"
-                            label={type}
-                            checked={jobTypes.includes(type)}
-                            onChange={() => handleJobTypeChange(type)}
-                          />
-                        </div>
-                      ))}
+                      {["full-time", "part-time", "contract", "internship"].map(
+                        (type) => {
+                          // Chuyển chữ cái đầu thành in hoa
+                          const formattedType =
+                            type.charAt(0).toUpperCase() + type.slice(1);
+
+                          return (
+                            <div className="item-type" key={type}>
+                              <Form.Check
+                                type="checkbox"
+                                label={formattedType} // Hiển thị chữ cái đầu in hoa
+                                checked={jobTypes.includes(type)}
+                                onChange={() => handleJobTypeChange(type)}
+                              />
+                            </div>
+                          );
+                        }
+                      )}
                     </div>
                   </Form.Group>
 
@@ -108,18 +135,11 @@ const AddJobDetails: React.FC = () => {
                   <div className="d-flex justify-content-between">
                     <Button
                       variant="secondary"
-                      onClick={() =>
-                        handleNavigation("/my-company/add-job-basics")
-                      }
+                      onClick={() => navigate("/my-company/add-job-basics")}
                     >
                       ← Back
                     </Button>
-                    <Button
-                      variant="primary"
-                      onClick={() =>
-                        handleNavigation("/my-company/add-pays-and-benefits")
-                      }
-                    >
+                    <Button variant="primary" onClick={handleSaveAndContinue}>
                       Continue →
                     </Button>
                   </div>
