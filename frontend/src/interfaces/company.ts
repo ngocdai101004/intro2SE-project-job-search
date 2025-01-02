@@ -18,6 +18,7 @@ interface IReview {
   user_id: string;
   rating: number;
   review: string;
+  date?: Date;
 }
 
 interface ICompany {
@@ -33,6 +34,10 @@ interface ICompany {
   legal_document_url?: string;
   reviews?: IReview[];
   followers?: string[];
+  sumRating?: number;
+  applicant?: string[];
+  employees?: string[];
+  avatar?: string;
 }
 
 export default ICompany;

@@ -16,6 +16,7 @@ export interface IUser {
   gender?: "male" | "female";
   date_of_birth?: Date;
   avatar?: string;
+  short_bio?: string;
 }
 
 export default IUser;

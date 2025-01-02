@@ -23,7 +23,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userID, isOwer}) => {
   const navigate = useNavigate();
   const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
   const [user, setUser] = useState<IUser>({});
-  const [userInfo, setUserInfo] = useState<IUserInfo>({});
+  const [userInfo, setUserInfo] = useState<IUserInfo>({user_id: "", ready_to_work: false});
   const [isOwnProfile, setIsOwnProfile] = useState<boolean>(isOwer || false);
   const [isEditing, setIsEditing] = useState(false);
   useEffect(() => {

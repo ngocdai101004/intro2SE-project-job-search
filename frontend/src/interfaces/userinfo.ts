@@ -1,6 +1,7 @@
 import IUser from "./user";
+
 export interface IReview {
-  reviewer: string;
+  reviewer: string; // Assuming this is a user ID
   content: string;
   rating: 1 | 2 | 3 | 4 | 5;
 }
@@ -47,22 +48,21 @@ export interface ICertification {
 }
 
 export interface IUserInfo {
-  user_id?: string;
+  user_id: string; // Required
   review?: IReview[];
-  following?: string[];
+  following?: string[]; // Assuming these are company IDs
   education?: IEducation[];
   experience?: IExperience[];
   skills?: string[];
   certifications?: ICertification[];
   job_preferences?: IJobPreference[];
-  ready_to_work?: boolean;
+  ready_to_work: boolean; // Required
   additional_info?: string;
   awards?: string[];
   languages?: string[];
   link?: string[];
   publications?: IPublication[];
   qualifications?: IQualification[];
-  short_bio?: string;
   profile_picture?: string;
   resume?: string[];
   summary?: string;

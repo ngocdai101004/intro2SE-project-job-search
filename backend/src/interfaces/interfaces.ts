@@ -2,13 +2,25 @@ import exp from "constants";
 import e, { Request } from "express";
 
 export interface IUser {
-  userID: string;
-  username: string;
+  first_name: string;
+  last_name?: string;
   email: string;
   password: string;
   is_verified: boolean;
-  verification_code: string;
-  createdAt: string;
+  verification_code?: string;
+  phone?: string;
+  address?: {
+    district?: string;
+    city_state?: string;
+    zip_code?: string;
+    country?: string;
+  };
+  gender?: "male" | "female";
+  date_of_birth?: Date;
+  avatar?: string;
+  short_bio: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface IJwtPayload {
@@ -99,9 +111,15 @@ export interface IJob {
   type: "full-time" | "part-time" | "contract" | "internship";
   location_type: "remote" | "on-site" | "hybrid";
   description: string;
-  salary: number;
+  salary: {
+    min: number;
+    max: number;
+  };
   emails?: string;
   requirements?: string[];
+  benefits?: string[];
+  responsibilities?: string[];
+  open_time: Date;
   deadline: Date;
   createdAt?: string;
   updatedAt?: string;
