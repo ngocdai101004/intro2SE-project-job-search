@@ -122,17 +122,6 @@ const companySchema = new mongoose.Schema(
       },
     ],
 
-    // Reviews
-    qa: [
-      {
-        question: {
-          type: String,
-        },
-        answer: {
-          type: String,
-        },
-      },
-    ],
     avatar: {
       type: String,
       default: "",

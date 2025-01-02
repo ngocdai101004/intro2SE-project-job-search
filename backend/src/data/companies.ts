@@ -91,23 +91,6 @@ export const companies = [
         date: new Date("2023-10-10"),
       },
     ],
-    qa: [
-      {
-        question: "What is the company culture like?",
-        answer:
-          "Our culture fosters innovation, teamwork, and continuous learning.",
-      },
-      {
-        question: "What benefits do you offer employees?",
-        answer:
-          "We provide health insurance, flexible work hours, and professional development programs.",
-      },
-      {
-        question: "Is there room for career growth?",
-        answer:
-          "Yes, we encourage internal promotions and provide mentorship programs.",
-      },
-    ],
   },
   {
     _id: new ObjectId(),
@@ -195,21 +178,6 @@ export const companies = [
         rating: 5,
         review: "Fantastic work environment and inspiring leadership.",
         date: new Date("2023-10-30"),
-      },
-    ],
-    qa: [
-      {
-        question: "What are your sustainability goals?",
-        answer: "We aim to be carbon-neutral by 2030.",
-      },
-      {
-        question: "Do you have remote work options?",
-        answer: "Yes, many of our roles allow for remote work.",
-      },
-      {
-        question: "What training programs do you offer?",
-        answer:
-          "We provide specialized training on renewable energy technologies.",
       },
     ],
   },
@@ -300,22 +268,6 @@ export const companies = [
         rating: 4,
         review: "Exciting projects but needs more resources.",
         date: new Date("2023-10-15"),
-      },
-    ],
-    qa: [
-      {
-        question: "What makes EduGlobal unique?",
-        answer:
-          "Our innovative approach to online education and focus on accessibility.",
-      },
-      {
-        question: "Do you offer internships?",
-        answer: "Yes, we have a structured internship program for students.",
-      },
-      {
-        question: "What technologies do you use?",
-        answer:
-          "We use cutting-edge platforms like AI-based adaptive learning systems.",
       },
     ],
   },

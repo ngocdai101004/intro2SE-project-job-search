@@ -158,11 +158,6 @@ const userInfoSchema = new mongoose.Schema(
       },
     ],
 
-    short_bio: {
-      type: String,
-      required: true,
-    },
-
     profile_picture: {
       type: String,
     },
