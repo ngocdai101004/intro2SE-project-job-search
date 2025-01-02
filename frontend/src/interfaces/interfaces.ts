@@ -25,7 +25,7 @@ interface Description {
 }
 
 export interface IReview {
-  user_id: string;
+  user_id?: string;
   rating: number;
   review: string;
   date: Date;

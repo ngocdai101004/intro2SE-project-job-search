@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Form, Button, Row, Col, Alert } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { IReview } from "../../../interfaces/interfaces";
 import axiosInstance from "../../../common/axiosInstance";
@@ -13,7 +12,7 @@ const ReviewForm = ({ company_id }: ReviewFormProps) => {
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>("");
   const [success, setSuccess] = useState<boolean | null>(null);
-  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
 
   const handleRating = (index: number): void => {
     setRating(index);
@@ -22,28 +21,31 @@ const ReviewForm = ({ company_id }: ReviewFormProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const user_id = "12345"; // Thay thế bằng logic xác thực nếu có
-
     const reviewData: IReview = {
-      user_id,
       rating,
       review,
       date: new Date(),
     };
 
     try {
-      console.log("company_id");
-      console.log(company_id);
-      console.log(reviewData);
+      setSuccess(false);
+      setError(null);
+      if (rating === 0) {
+        setError("Please rate the company before submitting your review.");
+        return;
+      }
+      if (review.trim() === "") {
+        setError("Please write your review before submitting.");
+        return;
+      }
+
       await axiosInstance.post(`/company/${company_id}/review`, reviewData);
       setSuccess(true);
       setRating(0);
       setReview("");
 
       // Chuyển hướng đến trang khác sau khi gửi thành công
-      setTimeout(() => {
-        navigate("/thank-you");
-      }, 2000);
+      window.location.reload();
     } catch (error) {
       console.error(error);
       setSuccess(false);
@@ -118,7 +120,7 @@ const ReviewForm = ({ company_id }: ReviewFormProps) => {
           )}
           {success === false && (
             <Alert variant="danger">
-              Failed to submit the review. Please try again.
+              {error || "Failed to submit the review. Please try again."}
             </Alert>
           )}
           <Row className="text-end">
