@@ -44,7 +44,7 @@ const UserHeader = ({ myState, setMyState, userData }: UserHeaderProps) => {
                   className="text-muted"
                   style={{ wordWrap: "break-word", maxWidth: "300px" }}
                 >
-                  {userData.userInfo.short_bio || "User Bio"}
+                  {userData.user.short_bio || "User Bio"}
                 </small>
               </Col>
             </Row>

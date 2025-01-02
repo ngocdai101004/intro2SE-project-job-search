@@ -464,4 +464,250 @@ export const userInfo = [
       "Experienced full stack developer with a strong background in JavaScript and Node.js. Proven ability to deliver high-quality software solutions. Looking for opportunities in tech industry.",
     following: [companies[0]._id, companies[1]._id],
   },
+  {
+    user_id: users[3]._id,
+    review: [
+      {
+        reviewer: companies[2]._id,
+        content: "Outstanding performance.",
+        rating: 5,
+      },
+      {
+        reviewer: companies[0]._id,
+        content: "Very reliable and efficient.",
+        rating: 4,
+      },
+    ],
+    education: [
+      {
+        education_level: "Bachelor's",
+        study_field: "Information Systems",
+        school_name: "Global University",
+        begin: new Date("2013-09-01T00:00:00.000Z"),
+        end: new Date("2017-05-31T00:00:00.000Z"),
+        additional_details: "Graduated with distinction",
+      },
+      {
+        education_level: "Master's",
+        study_field: "Data Science",
+        school_name: "Data University",
+        begin: new Date("2017-09-01T00:00:00.000Z"),
+        end: new Date("2019-05-31T00:00:00.000Z"),
+        additional_details: "Specialized in big data analytics",
+      },
+    ],
+    experience: [
+      {
+        job_title: "Data Scientist",
+        company_name: "DataAnalytics Inc.",
+        begin: new Date("2019-06-01T00:00:00.000Z"),
+        end: new Date("2023-06-01T00:00:00.000Z"),
+        description: "Analyzed large datasets to derive insights",
+      },
+      {
+        job_title: "Data Analyst",
+        company_name: "Insightful Solutions",
+        begin: new Date("2018-06-01T00:00:00.000Z"),
+        end: new Date("2019-06-01T00:00:00.000Z"),
+        description: "Performed data analysis and visualization",
+      },
+      {
+        job_title: "Intern",
+        company_name: "Tech Innovations",
+        begin: new Date("2017-06-01T00:00:00.000Z"),
+        end: new Date("2017-12-01T00:00:00.000Z"),
+        description: "Assisted in data collection and processing",
+      },
+    ],
+    skills: ["Python", "R", "SQL", "Tableau", "Machine Learning"],
+    certifications: [
+      {
+        name: "Certified Data Scientist",
+        issuing_organization: "Data Institute",
+        issue_date: new Date("2020-01-01T00:00:00.000Z"),
+      },
+      {
+        name: "Google Cloud Data Engineer",
+        issuing_organization: "Google",
+        issue_date: new Date("2021-01-01T00:00:00.000Z"),
+      },
+      {
+        name: "Certified Analytics Professional",
+        issuing_organization: "INFORMS",
+        issue_date: new Date("2019-01-01T00:00:00.000Z"),
+      },
+    ],
+    job_preferences: [
+      {
+        job_title: "Data Scientist",
+        industry: "Tech",
+        relocate_preference: "Yes",
+        salary_expectation: 100000,
+      },
+      {
+        job_title: "Machine Learning Engineer",
+        industry: "Finance",
+        relocate_preference: "No",
+        salary_expectation: 120000,
+      },
+      {
+        job_title: "Data Analyst",
+        industry: "Healthcare",
+        relocate_preference: "Yes",
+        salary_expectation: 90000,
+      },
+    ],
+    ready_to_work: true,
+    additional_info: "Open to remote work opportunities",
+    awards: ["Data Scientist of the Year", "Best Analyst Award"],
+    languages: ["English", "Chinese"],
+    link: ["https://github.com/user4", "https://linkedin.com/in/user4"],
+    publications: [
+      {
+        title: "Data Science in Healthcare",
+        url: "https://example.com/healthcare",
+        description: "An article on the impact of data science in healthcare",
+      },
+    ],
+    qualifications: [
+      {
+        title: "Data Science",
+        description:
+          "Python, R, SQL, Machine Learning, Deep Learning, Data Visualization, Big Data, Hadoop, Spark, Tableau, Power BI, Data Mining, Statistical Analysis, Predictive Modeling, Data Wrangling, Data Cleaning, Data Engineering, Cloud Computing, AWS, GCP, Azure, Docker, Kubernetes, CI/CD, Git, GitHub, Agile, Scrum",
+      },
+      {
+        title: "Soft Skills",
+        description:
+          "Communication, Teamwork, Problem-Solving, Time Management, Leadership, Adaptability, Creativity, Critical Thinking, Decision Making, Emotional Intelligence, Conflict Resolution, Negotiation, Stress Management, Collaboration, Empathy, Active Listening, Presentation, Public Speaking, Networking, Mentoring, Coaching, Delegation, Feedback, Motivation, Influence, Persuasion",
+      },
+    ],
+    profile_picture: "https://example.com/profile4.jpg",
+    resume: ["https://example.com/resume4.pdf"],
+    summary:
+      "Experienced data scientist with a strong background in machine learning and data analytics. Proven ability to derive insights from large datasets and deliver actionable recommendations. Looking for opportunities in tech industry.",
+    following: [companies[0]._id, companies[2]._id],
+  },
+  {
+    user_id: users[4]._id,
+    review: [
+      {
+        reviewer: companies[1]._id,
+        content: "Exceptional developer with great attention to detail.",
+        rating: 5,
+      },
+      {
+        reviewer: companies[2]._id,
+        content: "Highly collaborative and innovative.",
+        rating: 4,
+      },
+    ],
+    education: [
+      {
+        education_level: "Bachelor's",
+        study_field: "Computer Engineering",
+        school_name: "Tech University",
+        begin: new Date("2012-09-01T00:00:00.000Z"),
+        end: new Date("2016-05-31T00:00:00.000Z"),
+        additional_details: "Graduated with honors",
+      },
+      {
+        education_level: "Master's",
+        study_field: "Software Engineering",
+        school_name: "Engineering Institute",
+        begin: new Date("2016-09-01T00:00:00.000Z"),
+        end: new Date("2018-05-31T00:00:00.000Z"),
+        additional_details: "Specialized in software architecture",
+      },
+    ],
+    experience: [
+      {
+        job_title: "Lead Developer",
+        company_name: "Innovative Solutions",
+        begin: new Date("2018-06-01T00:00:00.000Z"),
+        end: new Date("2023-06-01T00:00:00.000Z"),
+        description: "Led a team of developers to build scalable applications",
+      },
+      {
+        job_title: "Software Engineer",
+        company_name: "Tech Innovations",
+        begin: new Date("2016-06-01T00:00:00.000Z"),
+        end: new Date("2018-06-01T00:00:00.000Z"),
+        description: "Developed software solutions for various clients",
+      },
+      {
+        job_title: "Intern",
+        company_name: "Startup Hub",
+        begin: new Date("2015-06-01T00:00:00.000Z"),
+        end: new Date("2015-12-01T00:00:00.000Z"),
+        description: "Assisted in software development projects",
+      },
+    ],
+    skills: ["Java", "Spring Boot", "Microservices", "Docker", "Kubernetes"],
+    certifications: [
+      {
+        name: "Oracle Certified Professional",
+        issuing_organization: "Oracle",
+        issue_date: new Date("2019-01-01T00:00:00.000Z"),
+      },
+      {
+        name: "Certified Kubernetes Administrator",
+        issuing_organization: "CNCF",
+        issue_date: new Date("2020-01-01T00:00:00.000Z"),
+      },
+      {
+        name: "AWS Certified Solutions Architect",
+        issuing_organization: "Amazon",
+        issue_date: new Date("2021-01-01T00:00:00.000Z"),
+      },
+    ],
+    job_preferences: [
+      {
+        job_title: "Lead Developer",
+        industry: "Tech",
+        relocate_preference: "No",
+        salary_expectation: 130000,
+      },
+      {
+        job_title: "Software Architect",
+        industry: "Finance",
+        relocate_preference: "Yes",
+        salary_expectation: 140000,
+      },
+      {
+        job_title: "Senior Software Engineer",
+        industry: "Healthcare",
+        relocate_preference: "Yes",
+        salary_expectation: 125000,
+      },
+    ],
+    ready_to_work: true,
+    additional_info: "Looking for leadership roles in software development",
+    awards: ["Developer of the Year", "Best Team Leader"],
+    languages: ["English", "Japanese"],
+    link: ["https://github.com/user5", "https://linkedin.com/in/user5"],
+    publications: [
+      {
+        title: "Microservices Architecture",
+        url: "https://example.com/microservices",
+        description: "An article on designing microservices architecture",
+      },
+    ],
+    qualifications: [
+      {
+        title: "Backend",
+        description:
+          "Java, Spring Boot, Microservices, Docker, Kubernetes, SQL, PostgreSQL, Redis, AWS, GCP, Azure, CI/CD, Jenkins, Git, GitHub, GitLab, Bitbucket, Jira, Confluence, Agile, Scrum, Kanban, TDD, BDD, DDD, Serverless",
+      },
+      {
+        title: "Soft Skills",
+        description:
+          "Communication, Teamwork, Problem-Solving, Time Management, Leadership, Adaptability, Creativity, Critical Thinking, Decision Making, Emotional Intelligence, Conflict Resolution, Negotiation, Stress Management, Collaboration, Empathy, Active Listening, Presentation, Public Speaking, Networking, Mentoring, Coaching, Delegation, Feedback, Motivation, Influence, Persuasion",
+      },
+    ],
+    profile_picture: "https://example.com/profile5.jpg",
+    resume: ["https://example.com/resume5.pdf"],
+    summary:
+      "Experienced lead developer with a strong background in Java and microservices architecture. Proven ability to lead teams and deliver high-quality software solutions. Looking for leadership roles in tech industry.",
+    following: [companies[1]._id, companies[2]._id],
+  },
 ];

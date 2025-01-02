@@ -7,9 +7,14 @@ export interface IJob {
   type: "full-time" | "part-time" | "contract" | "internship";
   location_type: "remote" | "on-site" | "hybrid";
   description: string;
-  salary: number;
+  salary: {
+    min: number;
+    max: number;
+  };
   emails?: string;
   requirements?: string[];
+  benefits?: string[];
+  responsibilities?: string[];
   deadline: Date;
   open_time: Date;
   createdAt?: Date; // Added by timestamps option

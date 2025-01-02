@@ -16,7 +16,7 @@ const UserProfile: React.FC = () => {
   const { userID } = useParams<{ userID: string }>();
 
   const [user, setUser] = useState<IUser>({});
-  const [userInfo, setUserInfo] = useState<IUserInfo>({});
+  const [userInfo, setUserInfo] = useState<IUserInfo>({user_id: "", ready_to_work: false});
   const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
   
   useEffect(() => {
