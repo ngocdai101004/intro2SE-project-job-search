@@ -1,0 +1,9 @@
+.job-description {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 10px;
+  min-height: 100px;
+  max-height: 280px;
+  white-space: pre-wrap;
+  overflow-y: auto;
+}

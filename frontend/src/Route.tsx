@@ -17,6 +17,7 @@ import JobList from "./pages/MyCompany/JobList/JobList.tsx";
 import UserProfile from "./pages/UserProfile/MainUserProfile/UserProfile.tsx";
 import JobSearchCV from "./pages/UserProfile/JobSearchCV/JobSearchCV.tsx";
 import CompanyList from "./pages/Company/CompanyList.tsx";
+import Candidates from "./pages/MyCompany/Candidates/Candidates.tsx";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
     element: <JobList />,
   },
   {
+    path: "/my-company/candidates",
+    element: <Candidates />,
+  },
+  {
     path: "/user/:userID/profile",
     element: <UserProfile />,
   },
@@ -107,6 +112,10 @@ const router = createBrowserRouter([
     path: "/home",
     element: <Home />,
   },
+  // {
+  //   path: "/home",
+  //   element: <Home />,
+  // },
 
   {
     element: <ProtectedRoute />,

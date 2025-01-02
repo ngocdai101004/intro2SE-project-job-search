@@ -53,9 +53,9 @@ const SideBar: React.FC = () => {
     },
     {
       label: "Candidates",
-      showIcon: false,
+      showIcon: true,
       icon: <FaUser />,
-      link: "/my-company/create-job-post",
+      link: "/my-company/candidates",
     },
   ];
 

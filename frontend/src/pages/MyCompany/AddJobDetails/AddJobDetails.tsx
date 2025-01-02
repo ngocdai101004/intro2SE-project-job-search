@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
+import "./AddJobDetails.css";
 
 const AddJobDetails: React.FC = () => {
   const navigate = useNavigate();
@@ -60,15 +61,7 @@ const AddJobDetails: React.FC = () => {
                         "Internship",
                         "Permanent",
                       ].map((type) => (
-                        <div
-                          key={type}
-                          style={{
-                            border: "1px solid #ced4da",
-                            padding: "3px 10px",
-                            borderRadius: "4px",
-                            marginBottom: "5px",
-                          }}
-                        >
+                        <div className="item-type" key={type}>
                           <Form.Check
                             type="checkbox"
                             label={type}
