@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +11,34 @@ const AddJobBasics: React.FC = () => {
   const [numPeople, setNumPeople] = useState("1");
   const [advertiseLocation, setAdvertiseLocation] = useState("");
 
-  const handleNavigation = (path: string) => {
-    navigate(path);
+  // Load dữ liệu đã lưu trong localStorage
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
+    if (savedData.title) setJobTitle(savedData.title);
+    if (savedData.number_of_peoples) setNumPeople(savedData.number_of_peoples);
+    if (savedData.advertiseLocation)
+      setAdvertiseLocation(savedData.advertiseLocation);
+  }, []);
+
+  // Lưu dữ liệu vào localStorage và chuyển tiếp
+  const handleSaveAndContinue = () => {
+    const currentData = {
+      title: jobTitle, // Đặt tên phù hợp với model Job
+      number_of_peoples: parseInt(numPeople), // Số lượng người cần tuyển
+      advertiseLocation,
+    };
+
+    // Lưu dữ liệu vào localStorage
+    const existingData = JSON.parse(
+      localStorage.getItem("jobPostData") || "{}"
+    );
+    localStorage.setItem(
+      "jobPostData",
+      JSON.stringify({ ...existingData, ...currentData })
+    );
+
+    // Chuyển đến trang tiếp theo
+    navigate("/my-company/add-job-details");
   };
 
   return (
@@ -97,18 +123,11 @@ const AddJobBasics: React.FC = () => {
                   <div className="d-flex justify-content-between">
                     <Button
                       variant="secondary"
-                      onClick={() =>
-                        handleNavigation("/my-company/create-job-post")
-                      }
+                      onClick={() => navigate("/my-company/create-job-post")}
                     >
                       ← Back
                     </Button>
-                    <Button
-                      variant="primary"
-                      onClick={() =>
-                        handleNavigation("/my-company/add-job-details")
-                      }
-                    >
+                    <Button variant="primary" onClick={handleSaveAndContinue}>
                       Continue →
                     </Button>
                   </div>
