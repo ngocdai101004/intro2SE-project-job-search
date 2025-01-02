@@ -60,7 +60,6 @@ interface ICompany {
 
   // Header
   company_name: string;
-  sumRating: number;
   applicant?: string[];
   employees?: string[];
   followers?: string[];

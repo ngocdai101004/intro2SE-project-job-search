@@ -13,72 +13,13 @@ const QA = () => (
   <div className="content-section bg-lightyellow">Q&A Content</div>
 );
 
-const exampleCompany: ICompany = {
-  _id: "123",
-  company_name: "TechVibes Inc.",
-  sumRating: 14,
-  followers: ["user123", "user456", "user789"],
-  address: {
-    district: "District 1",
-    city_state: "San Francisco, CA",
-    zip_code: "94103",
-    country: "USA",
-  },
-  description: {
-    company_size: [50, 200],
-    industry: "Information Technology",
-    headquarters: "San Francisco, CA",
-    links: ["https://techvibes.com", "https://linkedin.com/techvibes"],
-    founded: new Date("2010-05-15"),
-    specialities: ["Software Development", "Cloud Computing", "AI Solutions"],
-  },
-  short_description: "A leader in innovative tech solutions.",
-  reviews: [
-    {
-      user_id: "user123",
-      rating: 5,
-      review: "Great place to work with a strong focus on innovation!",
-      date: new Date("2023-12-15"),
-    },
-    {
-      user_id: "user456",
-      rating: 4,
-      review: "Good opportunities for growth but high workload.",
-      date: new Date("2023-11-25"),
-    },
-    {
-      user_id: "user789",
-      rating: 5,
-      review: "Supportive management and collaborative environment.",
-      date: new Date("2023-10-10"),
-    },
-  ],
-  qa: [
-    {
-      question: "What is the company culture like?",
-      answer:
-        "Our culture fosters innovation, teamwork, and continuous learning.",
-    },
-    {
-      question: "What benefits do you offer employees?",
-      answer:
-        "We provide health insurance, flexible work hours, and professional development programs.",
-    },
-    {
-      question: "Is there room for career growth?",
-      answer:
-        "Yes, we encourage internal promotions and provide mentorship programs.",
-    },
-  ],
-};
-
 function Company() {
   const { company_id } = useParams<{ company_id: string }>(); // Lấy company_id từ URL
   const { active_key } = useParams<{ active_key: string }>(); // Lấy active_key từ URL
 
   const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
 
-  const [companyData, setCompanyData] = useState<ICompany>(exampleCompany);
+  const [companyData, setCompanyData] = useState<ICompany | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

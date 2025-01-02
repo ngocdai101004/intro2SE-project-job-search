@@ -5,7 +5,7 @@ import ICompany from "../../../interfaces/interfaces";
 interface CompanyHeaderProps {
   myState?: string;
   setMyState?: React.Dispatch<React.SetStateAction<string>>;
-  companyData: ICompany;
+  companyData: ICompany | null;
 }
 
 const CompanyHeader = ({
@@ -18,13 +18,12 @@ const CompanyHeader = ({
   const setMyActiveKey = setMyState || (() => {});
 
   useEffect(() => {
-    const rating =
-      companyData.reviews.length == 0
-        ? 0
-        : Math.max(
-            Math.min(companyData.sumRating / companyData.reviews.length, 5),
-            0
-          );
+    const sumRating = companyData
+      ? companyData.reviews.reduce((acc, review) => acc + review.rating, 0)
+      : 0;
+    const len = companyData ? companyData.reviews.length : 1;
+    const rating = sumRating / len;
+
     setCompanyRating(rating);
   }, [companyData]);
 
@@ -47,7 +46,7 @@ const CompanyHeader = ({
               </Col>
               <Col className="d-flex flex-column justify-content-center">
                 <h5 className="mb-1">
-                  {companyData.company_name || "Fusodoya Company"}
+                  {companyData ? companyData.company_name : "Fusodoya Company"}
                 </h5>
                 <div className="d-flex align-items-center mb-1">
                   <span className="me-2 text-primary fw-bold">
@@ -84,7 +83,7 @@ const CompanyHeader = ({
               <Col xs="auto" className="d-flex justify-content-center">
                 <small className="text-muted">
                   {" "}
-                  {companyData.followers?.length} followers
+                  {companyData ? companyData.followers?.length : 0} followers
                 </small>
               </Col>
               <Col xs="auto" className="d-flex justify-content-center">

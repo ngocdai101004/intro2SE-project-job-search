@@ -196,6 +196,7 @@ export const reviewCompany = async (req: Request, res: Response) => {
       res.status(403).json({ message: "Please verify your account", data: {} });
       return;
     }
+
     review.user_id = userID;
     if (company.reviews.some((r) => r.user_id.toString() === userID)) {
       // Update review
