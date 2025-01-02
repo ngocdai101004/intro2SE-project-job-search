@@ -24,7 +24,7 @@ interface Description {
   specialities: string[];
 }
 
-interface IReview {
+export interface IReview {
   user_id: string;
   rating: number;
   review: string;

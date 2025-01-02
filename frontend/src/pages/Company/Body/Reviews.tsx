@@ -1,20 +1,7 @@
 import { useEffect, useState } from "react";
 import { Col, Row, ListGroup } from "react-bootstrap";
 import axiosInstance from "../../../common/axiosInstance";
-import JobDetail from "./JobDetail";
-
-interface iJobDescription {
-  id: number;
-  title: string;
-  location: string;
-  date: string;
-  description: string;
-  requirements: string[];
-  employmentType: string; // e.g., Full-time, Part-time
-  workMode: string; // e.g., On-site, Remote
-  applicantCount: number; // Số lượng ứng viên
-  level: string; // e.g., Internship, Entry-level, Mid-level, Senior-level
-}
+import ReviewForm from "./ReviewForm";
 
 const jobInstance = {
   id: 1,
@@ -34,26 +21,33 @@ const jobInstance = {
   level: "Internship", // Cấp độ công việc
 };
 
-const Reviews = () => {
-  const [jobs, setJobs] = useState(
+interface ReviewsProps {
+  company_id: string;
+}
+
+const Reviews = ({ company_id }: ReviewsProps) => {
+  const [reviews, setReviews] = useState(
     Array(10)
       .fill(jobInstance)
       .map((job, index) => ({ ...job, id: index }))
   );
-  const [selectedJob, setSelectedJob] = useState<iJobDescription | null>(null);
 
-  const fetchJobs = async () => {
+  const fetchReviews = async () => {
     try {
-      const res = await axiosInstance.get("/jobs");
-      setJobs(res.data);
+      console.log(company_id);
+      const response = await axiosInstance.get(
+        `/company/${company_id}/reviews`
+      ); // Sử dụng company_id từ URL
+      setReviews(response.data.data.reviews);
+      console.log(response.data.data);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchJobs();
-  }, []);
+    fetchReviews();
+  }, [company_id]);
 
   return (
     <div className="container">
@@ -64,7 +58,7 @@ const Reviews = () => {
           fontWeight: "bold",
         }}
       >
-        {jobs.length} jobs at DPTT Corporation
+        {reviews.length} reviews at DPTT Corporation
       </Row>
       <Row>
         <Col
@@ -72,38 +66,40 @@ const Reviews = () => {
           style={{ overflow: "scroll", scrollbarWidth: "none", height: "52vh" }}
         >
           <ListGroup>
-            {jobs.map((job) => (
+            {reviews.map((review, index) => (
               <ListGroup.Item
-                key={job.id}
-                action
-                onClick={() => {
-                  setSelectedJob(job);
-                }}
+                className="d-flex flex-row p-3"
+                key={index}
                 style={{
                   border: "1px solid lightgray",
                   borderRadius: "8px",
                   marginBottom: "0.5rem",
-                  backgroundColor:
-                    selectedJob?.id === job.id ? "#e7f3ff" : "#f8f9fa",
-                  cursor: "pointer",
+                  backgroundColor: "white",
                 }}
               >
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  {job.title}
-                </div>
-                <div className="text-muted" style={{ fontSize: "13px" }}>
-                  {job.location}
-                </div>
-                <div className="text-muted" style={{ fontSize: "13px" }}>
-                  {job.date}
-                </div>
+                <Col xs={1} style={{ fontWeight: "bold", fontSize: "15px" }}>
+                  {review.rating} ★
+                </Col>
+                <Col xs={11}>
+                  <div className="text-muted" style={{ fontSize: "13px" }}>
+                    {new Date(review.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </div>
+                  <div className="text-muted" style={{ fontSize: "13px" }}>
+                    {review.review}
+                  </div>
+                </Col>
               </ListGroup.Item>
             ))}
           </ListGroup>
         </Col>
 
         <Col xs={5}>
-          {selectedJob ? <JobDetail job={selectedJob} /> : <> </>}
+          <ReviewForm company_id={company_id} />
+          {/* {selectedJob ? <JobDetail job={selectedJob} /> : <> </>} */}
         </Col>
       </Row>
     </div>

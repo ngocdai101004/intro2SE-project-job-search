@@ -121,7 +121,7 @@ function Company() {
       case "/jobs":
         return <Jobs company_id={company_id || ""} />;
       case "/reviews":
-        return <Reviews />;
+        return <Reviews company_id={company_id || ""} />;
       case "/qa":
         return <QA />;
       default:
