@@ -1,141 +1,155 @@
-import { Card, Col, Row } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import {Col, Container, Row} from "react-bootstrap";
+import {useEffect, useState} from "react";
 import axiosInstance from "../../../common/axiosInstance";
-import IUser from "../../../interfaces/user";
-import IUserInfo from "../../../interfaces/userinfo";
+import IUserInfo, {
+    ICertification,
+    IEducation,
+    IExperience,
+    IJobPreference,
+    IPublication,
+    IQualification
+} from "../../../interfaces/userinfo.ts";
+import UserEducation from "../InfoCards/UserEducation.tsx";
+import UserExp from "../InfoCards/UserExp.tsx";
+import UserPrefs from "../InfoCards/UserPrefs.tsx";
+import UserCertification from "../InfoCards/UserCerts.tsx";
+import UserQualification from "../InfoCards/UserQuals.tsx";
+import UserPublication from "../InfoCards/UserPubs.tsx";
+import UserCommonInfo from "../InfoCards/UserCommonInfo.tsx";
+import UserSummary from "../InfoCards/UserSummary.tsx";
 
-interface UserMainProfileProps {
-    userData: {
-        user: IUser;
-        userInfo: IUserInfo;
-    };
-}
 
-interface ICompanyReviewer {
-    name: string;
-    avatar: string;
-    content: string;
-    rating: number;
-  };
+const UserMainProfile = ({userID}: { userID: string | null }) => {
+    const [userInfo, setUserInfo] = useState<IUserInfo | undefined>();
 
-const UserMainProfile = ({ userData }: UserMainProfileProps) => {
-
-const [reviewerList, setReviewerList] = useState<ICompanyReviewer[]>([]);
     useEffect(() => {
-        const fetchData = async () => {
-            const tempReviewerList: ICompanyReviewer[] = [];
-            if (userData.userInfo.review) {
-                for (let i = 0; i < userData.userInfo.review.length; i++) {
-                    try {
-                        const response = await axiosInstance.get("/company/" + userData.userInfo.review[i].reviewer);
-                        console.log("Reviewer Data:", response.data.data.company);
-                        tempReviewerList.push({
-                            name: response.data.data.company.company_name || "Anonymous",
-                            avatar: response.data.data.company.avatar || "company-avatar.jpg",
-                            content: userData.userInfo.review[i].content,
-                            rating: userData.userInfo.review[i].rating
-                        });
-                    } catch (error) {
-                        console.error("Error fetching reviewer data:", error);
-                    }
+        const fetchUserInfo = async () => {
+            try {
+                let response;
+                if (!userID) {
+                    response = await axiosInstance.get("/user/profile/info");
+                } else {
+                    response = await axiosInstance.get("/user/" + userID + "/profile/info");
                 }
-                setReviewerList(tempReviewerList);
+                setUserInfo(response.data.data.userInfo);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
             }
-        };
-        fetchData();
-    }, [userData.userInfo.review]);
+        }
+        fetchUserInfo();
+        console.log("effected");
+    }, []);
+
+    if (!userInfo) {
+        return (
+            <h1>Loading...</h1>
+        );
+    }
+
+    const patchUserInfo = async (newUserInfo: IUserInfo) => {
+        try {
+            await axiosInstance.patch("/user/profile/info", newUserInfo);
+        } catch (error) {
+            console.error("Error updating user data:", error);
+        }
+    }
+
+    const handleEducationChange = (updatedEducation: IEducation[]) => {
+        const newUserInfo = {...userInfo, education: updatedEducation};
+        setUserInfo({...userInfo, education: updatedEducation});
+        patchUserInfo(newUserInfo);
+    };
+
+    const handleExperienceChange = (updatedExperience: IExperience[]) => {
+        const newUserInfo = {...userInfo, experience: updatedExperience};
+        setUserInfo({...userInfo, experience: updatedExperience});
+        patchUserInfo(newUserInfo);
+    }
+
+    const handleJobPreferenceChange = (updatedJobPreference: IJobPreference[]) => {
+        const newUserInfo = {...userInfo, job_preferences: updatedJobPreference};
+        setUserInfo({...userInfo, job_preferences: updatedJobPreference});
+        patchUserInfo(newUserInfo);
+    }
+
+    const handleCertificationChange = (updatedCertification: ICertification[]) => {
+        const newUserInfo = {...userInfo, certifications: updatedCertification};
+        setUserInfo({...userInfo, certifications: updatedCertification});
+        patchUserInfo(newUserInfo);
+    }
+
+    const handleQualificationChange = (updatedQualification: IQualification[]) => {
+        const newUserInfo = {...userInfo, qualifications: updatedQualification};
+        setUserInfo({...userInfo, qualifications: updatedQualification});
+        patchUserInfo(newUserInfo);
+    }
+
+    const handlePublicationChange = (updatedPublication: IPublication[]) => {
+        const newUserInfo = {...userInfo, publications: updatedPublication};
+        setUserInfo({...userInfo, publications: updatedPublication});
+        patchUserInfo(newUserInfo);
+    }
 
     return (
-        <div
-            className="container mt-4"
-            style={{ overflow: "scroll", scrollbarWidth: "thin", height: "60vh" }}
-        >
+        <Container className="h-100 w-75 overflow-auto">
             <Row className="mb-4">
                 <Col>
-                    <Card className="p-3 mb-3 border-0">
-                        <h5>Resume</h5>
-                        <div className="border rounded p-3">
-                            <div className="d-flex">
-                                <div className="p-2">
-                                    <a href={`/user/${userData.user._id}/profile/job-search-cv`} target="_blank" rel="noopener noreferrer">
-                                        <i className="bi bi-file-earmark-text"></i> Jobsearch Resume
-                                    </a>
-                                </div>
-                                {userData.userInfo.resume && userData.userInfo.resume.map((resumeUrl, index) => (
-                                    <div className="p-2" key={index}>
-                                        <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
-                                            <i className="bi bi-file-earmark-text"></i> Resume {index + 1}
-                                        </a>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </Card>
-                    <hr />
-                    <Card className="p-3 mb-3 border-0">
-                        <h5>Qualifications</h5>
-                        <div className="border rounded p-3">
-                            <Row>
-                                {userData.userInfo.qualifications && userData.userInfo.qualifications.map((qualification: { title: string, description?: string }, index: number) => (
-                                    <Col md={6} key={index}>
-                                        <p><strong>{qualification.title}</strong>: {qualification.description || "No description provided"}</p>
-                                    </Col>
-                                ))}
-                            </Row>
-                        </div>
-                    </Card>
-                    <hr />
-                    <Card className="p-3 mb-3 border-0">
-                        <h5>Job Preferences</h5>
-                        <div className="border rounded p-3">
-                            <ul>
-                                {userData.userInfo.job_preferences && userData.userInfo.job_preferences.map((job: { job_title: string }, index: number) => (
-                                    <li key={index}>{job.job_title}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    </Card>
-                    <hr />
-                    <Card className="p-3 mb-3 border-0">
-                        <h5>Ready to Work</h5>
-                        <div className="border rounded p-3">
-                        <div className="d-flex align-items-center">
-                            <p className="mb-0">I'm available to start immediately</p>
-                            <div className="form-check form-switch ms-3">
-                                <input className="form-check-input" type="checkbox" id="readyToWorkSwitch" />
-                                <label className="form-check-label" htmlFor="readyToWorkSwitch"></label>
-                            </div>
-                        </div>
-                        </div>
-                    </Card>
-                    <hr />
-                    <Card className="p-3 mb-3 border-0">
-                        <h5>Reviews</h5>
-                        <div className="border rounded p-3">
-                            {/* Content for Reviews */}
-                        {reviewerList.length > 0 ? (
-                            reviewerList.map((reviewer, index) => (
-                                <div key={index} className="d-flex mb-3">
-                                    <img
-                                        src={reviewer.avatar || "company-avatar.jpg"}
-                                        alt={reviewer.name}
-                                        className="rounded-circle me-3"
-                                        style={{ width: "30px", height: "30px" }}
-                                    />
-                                    <div>
-                                        <h6>{reviewer.name}</h6>
-                                        <p>{reviewer.content}</p>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No reviews available</p>
-                        )}
-                        </div>
-                    </Card>
+                    <UserSummary summary={userInfo.summary ? userInfo.summary : "Nothing to show"}
+                                 onSummaryChange={(updated) => {
+                                     const newUserInfo = {...userInfo, summary: updated};
+                                     setUserInfo({...userInfo, summary: updated});
+                                     patchUserInfo(newUserInfo);
+                                 }}/>
+
+                    <UserCommonInfo commonInfoLabel="Awards" userCommonInfoList={userInfo.awards}
+                                    onCommonInfoChange={(updated) => {
+                                        const newUserInfo = {...userInfo, awards: updated};
+                                        setUserInfo({...userInfo, awards: updated});
+                                        patchUserInfo(newUserInfo);
+                                    }}/>
+                    <hr/>
+                    <UserCommonInfo commonInfoLabel="Languages" userCommonInfoList={userInfo.languages}
+                                    onCommonInfoChange={(updated) => {
+                                        const newUserInfo = {...userInfo, languages: updated};
+                                        setUserInfo({...userInfo, languages: updated});
+                                        patchUserInfo(newUserInfo);
+                                    }}/>
+                    <hr/>
+                    <UserCommonInfo commonInfoLabel="Links" userCommonInfoList={userInfo.link}
+                                    onCommonInfoChange={(updated) => {
+                                        const newUserInfo = {...userInfo, link: updated};
+                                        setUserInfo({...userInfo, link: updated});
+                                        patchUserInfo(newUserInfo);
+                                    }}/>
+                    <hr/>
+                    <UserCommonInfo commonInfoLabel="Skills" userCommonInfoList={userInfo.skills}
+                                    onCommonInfoChange={(updatedSkills) => {
+                                        const newUserInfo = {...userInfo, skills: updatedSkills};
+                                        setUserInfo({...userInfo, skills: updatedSkills});
+                                        patchUserInfo(newUserInfo);
+                                    }}/>
+                    <hr/>
+                    <UserEducation userEducationList={userInfo.education}
+                                   onEducationChange={handleEducationChange}/>
+                    <hr/>
+                    <UserExp userExperienceList={userInfo.experience}
+                             onExperienceChange={handleExperienceChange}/>
+                    <hr/>
+                    <UserPrefs userJobPreferenceList={userInfo.job_preferences}
+                               onJobPreferenceChange={handleJobPreferenceChange}/>
+                    <hr/>
+                    <UserCertification userCertificationList={userInfo.certifications}
+                                       onCertificationChange={handleCertificationChange}/>
+                    <hr/>
+                    <UserQualification userQualificationList={userInfo.qualifications}
+                                       onQualificationChange={handleQualificationChange}/>
+                    <hr/>
+                    <UserPublication userPublicationList={userInfo.publications}
+                                     onPublicationChange={handlePublicationChange}/>
+                    <hr/>
                 </Col>
             </Row>
-        </div>
+        </Container>
     );
 };
 
