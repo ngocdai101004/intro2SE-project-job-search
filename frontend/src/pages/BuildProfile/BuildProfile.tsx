@@ -41,7 +41,7 @@ const UserRegistrationForm: React.FC = () => {
             const response = await axiosInstance.patch('/user/profile', formData);
             console.log(response.data);
             toast.success('Profile updated successfully');
-            navigate('/home');
+            navigate('/user/build-job-search-cv');
             
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
