@@ -86,8 +86,10 @@ const createChat = async (req: Request, res: Response) => {
 const sendMessage = async (req: Request, res: Response) => {
     try {
         const userID = req.body.userID;
-        const chatID = req.params.id;
+        const chatID = req.body.chatID;
         const message = req.body.message;
+
+
         if (!userID || !chatID || !message) {
             res.status(400).json({message: "Missing required fields"});
             return;

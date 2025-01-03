@@ -7,8 +7,8 @@ const router = Router();
 
 router.use(verifyUser);
 router.get("/", getChatInfo);
-router.post("/id/create", createChat);
-router.post("/:id", sendMessage);
+router.post("/:id/create", createChat);
+router.post("/", sendMessage);
 
 
 export default router;
