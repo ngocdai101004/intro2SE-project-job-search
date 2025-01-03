@@ -43,10 +43,7 @@ export const getJobs = async (req: Request, res: Response) => {
 };
 
 // Controller lấy jobs theo companyId
-export const getJobsByCompanyId = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getJobsByCompanyId = async (req: Request, res: Response) => {
   try {
     // Lấy dữ liệu từ params và query
     const { companyId } = req.params; // Đổi tên tham số để đồng bộ với route
@@ -55,7 +52,6 @@ export const getJobsByCompanyId = async (
     // Kiểm tra companyId hợp lệ
     if (!mongoose.Types.ObjectId.isValid(companyId)) {
       res.status(400).json({ message: "Invalid company ID", data: [] });
-      return; // Thoát hàm nếu companyId không hợp lệ
     }
 
     // Tính toán phân trang

@@ -67,9 +67,6 @@ const DescribeJob: React.FC = () => {
     try {
       const response = await axiosInstance.post("/job/create", formattedData);
 
-      alert("Job created successfully!");
-      console.log(response.data);
-
       // Xóa dữ liệu trong localStorage
       localStorage.removeItem("jobPostData");
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,25 @@ const CreateJobPost: React.FC = () => {
   const handleNavigation = (path: string) => {
     navigate(path);
   };
+
+  const handleContinue = () => {
+    const savedPage = localStorage.getItem("currentPage");
+    const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
+
+    if (!savedPage || Object.keys(savedData).length === 0) {
+      // Không có dữ liệu, quay về bước đầu
+      navigate("/my-company/add-job-basics");
+    } else {
+      navigate(savedPage);
+    }
+  };
+
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
+    if (!savedData.title) {
+      navigate("/my-company/create-job-post");
+    }
+  }, []);
 
   return (
     <MainLayout>
@@ -86,8 +105,11 @@ const CreateJobPost: React.FC = () => {
                     <Col sm={12} className="d-flex justify-content-end">
                       <Button
                         className="continue-btn"
-                        onClick={() =>
-                          handleNavigation("/my-company/add-job-basics")
+                        onClick={
+                          () =>
+                            selectedOption === "new"
+                              ? handleNavigation("/my-company/add-job-basics")
+                              : handleContinue() // Điều hướng đến trang đang điền dở
                         }
                       >
                         Continue →
