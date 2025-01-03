@@ -13,9 +13,9 @@ const ReadyToWorkSection: React.FC<ReadyToWorkSectionProps> = ({
     onReadyToWorkChange 
 }) => {
     return (
-        <Card className="p-3 mb-3 border-0">
+        <Card className="p-3 mb-3 border-0 shadow-sm" style={{ maxWidth: '95%', margin: '0 auto' }}>
             <h5>Ready to Work</h5>
-            <div className="border rounded p-3">
+            <div className="border rounded p-3 bg-light">
                 <div className="d-flex align-items-center">
                     <p className="mb-0">I'm available to start immediately</p>
                     <div className="form-check form-switch ms-3">

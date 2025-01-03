@@ -10,7 +10,6 @@ const AddPaysAndBenefits: React.FC = () => {
   const [payType, setPayType] = useState("Range");
   const [minimumPay, setMinimumPay] = useState("");
   const [maximumPay, setMaximumPay] = useState("");
-  const [locationType, setLocationType] = useState("on-site"); // Loại vị trí làm việc
   const [benefits, setBenefits] = useState<string[]>([""]); // Danh sách lợi ích
 
   // Load dữ liệu từ localStorage khi render lại trang
@@ -18,7 +17,6 @@ const AddPaysAndBenefits: React.FC = () => {
     const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
     if (savedData.minimumPay) setMinimumPay(savedData.minimumPay);
     if (savedData.maximumPay) setMaximumPay(savedData.maximumPay);
-    if (savedData.locationType) setLocationType(savedData.locationType);
     if (savedData.benefits) setBenefits(savedData.benefits);
   }, []);
 
@@ -41,7 +39,6 @@ const AddPaysAndBenefits: React.FC = () => {
         min: minimumPay,
         max: payType === "Fixed" ? minimumPay : maximumPay, // Nếu Fixed thì min = max
       },
-      locationType,
       benefits,
     };
 
@@ -53,6 +50,8 @@ const AddPaysAndBenefits: React.FC = () => {
       "jobPostData",
       JSON.stringify({ ...existingData, ...currentData })
     );
+
+    localStorage.setItem("currentPage", "/my-company/add-job-description");
 
     // Chuyển đến trang tiếp theo
     navigate("/my-company/add-job-description");
@@ -124,23 +123,6 @@ const AddPaysAndBenefits: React.FC = () => {
                         </Form.Select>
                       )}
                     </div>
-                  </Form.Group>
-
-                  {/* Location Type Section */}
-                  <Form.Group className="mb-3">
-                    <strong>
-                      <Form.Label column sm={12} className="text-left">
-                        Work Location Type
-                      </Form.Label>
-                    </strong>
-                    <Form.Select
-                      value={locationType}
-                      onChange={(e) => setLocationType(e.target.value)}
-                    >
-                      <option value="remote">Remote</option>
-                      <option value="on-site">On-site</option>
-                      <option value="hybrid">Hybrid</option>
-                    </Form.Select>
                   </Form.Group>
 
                   {/* Benefits Section */}

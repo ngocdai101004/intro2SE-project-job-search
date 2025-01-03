@@ -61,6 +61,7 @@ const AddJobDescription: React.FC = () => {
       JSON.stringify({ ...existingData, ...currentData })
     );
 
+    localStorage.setItem("currentPage", "/my-company/describe-job");
     // Chuyển đến trang tiếp theo
     navigate("/my-company/describe-job");
   };

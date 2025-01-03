@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -8,9 +8,38 @@ import {
   FormControl,
 } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
+import axiosInstance from "../../../common/axiosInstance";
 import "./Candidates.css";
 
+interface Candidate {
+  id: string;
+  candidateName: string;
+  jobTitle: string;
+  feedback: string;
+  appliedDate: string;
+  status: string;
+}
+
 const Candidates: React.FC = () => {
+  const [candidates, setCandidates] = useState<Candidate[]>([]); // State lưu danh sách ứng viên
+
+  // Fetch dữ liệu từ API
+  useEffect(() => {
+    const fetchCandidates = async () => {
+      try {
+        const companyId = "6776acea66277d8c90632d9f"; // ID công ty
+        const { data } = await axiosInstance.get(
+          `/applicant/${companyId}` // API endpoint
+        );
+        setCandidates(data); // Lưu dữ liệu vào state
+      } catch (error) {
+        console.error("Error fetching candidates:", error);
+      }
+    };
+
+    fetchCandidates(); // Gọi API khi component mount
+  }, []);
+
   return (
     <MainLayout>
       <Container fluid className="candidate-post-container">
@@ -59,7 +88,7 @@ const Candidates: React.FC = () => {
                     <th>Interested?</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   <tr>
                     <td>
                       <input type="checkbox" />
@@ -91,6 +120,52 @@ const Candidates: React.FC = () => {
                       </div>
                     </td>
                   </tr>
+                </tbody> */}
+                <tbody>
+                  {candidates.length > 0 ? (
+                    candidates.map((candidate, index) => (
+                      <tr key={index}>
+                        <td>
+                          <input type="checkbox" />
+                        </td>
+                        <td>
+                          <p className="candidate-name">
+                            {candidate.candidateName}
+                          </p>
+                          <div className="candidate-state">Awaiting Review</div>
+                          <p
+                            className="location"
+                            style={{ fontSize: "12px", opacity: 0.7 }}
+                          >
+                            Applied: {candidate.appliedDate}
+                          </p>
+                        </td>
+                        <td>
+                          <span className="candidate-job">
+                            {candidate.jobTitle}
+                          </span>
+                        </td>
+                        <td>
+                          <span>
+                            {candidate.feedback || "No feedback provided"}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="candidate-intersted">
+                            <span className="icon">&#10003;</span>
+                            <span className="icon">?</span>
+                            <span className="icon">&#10007;</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} style={{ textAlign: "center" }}>
+                        No candidates found.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

@@ -45,6 +45,7 @@ const AddJobDetails: React.FC = () => {
       JSON.stringify({ ...existingData, ...currentData })
     );
 
+    localStorage.setItem("currentPage", "/my-company/add-pays-and-benefits");
     // Chuyển đến bước tiếp theo
     navigate("/my-company/add-pays-and-benefits");
   };

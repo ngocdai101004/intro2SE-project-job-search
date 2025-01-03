@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema(
     },
     short_bio: {
       type: String,
-      required: true,
+      default: "",
     },
   },
   {

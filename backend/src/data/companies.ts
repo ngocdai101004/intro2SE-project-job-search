@@ -44,6 +44,7 @@ export const companies = [
         date: new Date("2023-10-10"),
       },
     ],
+    avatar: "/company-avatar.jpg",
   },
   {
     _id: new ObjectId("67773cd820a2ca18b092cf8c"),
@@ -87,6 +88,7 @@ export const companies = [
         date: new Date("2023-10-30"),
       },
     ],
+    avatar: "/company-avatar.jpg",
   },
   {
     _id: new ObjectId("67773cd820a2ca18b092cf90"),
@@ -130,5 +132,6 @@ export const companies = [
         date: new Date("2023-10-15"),
       },
     ],
+    avatar: "/company-avatar.jpg",
   },
 ];

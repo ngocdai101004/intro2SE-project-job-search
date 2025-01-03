@@ -16,11 +16,13 @@ import PreviewJob from "./pages/MyCompany/PreviewJob/PreviewJob.tsx";
 import JobList from "./pages/MyCompany/JobList/JobList.tsx";
 import OwnUserProfile from "./pages/UserProfile/MainUserProfile/OwnUserProfile";
 import GuestUserProfile from "./pages/UserProfile/MainUserProfile/GuestUserProfile.tsx";
-import JobSearchCV from "./pages/UserProfile/JobSearchCV/JobSearchCV.tsx";
+import OwnJobSearchCV from "./pages/UserProfile/JobSearchCV/OwnJobSearchCV.tsx";
+import GuestJobSearchCV from "./pages/UserProfile/JobSearchCV/GuestJobSearchCV.tsx";
 import CompanyList from "./pages/Company/CompanyList.tsx";
 import Candidates from "./pages/MyCompany/Candidates/Candidates.tsx";
 import AddJobDescription from "./pages/MyCompany/AddJobDescription/AddJobDescription.tsx";
-
+import BuildProfile from "./pages/BuildProfile/BuildProfile.tsx";
+import ResumeBuilder from "./pages/BuildJobSearchCV/ResumeBuilder.tsx";
 const router = createBrowserRouter([
   {
     path: "/signin",
@@ -91,6 +93,16 @@ const router = createBrowserRouter([
     element: <Candidates />,
   },
   {
+    path: "user/build-profile",
+    element: <BuildProfile />,
+    
+  },
+  {
+    path: "/user/build-job-search-cv",
+    element: <ResumeBuilder />,
+
+  },
+  {
     path: "/user/:userID/profile",
     element: <GuestUserProfile />,
   },
@@ -100,11 +112,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/user/:userID/profile/job-search-cv",
-    element: <JobSearchCV />,
+    element: <GuestJobSearchCV />,
   },
   {
     path: "/user/profile/job-search-cv",
-    element: <JobSearchCV />,
+    element: <OwnJobSearchCV />,
   },
   {
     path: "/user/profile",

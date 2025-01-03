@@ -1,3 +1,4 @@
+import e from "express";
 import mongoose from "mongoose";
 
 const userInfoSchema = new mongoose.Schema(
@@ -84,7 +85,10 @@ const userInfoSchema = new mongoose.Schema(
       },
     ],
 
-    skills: [String],
+    skills: {
+      type: [String],
+      default: [],
+    },
 
     certifications: [
       {
@@ -115,7 +119,7 @@ const userInfoSchema = new mongoose.Schema(
         },
         relocate_preference: {
           type: String,
-          required: true,
+          enum: ["willing", "not_willing", "remote_only", "flexible"],
         },
         salary_expectation: {
           type: Number,
@@ -129,13 +133,25 @@ const userInfoSchema = new mongoose.Schema(
       required: true,
     },
 
-    additional_info: String,
+    additional_info: {
+      type: String,
+      default: "",
+    },
 
-    awards: [String],
+    awards: {
+      type: [String],
+      default: [],
+    },
 
-    languages: [String],
+    languages: {
+      type: [String],
+      default: [],
+    },
 
-    link: [String],
+    link: {
+      type: [String],
+      default: [],
+    },
 
     publications: [
       {
@@ -143,8 +159,14 @@ const userInfoSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-        url: String,
-        description: String,
+        url: {
+          type: String,
+          default: "",
+        },
+        description: {
+          type: String,
+          default: "",
+        },
       },
     ],
 
@@ -154,20 +176,21 @@ const userInfoSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-        description: String,
+        description: {
+          type: String,
+          default: "",
+        },
       },
     ],
 
-    profile_picture: {
-      type: String,
-    },
-
     resume: {
       type: [String],
+      default: [],
     },
 
     summary: {
       type: String,
+      default: "",
     },
   },
   {

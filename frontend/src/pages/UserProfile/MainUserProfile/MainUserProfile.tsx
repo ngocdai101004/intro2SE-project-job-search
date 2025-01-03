@@ -55,29 +55,30 @@ const UserMainProfile: React.FC<UserProfileProps> = ({
     return (
         <div
             className="container mt-4"
-            style={{ overflow: "scroll", scrollbarWidth: "thin", height: "60vh" }}
+            style={{ overflow: "scroll", scrollbarWidth: "thin", height: "60vh" , maxWidth: '70%'}}
         >
             <Row className="mb-4">
                 <Col>
                     <ResumeSection 
                         userID={userData.user._id} 
-                        resumes={userData.userInfo.resume} 
+                        resumes={userData.userInfo.resume}
+                        isOwnProfile={isOwnProfile}
                     />
-                    <hr />
+                    <hr  style={{ width: '95%' }}/>
                     <QualificationsSection 
                         qualifications={userData.userInfo.qualifications} 
                     />
-                    <hr />
+                    <hr  style={{ width: '95%' }}/>
                     <JobPreferencesSection 
                         jobPreferences={userData.userInfo.job_preferences} 
                     />
-                    <hr />
+                    <hr  style={{ width: '95%' }}/>
                     <ReadyToWorkSection 
                         readyToWork={readyToWork}
                         isOwnProfile={isOwnProfile}
                         onReadyToWorkChange={handleReadyToWorkChange}
                     />
-                    <hr />
+                    <hr  style={{ width: '95%' }}/>
                     <ReviewsSection 
                         reviewers={reviewerList} 
                     />

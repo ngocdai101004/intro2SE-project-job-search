@@ -1,25 +1,21 @@
 import React from "react";
 import { Card, Col, Nav, Row, Image } from "react-bootstrap";
 import IUser from "../../../interfaces/user";
-import IUserInfo from "../../../interfaces/userinfo";
 
 interface UserHeaderProps {
   myState?: string;
   setMyState?: React.Dispatch<React.SetStateAction<string>>;
-  userData: {
-    user: IUser;
-    userInfo: IUserInfo;
-  };
+  user: IUser;
 }
 
 
-const UserHeader = ({ myState, setMyState, userData }: UserHeaderProps) => {
+const UserHeader = ({ myState, setMyState, user }: UserHeaderProps) => {
   const myActiveKey = myState || "/snapshot";
   const setMyActiveKey = setMyState || (() => {});
   
   return (
     <div className="bg-cyan py-3 pb-0">
-      <div className="container">
+      <div className="container" style={{width: '70%'}}>
         {/* Header Section */}
         <div className="row">
           <Card
@@ -36,15 +32,15 @@ const UserHeader = ({ myState, setMyState, userData }: UserHeaderProps) => {
               </Col>
               <Col className="d-flex flex-column justify-content-center">
                 <h5 className="mb-1">
-                  {(userData.user.first_name || "") +
+                  {(user.first_name || "") +
                     " " +
-                    (userData.user.last_name || "") || "Company"}
+                    (user.last_name || "") || "Company"}
                 </h5>
                 <small
                   className="text-muted"
                   style={{ wordWrap: "break-word", maxWidth: "300px" }}
                 >
-                  {userData.user.short_bio || "User Bio"}
+                  {user.short_bio || "User Bio"}
                 </small>
               </Col>
             </Row>
@@ -57,22 +53,22 @@ const UserHeader = ({ myState, setMyState, userData }: UserHeaderProps) => {
             <Row className="mb-2">
               <Col xs="auto" className="d-flex align-items-center">
                 <i className="bi bi-envelope"></i>
-                <span className="ms-2">{userData.user.email}</span>
+                <span className="ms-2">{user.email}</span>
               </Col>
             </Row>
             <Row className="mb-2">
               <Col xs="auto" className="d-flex align-items-center">
                 <i className="bi bi-telephone"></i>
-                <span className="ms-2">{userData.user.phone}</span>
+                <span className="ms-2">{user.phone}</span>
               </Col>
             </Row>
             <Row>
               <Col xs="auto" className="d-flex align-items-center">
                 <i className="bi bi-geo-alt"></i>
                 <span className="ms-2">
-                  {(userData.user.address?.city_state || "") +
+                  {(user.address?.city_state || "") +
                     ", " +
-                    (userData.user.address?.country || "")}
+                    (user.address?.country || "")}
                 </span>
               </Col>
             </Row>
