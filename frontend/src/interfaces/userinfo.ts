@@ -26,7 +26,7 @@ export interface IExperience {
 export interface IJobPreference {
   job_title: string;
   industry: string;
-  relocate_preference: string;
+  relocate_preference: "willing" | "not_willing" | "remote_only" | "flexible";
   salary_expectation?: number;
 }
 
@@ -91,6 +91,22 @@ export interface ICompanyReviewer {
   avatar: string;
   content: string;
   rating: number;
+}
+
+export interface ResumeData {
+  summary: string;
+  education: IEducation[];
+  qualifications: IQualification[];
+  skills: string[];
+  experience: IExperience[];
+  certifications: ICertification[];
+  job_preferences: IJobPreference[];
+  ready_to_work: boolean;
+}
+
+export interface BuildJobSearhCVProps {
+  data: ResumeData;
+  setData: (data: ResumeData) => void;
 }
 
 export default IUserInfo;

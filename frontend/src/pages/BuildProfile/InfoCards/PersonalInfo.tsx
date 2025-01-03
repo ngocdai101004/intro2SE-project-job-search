@@ -1,8 +1,6 @@
-import React from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Form, Row, Col, Alert } from 'react-bootstrap';
 import { IUser } from '../../../interfaces/user';
-import { toast } from 'react-toastify';
-import { MyToastContainer } from '../../../components/MyToastContainer';
 
 interface Props {
     gender?: "male" | "female";
@@ -12,12 +10,26 @@ interface Props {
 }
 
 const PersonalInfo: React.FC<Props> = ({ gender, dateOfBirth, shortBio, onChange }) => {
+    const [bioError, setBioError] = useState<string | null>(null);
+    const [dateError, setDateError] = useState<string | null>(null);
+
     const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const bio = e.target.value;
         if (bio.length > 100) {
-            toast.error('Bio cannot exceed 100 characters');
+            setBioError('Bio cannot exceed 100 characters');
         } else {
+            setBioError(null);
             onChange('short_bio', bio);
+        }
+    };
+
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const dateValue = new Date(e.target.value);
+        if (isNaN(dateValue.getTime())) {
+            setDateError('Invalid date value');
+        } else {
+            setDateError(null);
+            onChange('date_of_birth', dateValue);
         }
     };
 
@@ -43,8 +55,9 @@ const PersonalInfo: React.FC<Props> = ({ gender, dateOfBirth, shortBio, onChange
                         <Form.Control
                             type="date"
                             value={dateOfBirth ? new Date(dateOfBirth).toISOString().split('T')[0] : ''}
-                            onChange={(e) => onChange('date_of_birth', new Date(e.target.value))}
+                            onChange={handleDateChange}
                         />
+                        {dateError && <Alert variant="danger" className="mt-2">{dateError}</Alert>}
                     </Form.Group>
                 </Col>
             </Row>
@@ -56,8 +69,8 @@ const PersonalInfo: React.FC<Props> = ({ gender, dateOfBirth, shortBio, onChange
                     value={shortBio}
                     onChange={handleBioChange}
                 />
+                {bioError && <Alert variant="danger" className="mt-1" style={{ height: '15px' }}>{bioError}</Alert>}
             </Form.Group>
-            <MyToastContainer />
         </div>
     );
 };
