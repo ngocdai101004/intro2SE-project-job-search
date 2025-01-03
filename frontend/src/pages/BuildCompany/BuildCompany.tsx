@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import PersonalInfo from "./InfoCards/PersonalInfo";
 import DescriptionInfo from "./InfoCards/DescriptionInfo.tsx";
-// import AddressInfo from "./InfoCards/AddressInfo";
+import AddressInfo from "./InfoCards/AddressInfo";
 // import AvatarUpload from "./InfoCards/AvatarUpload";
 import axios from "axios";
 import axiosInstance from "../../common/axiosInstance";
@@ -108,8 +108,8 @@ const UserRegistrationForm: React.FC = () => {
         return <PersonalInfo data={formData} onChange={handleChange} />;
       case "contact":
         return <DescriptionInfo data={formData} onChange={handleChange} />;
-      //   case "address":
-      //     return <AddressInfo onChange={handleChange} />;
+      case "address":
+        return <AddressInfo data={formData} onChange={handleChange} />;
       //   case "avatar":
       //     return (
       //       <AvatarUpload
