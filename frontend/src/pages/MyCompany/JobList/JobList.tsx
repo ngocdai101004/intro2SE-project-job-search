@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -9,24 +9,87 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
+import axiosInstance from "../../../common/axiosInstance";
 import "./JobList.css";
 
-interface JobStatus {
-  aiEngineering: string;
-  softwareEngineer: string;
+interface Job {
+  _id: string;
+  title: string;
+  location_type: string;
+  status: string;
+  number_of_peoples: number;
+  deadline: string;
+  createdAt: string;
+}
+
+// Định nghĩa kiểu dữ liệu phân trang
+interface Pagination {
+  totalJobs: number;
+  currentPage: number;
+  totalPages: number;
 }
 
 const JobList: React.FC = () => {
-  const [jobStatus, setJobStatus] = useState<JobStatus>({
-    aiEngineering: "Closed",
-    softwareEngineer: "Draft",
-  });
+  const [jobs, setJobs] = useState<Job[]>([]); // Lưu danh sách jobs
+  const [loading, setLoading] = useState<boolean>(true); // Trạng thái loading
+  const [error, setError] = useState<string>(""); // Lưu lỗi nếu có
 
-  const handleStatusChange = (job: keyof JobStatus, status: string) => {
+  const [pagination, setPagination] = useState<Pagination>({
+    totalJobs: 0,
+    currentPage: 1,
+    totalPages: 2,
+  }); // Lưu thông tin phân trang
+
+  const [jobStatus, setJobStatus] = useState<{ [key: string]: string }>({}); // Lưu trạng thái job
+
+  // Hàm fetch dữ liệu jobs từ backend
+  const fetchJobs = async (page: number = 1) => {
+    setLoading(true);
+    try {
+      const companyId = "6776acea66277d8c90632d9f"; // Thay bằng company_id thực tế
+      const response = await axiosInstance.get(
+        `/job?companyId=${companyId}&page=${page}&limit=5`
+      );
+
+      const { jobs, totalJobs, totalPages, currentPage } = response.data.data;
+
+      setJobs(jobs); // Lưu danh sách jobs
+      setPagination({ totalJobs, currentPage, totalPages }); // Lưu phân trang
+
+      // Lưu trạng thái job
+      const statusMap: { [key: string]: string } = {};
+      jobs.forEach((job: Job) => {
+        statusMap[job._id] = job.status;
+      });
+      setJobStatus(statusMap);
+    } catch (err: any) {
+      console.error("Error fetching jobs:", err);
+      setError(
+        err.response?.data?.message || "Failed to fetch jobs. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Gọi API khi component render lần đầu
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  // Hàm thay đổi trạng thái job
+  const handleStatusChange = (jobId: string, status: string) => {
     setJobStatus((prev) => ({
       ...prev,
-      [job]: status,
+      [jobId]: status,
     }));
+  };
+
+  // Xử lý chuyển trang
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      fetchJobs(newPage);
+    }
   };
 
   return (
@@ -68,171 +131,201 @@ const JobList: React.FC = () => {
                   </InputGroup>
                 </div>
               </div>
-              <table
-                className="job-table table table-spacing"
-                style={{ width: "100%" }}
-              >
-                <thead>
-                  <tr>
-                    <th>
-                      <input type="checkbox" />
-                    </th>
-                    <th>
-                      <div className="title-icon">
-                        Job title{" "}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          className="lucide lucide-chevrons-up-down"
-                        >
-                          <path d="m7 15 5 5 5-5" />
-                          <path d="m7 9 5-5 5 5" />
-                        </svg>
-                      </div>
-                    </th>
-                    <th>Candidates</th>
-                    <th>
-                      <div className="title-icon">
-                        Date posted
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          className="lucide lucide-chevrons-up-down"
-                        >
-                          <path d="m7 15 5 5 5-5" />
-                          <path d="m7 9 5-5 5 5" />
-                        </svg>
-                      </div>
-                    </th>
-                    <th>
-                      Job status
-                      <i
-                        className="bi bi-chevron-down"
-                        style={{ fontSize: "12px" }}
-                      ></i>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <input type="checkbox" />
-                    </td>
-                    <td>
-                      <span className="job-title">Software engineer</span>
-                      <p
-                        className="location"
-                        style={{ fontSize: "12px", opacity: 0.7 }}
-                      >
-                        Ho Chi Minh City
-                      </p>
-                    </td>
-                    <td>
-                      <div className="candidates-incomplete">
+              {loading ? (
+                <p>Loading jobs...</p>
+              ) : error ? (
+                <p style={{ color: "red" }}>{error}</p>
+              ) : (
+                <table
+                  className="job-table table table-spacing"
+                  style={{ width: "100%" }}
+                >
+                  <thead>
+                    <tr>
+                      <th>
+                        <input type="checkbox" />
+                      </th>
+                      <th>
+                        <div className="title-icon">
+                          Job title{" "}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-chevrons-up-down"
+                          >
+                            <path d="m7 15 5 5 5-5" />
+                            <path d="m7 9 5-5 5 5" />
+                          </svg>
+                        </div>
+                      </th>
+                      <th>Candidates</th>
+                      <th>
+                        <div className="title-icon">
+                          Date posted
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-chevrons-up-down"
+                          >
+                            <path d="m7 15 5 5 5-5" />
+                            <path d="m7 9 5-5 5 5" />
+                          </svg>
+                        </div>
+                      </th>
+                      <th>
+                        Job status
                         <i
-                          className="bi bi-info-circle-fill"
-                          style={{
-                            color: "#D9534F",
-                            fontSize: "20px",
-                          }}
+                          className="bi bi-chevron-down"
+                          style={{ fontSize: "12px" }}
                         ></i>
-                        <div style={{ flexGrow: 1 }}>
-                          <p
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {jobs.map((job) => (
+                      //   <tr>
+                      //   <td>
+                      //     <input type="checkbox" />
+                      //   </td>
+                      //   <td>
+                      //     <span className="job-title">Software engineer</span>
+                      //     <p
+                      //       className="location"
+                      //       style={{ fontSize: "12px", opacity: 0.7 }}
+                      //     >
+                      //       Ho Chi Minh City
+                      //     </p>
+                      //   </td>
+                      //   <td>
+                      //     <div className="candidates-incomplete">
+                      //       <i
+                      //         className="bi bi-info-circle-fill"
+                      //         style={{
+                      //           color: "#D9534F",
+                      //           fontSize: "20px",
+                      //         }}
+                      //       ></i>
+                      //       <div style={{ flexGrow: 1 }}>
+                      //         <p
+                      //           style={{
+                      //             fontWeight: "bold",
+                      //             marginBottom: "10px",
+                      //           }}
+                      //         >
+                      //           Your job posting is incomplete.
+                      //         </p>
+                      //         <button className="complete-btn btn btn-primary">
+                      //           Finish job posting
+                      //         </button>
+                      //       </div>
+                      //     </div>
+                      //   </td>
+                      //   <td>-</td>
+                      //   <td>{jobStatus.softwareEngineer}</td>
+                      // </tr>
+                      <tr key={job._id}>
+                        <td>
+                          <input type="checkbox" defaultChecked />
+                        </td>
+                        <td>
+                          <span
+                            className="job-title"
                             style={{
                               fontWeight: "bold",
-                              marginBottom: "10px",
+                              textDecoration: "underline",
                             }}
                           >
-                            Your job posting is incomplete.
+                            {job.title}
+                          </span>
+                          <p
+                            className="location"
+                            style={{ fontSize: "12px", opacity: 0.7 }}
+                          >
+                            Ho Chi Minh City
                           </p>
-                          <button className="complete-btn btn btn-primary">
-                            Finish job posting
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>-</td>
-                    <td>{jobStatus.softwareEngineer}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input type="checkbox" defaultChecked />
-                    </td>
-                    <td>
-                      <span
-                        className="job-title"
-                        style={{
-                          fontWeight: "bold",
-                          textDecoration: "underline",
-                        }}
-                      >
-                        AI engineering
-                      </span>
-                      <p
-                        className="location"
-                        style={{ fontSize: "12px", opacity: 0.7 }}
-                      >
-                        Ho Chi Minh City
-                      </p>
-                    </td>
-                    <td>
-                      <div className="candidates-complete">
-                        <div className="candidates-applicants">
-                          <div className="icon-number">
-                            <i className="bi bi-person"></i>
-                            <span>1</span>
+                        </td>
+                        <td>
+                          <div className="candidates-complete">
+                            <div className="candidates-applicants">
+                              <div className="icon-number">
+                                <i className="bi bi-person"></i>
+                                <span>1</span>
+                              </div>
+                              <p>Applicants</p>
+                            </div>
+                            <div className="candidates-awaiting">
+                              <div className="icon-number">
+                                <i className="bi bi-hourglass-split"></i>
+                                <span
+                                  style={{
+                                    right: "-7px",
+                                  }}
+                                >
+                                  0
+                                </span>
+                              </div>
+                              <p>Awaiting</p>
+                            </div>
                           </div>
-                          <p>Applicants</p>
-                        </div>
-                        <div className="candidates-awaiting">
-                          <div className="icon-number">
-                            <i className="bi bi-hourglass-split"></i>
-                            <span
-                              style={{
-                                right: "-7px",
-                              }}
-                            >
-                              0
-                            </span>
-                          </div>
-                          <p>Awaiting</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <p>5 minutes ago</p>
-                      <p>October 31st, 2024</p>
-                    </td>
-                    <td>
-                      <select
-                        value={jobStatus.aiEngineering}
-                        onChange={(e) =>
-                          handleStatusChange("aiEngineering", e.target.value)
-                        }
-                        style={{ padding: "5px", width: "100%" }}
-                      >
-                        <option value="Closed">Closed</option>
-                        <option value="Paused">Paused</option>
-                        <option value="Open">Open</option>
-                      </select>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                        </td>
+                        <td>
+                          <p>5 minutes ago</p>
+                          <p>{job.createdAt}</p>
+                        </td>
+                        <td>
+                          <select
+                            value={jobStatus[job._id]}
+                            onChange={(e) =>
+                              handleStatusChange(job._id, e.target.value)
+                            }
+                            style={{ padding: "5px", width: "100%" }}
+                          >
+                            <option value="Closed">Closed</option>
+                            <option value="Paused">Paused</option>
+                            <option value="Open">Open</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+              {/* Phân trang */}
+              <div className="pagination-controls d-flex justify-content-center mt-3">
+                <Button
+                  variant="outline-primary"
+                  onClick={() => handlePageChange(pagination.currentPage - 1)}
+                  disabled={pagination.currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <span className="mx-3">
+                  Page {pagination.currentPage || 1} of{" "}
+                  {pagination.totalPages || 1}
+                </span>
+                <Button
+                  variant="outline-primary"
+                  onClick={() => handlePageChange(pagination.currentPage + 1)}
+                  disabled={pagination.currentPage >= pagination.totalPages}
+                >
+                  Next
+                </Button>
+              </div>
+              ;
             </div>
           </Col>
         </Row>

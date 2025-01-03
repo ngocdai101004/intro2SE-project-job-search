@@ -7,15 +7,17 @@ const AddJobDescription: React.FC = () => {
   const navigate = useNavigate();
 
   // State để lưu dữ liệu từ form
-  const [responsibilities, setResponsibilities] = useState<string[]>([""]);
-  const [requirements, setRequirements] = useState<string[]>([""]);
+  const [description, setDescription] = useState<string>(""); // Mô tả công việc
+  const [responsibilities, setResponsibilities] = useState<string[]>([""]); // Trách nhiệm
+  const [requirements, setRequirements] = useState<string[]>([""]); // Yêu cầu
 
   // Load dữ liệu từ localStorage khi render lại trang
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
+    if (savedData.description) setDescription(savedData.description); // Load mô tả công việc
     if (savedData.responsibilities)
-      setResponsibilities(savedData.responsibilities);
-    if (savedData.requirements) setRequirements(savedData.requirements);
+      setResponsibilities(savedData.responsibilities); // Load trách nhiệm
+    if (savedData.requirements) setRequirements(savedData.requirements); // Load yêu cầu
   }, []);
 
   // Hàm thêm dòng mới cho Responsibilities
@@ -45,6 +47,7 @@ const AddJobDescription: React.FC = () => {
   // Lưu dữ liệu vào localStorage và chuyển tiếp
   const handleSaveAndContinue = () => {
     const currentData = {
+      description, // Thêm mô tả công việc
       responsibilities,
       requirements,
     };
@@ -79,6 +82,24 @@ const AddJobDescription: React.FC = () => {
                   <h1>Add job description</h1>
                   <hr />
                 </header>
+
+                {/* Job Description */}
+                <Form.Group className="mb-3">
+                  <strong>
+                    Job Description{" "}
+                    <span className="required" style={{ color: "red" }}>
+                      *
+                    </span>
+                  </strong>
+                  <Form.Control
+                    as="textarea"
+                    rows={5}
+                    placeholder="Enter job description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="mb-2"
+                  />
+                </Form.Group>
 
                 {/* Responsibilities */}
                 <Form.Group className="mb-3">
