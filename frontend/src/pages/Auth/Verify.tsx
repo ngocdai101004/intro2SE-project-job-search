@@ -18,7 +18,7 @@ function Verify() {
 
         try {
             const response = await axiosInstance.post('/auth/verify_account', { code });
-            navigate('/home');
+            navigate('/user/build-profile');
             console.log('Verify successfully:', response.data);
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {

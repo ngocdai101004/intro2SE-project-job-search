@@ -145,6 +145,7 @@ const verifyEmail = async (req: IVerifyAccountRequest, res: Response) => {
 
 // Get verification code
 const getVerifyCode = async (req: IGetVerifyCodeRequest, res: Response) => {
+  console.log("I am verify Code");
   const { email } = req.body;
   if (!email) {
     res.status(400).json({ message: "Email not found" });

@@ -21,7 +21,7 @@ import GuestJobSearchCV from "./pages/UserProfile/JobSearchCV/GuestJobSearchCV.t
 import CompanyList from "./pages/Company/CompanyList.tsx";
 import Candidates from "./pages/MyCompany/Candidates/Candidates.tsx";
 import AddJobDescription from "./pages/MyCompany/AddJobDescription/AddJobDescription.tsx";
-
+import BuildProfile from "./pages/BuildProfile/BuildProfile.tsx";
 const router = createBrowserRouter([
   {
     path: "/signin",
@@ -90,6 +90,11 @@ const router = createBrowserRouter([
   {
     path: "/my-company/candidates",
     element: <Candidates />,
+  },
+  {
+    path: "user/build-profile",
+    element: <BuildProfile />,
+    
   },
   {
     path: "/user/:userID/profile",
