@@ -7,14 +7,14 @@ import {
   getJobs,
   getJobByID,
   getRecommendedJobs,
-  getJobsByCompanyId,
+  // getJobsByCompanyId,
 } from "../controllers/jobController";
 
 const router = Router();
 
 router.post("/create", verifyUser, verifyAdmin, createJob);
 router.get("/", getJobs);
-router.get("/:companyId", getJobsByCompanyId);
+// router.get("/:companyId", getJobsByCompanyId);
 router.get("/recommended", verifyUser, getRecommendedJobs);
 router.get("/:jobID", getJobByID);
 
