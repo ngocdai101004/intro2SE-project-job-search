@@ -72,7 +72,7 @@ const JobList: React.FC = () => {
       // Fetch dữ liệu từ database
       const companyId = "6776acea66277d8c90632d9f";
       const response = await axiosInstance.get(
-        `/job/${companyId}?page=${page}&limit=${limit}`
+        `/job/company/${companyId}?page=${page}&limit=${limit}`
       );
 
       const {
