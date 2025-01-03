@@ -39,6 +39,7 @@
     "@types/node": "^22.10.2",
     "@types/nodemailer": "^6.4.17",
     "@types/string-similarity": "^4.0.2",
+    "@types/ws": "^8.5.13",
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
