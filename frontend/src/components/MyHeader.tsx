@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import axiosInstance from "../common/axiosInstance.tsx";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 interface MyHeaderProps {
   mydefaultActiveKey: string;
