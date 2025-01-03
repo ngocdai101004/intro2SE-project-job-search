@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import MyHeader from "../../components/MyHeader.tsx";
 import axiosInstance from "../../common/axiosInstance.tsx";
 // import {useNavigate} from "react-router-dom";
