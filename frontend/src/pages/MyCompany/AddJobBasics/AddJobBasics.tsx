@@ -9,15 +9,14 @@ const AddJobBasics: React.FC = () => {
   // State để lưu dữ liệu từ form
   const [jobTitle, setJobTitle] = useState("");
   const [numPeople, setNumPeople] = useState("1");
-  const [advertiseLocation, setAdvertiseLocation] = useState("");
+  const [locationType, setLocationType] = useState("");
 
   // Load dữ liệu đã lưu trong localStorage
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
     if (savedData.title) setJobTitle(savedData.title);
     if (savedData.number_of_peoples) setNumPeople(savedData.number_of_peoples);
-    if (savedData.advertiseLocation)
-      setAdvertiseLocation(savedData.advertiseLocation);
+    if (savedData.locationType) setLocationType(savedData.advertiseLocation);
   }, []);
 
   // Lưu dữ liệu vào localStorage và chuyển tiếp
@@ -25,7 +24,7 @@ const AddJobBasics: React.FC = () => {
     const currentData = {
       title: jobTitle, // Đặt tên phù hợp với model Job
       number_of_peoples: parseInt(numPeople), // Số lượng người cần tuyển
-      advertiseLocation,
+      locationType,
     };
 
     // Lưu dữ liệu vào localStorage
@@ -36,6 +35,8 @@ const AddJobBasics: React.FC = () => {
       "jobPostData",
       JSON.stringify({ ...existingData, ...currentData })
     );
+
+    localStorage.setItem("currentPage", "/my-company/add-job-details");
 
     // Chuyển đến trang tiếp theo
     navigate("/my-company/add-job-details");
@@ -99,24 +100,21 @@ const AddJobBasics: React.FC = () => {
                     </Form.Select>
                   </Form.Group>
 
-                  <Form.Group
-                    className="mb-3"
-                    controlId="formAdvertiseLocation"
-                  >
+                  {/* Location Type Section */}
+                  <Form.Group className="mb-3">
                     <strong>
                       <Form.Label column sm={12} className="text-left">
-                        Where would you like to advertise this job?{" "}
-                        <span className="required" style={{ color: "red" }}>
-                          *
-                        </span>
+                        Work Location Type
                       </Form.Label>
                     </strong>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter location"
-                      value={advertiseLocation}
-                      onChange={(e) => setAdvertiseLocation(e.target.value)}
-                    />
+                    <Form.Select
+                      value={locationType}
+                      onChange={(e) => setLocationType(e.target.value)}
+                    >
+                      <option value="remote">Remote</option>
+                      <option value="on-site">On-site</option>
+                      <option value="hybrid">Hybrid</option>
+                    </Form.Select>
                   </Form.Group>
 
                   {/* Button điều hướng */}
