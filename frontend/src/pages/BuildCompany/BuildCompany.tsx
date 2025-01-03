@@ -44,12 +44,17 @@ const UserRegistrationForm: React.FC = () => {
     console.log("Formatdata", formData);
     e.preventDefault();
     const toastId = toast.loading("Updating...");
-    toast.loading("Updating...");
+
     try {
       const response = await axiosInstance.patch("/user/profile", formData);
       console.log(response.data);
-      toast.success("Profile updated successfully");
-      navigate("/user/build-job-search-cv");
+      toast.update(toastId, {
+        render: "Profile updated successfully",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+        onClose: () => navigate("/company-list"),
+      });
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
         toast.update(toastId, {
@@ -157,7 +162,7 @@ const UserRegistrationForm: React.FC = () => {
         <Container className="center mt-5" style={{ width: "60%" }}>
           <h2 className="text-center mb-4">Build Your Profile</h2>
           {renderProgressBar()}
-          <Form onSubmit={handleSubmit}>
+          <Form>
             <div
               className="min-vh-60 mt-5"
               style={{
@@ -183,7 +188,7 @@ const UserRegistrationForm: React.FC = () => {
                   Next
                 </Button>
               ) : (
-                <Button variant="success" type="submit" onClick={handleSubmit}>
+                <Button variant="success" onClick={handleSubmit}>
                   Submit
                 </Button>
               )}
