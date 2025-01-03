@@ -86,7 +86,7 @@ function Company() {
         setMyState={setMyActiveKey}
         companyData={companyData}
       />
-      <div className="">{renderContent()}</div>
+      <div className="flex-grow-1">{renderContent()}</div>
     </div>
   );
 }

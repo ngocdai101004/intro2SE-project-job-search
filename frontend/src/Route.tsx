@@ -25,6 +25,7 @@ import BuildProfile from "./pages/BuildProfile/BuildProfile.tsx";
 import ChatPage from "./pages/Chat/Chat.tsx";
 
 import ResumeBuilder from "./pages/BuildJobSearchCV/ResumeBuilder.tsx";
+import BuildCompany from "./pages/BuildCompany/BuildCompany.tsx";
 const router = createBrowserRouter([
     {
         path: "/signin",
@@ -96,12 +97,14 @@ const router = createBrowserRouter([
   {
     path: "user/build-profile",
     element: <BuildProfile />,
-    
   },
   {
     path: "/user/build-job-search-cv",
     element: <ResumeBuilder />,
-
+  },
+  {
+    path: "/build-company",
+    element: <BuildCompany />,
   },
   {
     path: "/user/:userID/profile",

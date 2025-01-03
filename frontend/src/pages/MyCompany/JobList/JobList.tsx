@@ -37,6 +37,7 @@ const JobList: React.FC = () => {
   const [incompleteJobs, setIncompleteJobs] = useState<{
     [key: string]: boolean;
   }>({});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [localJobAdded, setLocalJobAdded] = useState<boolean>(false);
 
   const fetchJobs = async (page: number = 1) => {
@@ -100,6 +101,7 @@ const JobList: React.FC = () => {
       });
       setJobStatus(statusMap);
       setIncompleteJobs((prev) => ({ ...prev, ...incompleteMap }));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Error fetching jobs:", err);
       setError(

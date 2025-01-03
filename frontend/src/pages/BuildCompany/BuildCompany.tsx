@@ -1,36 +1,44 @@
 // UserRegistrationForm.tsx
 import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
-import PersonalInfo from "./InfoCards/PersonalInfo";
-import ContactInfo from "./InfoCards/ContactInfo";
+import PersonalInfo from "./InfoCards/CompanyInfo.tsx";
+import DescriptionInfo from "./InfoCards/DescriptionInfo.tsx";
 import AddressInfo from "./InfoCards/AddressInfo";
 import AvatarUpload from "./InfoCards/AvatarUpload";
-import { IUser, IAddress } from "../../interfaces/user";
 import axios from "axios";
 import axiosInstance from "../../common/axiosInstance";
 import { toast } from "react-toastify";
 import { MyToastContainer } from "../../components/MyToastContainer.tsx";
 import MyHeader from "../../components/MyHeader.tsx";
 import { useNavigate } from "react-router-dom";
+import ICompany from "../../interfaces/company.ts";
 
 type FormStep = "personal" | "contact" | "address" | "avatar";
+
+const companyInstance: ICompany = {
+  company_name: "",
+  short_description: "",
+  description: {
+    company_size: [],
+    industry: "",
+    headquarters: "",
+    links: [],
+    founded: new Date(),
+    specialities: [],
+  },
+  address: {
+    district: "",
+    city_state: "",
+    zip_code: "",
+    country: "",
+  },
+  avatar: "",
+};
 
 const UserRegistrationForm: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<FormStep>("personal");
-  const [formData, setFormData] = useState<IUser>({
-    phone: "",
-    gender: "male",
-    date_of_birth: new Date(),
-    avatar: "",
-    short_bio: "",
-    address: {
-      district: "",
-      city_state: "",
-      zip_code: "",
-      country: "",
-    },
-  });
+  const [formData, setFormData] = useState<ICompany>(companyInstance);
 
   const handleSubmit = async (e: React.FormEvent) => {
     console.log("Formatdata", formData);
@@ -45,7 +53,7 @@ const UserRegistrationForm: React.FC = () => {
         type: "success",
         isLoading: false,
         autoClose: 2000,
-        onClose: () => navigate("/user/build-job-search-cv"),
+        onClose: () => navigate("/company-list"),
       });
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
@@ -67,20 +75,8 @@ const UserRegistrationForm: React.FC = () => {
     }
   };
 
-  const handleChange = (field: keyof IUser, value: string | Date) => {
+  const handleChange = (field: keyof ICompany, value: unknown) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleAddressChange = (addressData: Partial<IAddress>) => {
-    setFormData((prev) => ({
-      ...prev,
-      address: {
-        district: addressData.district ?? prev.address?.district ?? "",
-        city_state: addressData.city_state ?? prev.address?.city_state ?? "",
-        zip_code: addressData.zip_code ?? prev.address?.zip_code ?? "",
-        country: addressData.country ?? prev.address?.country ?? "",
-      },
-    }));
   };
 
   const nextStep = () => {
@@ -114,30 +110,13 @@ const UserRegistrationForm: React.FC = () => {
   const renderStepContent = () => {
     switch (currentStep) {
       case "personal":
-        return (
-          <PersonalInfo
-            gender={formData.gender}
-            dateOfBirth={formData.date_of_birth}
-            shortBio={formData.short_bio}
-            onChange={handleChange}
-          />
-        );
+        return <PersonalInfo data={formData} onChange={handleChange} />;
       case "contact":
-        return <ContactInfo phone={formData.phone} onChange={handleChange} />;
+        return <DescriptionInfo data={formData} onChange={handleChange} />;
       case "address":
-        return (
-          <AddressInfo
-            address={formData.address}
-            onChange={handleAddressChange}
-          />
-        );
+        return <AddressInfo data={formData} onChange={handleChange} />;
       case "avatar":
-        return (
-          <AvatarUpload
-            avatar={formData.avatar}
-            onAvatarChange={(value) => handleChange("avatar", value)}
-          />
-        );
+        return <AvatarUpload data={formData} onChange={handleChange} />;
     }
   };
 
@@ -179,15 +158,20 @@ const UserRegistrationForm: React.FC = () => {
   return (
     <div>
       <div className="d-flex flex-column min-vh-100">
-        <MyHeader mydefaultActiveKey="/home" className="fixed-top" />
-        <Container
-          className="center"
-          style={{ paddingTop: "150px", width: "60%" }}
-        >
+        <MyHeader mydefaultActiveKey="/home" />
+        <Container className="center mt-5" style={{ width: "60%" }}>
           <h2 className="text-center mb-4">Build Your Profile</h2>
           {renderProgressBar()}
           <Form>
-            <div className="min-vh-50" style={{ height: "35vh" }}>
+            <div
+              className="min-vh-60 mt-5"
+              style={{
+                height: "35vh",
+                overflowY: "auto",
+                overflowX: "hidden",
+                padding: "0 20px",
+              }}
+            >
               {renderStepContent()}
             </div>
 

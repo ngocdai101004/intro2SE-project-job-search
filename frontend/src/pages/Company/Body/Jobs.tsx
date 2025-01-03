@@ -1,89 +1,116 @@
 import { useEffect, useState } from "react";
-import { Col, Row, ListGroup } from "react-bootstrap";
 import axiosInstance from "../../../common/axiosInstance";
-import JobDetail from "./JobDetail";
 import { IJob } from "../../../interfaces/interfaces";
+import { IJobCard } from "../../../interfaces/job";
+import JobList from "../../../components/JobCard/JobList";
+import JobDetail from "../../../components/JobCard/JobDetail";
+import { Col, Row } from "react-bootstrap";
 
 interface JobsProps {
   company_id: string;
 }
 
 const Jobs = ({ company_id }: JobsProps) => {
-  const [jobs, setJobs] = useState<IJob[]>([]);
-  const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
-
-  const fetchJobs = async () => {
-    // setLoading(true);
-    // setError(null); // Reset error state
-    try {
-      const response = await axiosInstance.get(`/job?company_id=${company_id}`); // Sử dụng company_id từ URL
-      setJobs(response.data.data.jobs);
-      console.log(response.data.data);
-    } catch (error) {
-      console.error("Error fetching company data:", error);
-      // setError("Failed to fetch company data. Please try again later.");
-    } finally {
-      // setLoading(false);
-    }
-  };
+  const [jobs, setJobs] = useState<IJobCard[]>([]);
+  const [selectedJob, setSelectedJob] = useState<IJobCard | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    console.log(company_id);
+    const checkAuth = async () => {
+      try {
+        const response = await axiosInstance.get("/auth/check");
+        if (response.status === 200) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchJobs = async () => {
+      try {
+        let jobList = [];
+        if (isAuthenticated) {
+          const recommendedJobsResponse = await axiosInstance.get(
+            `/job?company_id=${company_id}`
+          );
+          jobList = recommendedJobsResponse.data.data.jobs || [];
+        } else {
+          const jobsResponse = await axiosInstance.get("/job");
+          jobList = jobsResponse.data.data.jobs || [];
+        }
+
+        const companiesResponse = await axiosInstance.get("/company");
+        const companies = companiesResponse.data.data || [];
+
+        const updatedJobs = jobList.map((job: IJob) => {
+          const company = companies.find(
+            (company: { _id: string }) => company._id === job.company_id
+          );
+          return {
+            ...job,
+            company_name: company?.company_name,
+            company_avatar: company?.avatar,
+          };
+        });
+
+        if (isMounted) {
+          setJobs(updatedJobs);
+          if (!selectedJob && updatedJobs.length > 0) {
+            setSelectedJob(updatedJobs[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+
     fetchJobs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [company_id]);
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthenticated]);
 
   return (
-    <div className="container">
-      <Row
-        style={{
-          margin: "20px 0 20px 0",
-          fontSize: "15px",
-          fontWeight: "bold",
-        }}
-      >
-        {jobs.length} jobs at DPTT Corporation
-      </Row>
-      <Row>
-        <Col
-          xs={selectedJob ? 4 : 12}
-          style={{ overflow: "scroll", scrollbarWidth: "none", height: "52vh" }}
+    <div>
+      <div className="d-flex flex-column">
+        <div
+          className="container justify-content-center"
+          style={{ marginTop: "20px" }}
         >
-          <ListGroup>
-            {jobs.map((job) => (
-              <ListGroup.Item
-                key={job ? job._id : "jobID"}
-                action
-                onClick={() => {
-                  setSelectedJob(job);
-                }}
-                style={{
-                  border: "1px solid lightgray",
-                  borderRadius: "8px",
-                  marginBottom: "0.5rem",
-                  backgroundColor:
-                    selectedJob?._id === job._id ? "#e7f3ff" : "#f8f9fa",
-                  cursor: "pointer",
-                }}
-              >
-                <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  {job.title}
-                </div>
-                <div className="text-muted" style={{ fontSize: "13px" }}>
-                  {job.description}
-                </div>
-                <div className="text-muted" style={{ fontSize: "13px" }}>
-                  {job.createdAt}
-                </div>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Col>
-
-        <Col xs={selectedJob ? 8 : 0}>
-          {selectedJob ? <JobDetail job={selectedJob} /> : <> </>}
-        </Col>
-      </Row>
+          <Row>
+            <Col
+              xs={4}
+              style={{
+                overflow: "scroll",
+                scrollbarWidth: "none",
+                height: "60vh",
+              }}
+            >
+              <JobList
+                jobs={jobs}
+                selectedJob={selectedJob}
+                onJobSelect={setSelectedJob}
+              />
+            </Col>
+            <Col
+              xs={8}
+              style={{
+                overflow: "scroll",
+                scrollbarWidth: "none",
+                height: "60vh",
+              }}
+            >
+              {selectedJob && <JobDetail job={selectedJob} />}
+            </Col>
+          </Row>
+        </div>
+      </div>
     </div>
   );
 };
