@@ -165,7 +165,15 @@ const UserRegistrationForm: React.FC = () => {
           <h2 className="text-center mb-4">Build Your Profile</h2>
           {renderProgressBar()}
           <Form onSubmit={handleSubmit}>
-            <div className="min-vh-50" style={{ height: "35vh" }}>
+            <div
+              className="min-vh-50"
+              style={{
+                height: "35vh",
+                overflowY: "auto",
+                overflowX: "hidden",
+                padding: "0 20px",
+              }}
+            >
               {renderStepContent()}
             </div>
 
