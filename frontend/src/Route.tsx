@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import {createBrowserRouter} from "react-router-dom";
 import SignIn from "./pages/Auth/SignIn.tsx";
 import SignUp from "./pages/Auth/SignUp.tsx";
 import ProtectedRoute from "./common/ProtectedRoute.tsx";
@@ -22,126 +22,132 @@ import CompanyList from "./pages/Company/CompanyList.tsx";
 import Candidates from "./pages/MyCompany/Candidates/Candidates.tsx";
 import AddJobDescription from "./pages/MyCompany/AddJobDescription/AddJobDescription.tsx";
 import BuildProfile from "./pages/BuildProfile/BuildProfile.tsx";
+import ChatPage from "./pages/Chat/Chat.tsx";
+
 const router = createBrowserRouter([
-  {
-    path: "/signin",
-    element: <SignIn />,
-    index: true,
-  },
-  {
-    path: "/signup",
-    element: <SignUp />,
-  },
-  {
-    path: "/verify",
-    element: <Verify />,
-  },
-  {
-    path: "/forgotpassword/:email",
-    element: <ForgotPasswordEmail />,
-  },
-  {
-    path: "/forgotpassword",
-    element: <ForgotPassword />,
-  },
+    {
+        path: "/signin",
+        element: <SignIn/>,
+        index: true,
+    },
+    {
+        path: "/signup",
+        element: <SignUp/>,
+    },
+    {
+        path: "/verify",
+        element: <Verify/>,
+    },
+    {
+        path: "/forgotpassword/:email",
+        element: <ForgotPasswordEmail/>,
+    },
+    {
+        path: "/forgotpassword",
+        element: <ForgotPassword/>,
+    },
 
-  {
-    path: "/company-list",
-    element: <CompanyList />,
-  },
+    {
+        path: "/company-list",
+        element: <CompanyList/>,
+    },
 
-  {
-    path: "/company/:company_id/:active_key",
-    element: <Company />,
-  },
+    {
+        path: "/company/:company_id/:active_key",
+        element: <Company/>,
+    },
 
-  {
-    path: "/my-company/create-job-post",
-    element: <CreateJobPost />,
-  },
-  {
-    path: "/my-company/add-job-basics",
-    element: <AddJobBasics />,
-  },
-  {
-    path: "/my-company/add-job-details",
-    element: <AddJobDetails />,
-  },
-  {
-    path: "/my-company/add-pays-and-benefits",
-    element: <AddPaysAndBenefits />,
-  },
-  {
-    path: "/my-company/add-job-description",
-    element: <AddJobDescription />,
-  },
-  {
-    path: "/my-company/describe-job",
-    element: <DescribeJob />,
-  },
-  {
-    path: "/my-company/preview-job",
-    element: <PreviewJob />,
-  },
-  {
-    path: "/my-company/job-list",
-    element: <JobList />,
-  },
-  {
-    path: "/my-company/candidates",
-    element: <Candidates />,
-  },
-  {
-    path: "user/build-profile",
-    element: <BuildProfile />,
-    
-  },
-  {
-    path: "/user/:userID/profile",
-    element: <GuestUserProfile />,
-  },
-  {
-    path: "/user/:userID/profile/snapshot",
-    element: <GuestUserProfile />,
-  },
-  {
-    path: "/user/:userID/profile/job-search-cv",
-    element: <GuestJobSearchCV />,
-  },
-  {
-    path: "/user/profile/job-search-cv",
-    element: <OwnJobSearchCV />,
-  },
-  {
-    path: "/user/profile",
-    element: <OwnUserProfile />,
-  },
-  {
-    path: "/user/profile/snapshot",
-    element: <OwnUserProfile />,
-  },
-  {
-    path: "/home",
-    element: <Home />,
-  },
-  {
-    path: "/",
-    element: <Home />,
-  },
+    {
+        path: "/my-company/create-job-post",
+        element: <CreateJobPost/>,
+    },
+    {
+        path: "/my-company/add-job-basics",
+        element: <AddJobBasics/>,
+    },
+    {
+        path: "/my-company/add-job-details",
+        element: <AddJobDetails/>,
+    },
+    {
+        path: "/my-company/add-pays-and-benefits",
+        element: <AddPaysAndBenefits/>,
+    },
+    {
+        path: "/my-company/add-job-description",
+        element: <AddJobDescription/>,
+    },
+    {
+        path: "/my-company/describe-job",
+        element: <DescribeJob/>,
+    },
+    {
+        path: "/my-company/preview-job",
+        element: <PreviewJob/>,
+    },
+    {
+        path: "/my-company/job-list",
+        element: <JobList/>,
+    },
+    {
+        path: "/my-company/candidates",
+        element: <Candidates/>,
+    },
+    {
+        path: "user/build-profile",
+        element: <BuildProfile/>,
 
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
+    },
+    {
+        path: "/user/:userID/profile",
+        element: <GuestUserProfile/>,
+    },
+    {
+        path: "/user/:userID/profile/snapshot",
+        element: <GuestUserProfile/>,
+    },
+    {
+        path: "/user/:userID/profile/job-search-cv",
+        element: <GuestJobSearchCV/>,
+    },
+    {
+        path: "/user/profile/job-search-cv",
+        element: <OwnJobSearchCV/>,
+    },
+    {
+        path: "/user/profile",
+        element: <OwnUserProfile/>,
+    },
+    {
+        path: "/user/profile/snapshot",
+        element: <OwnUserProfile/>,
+    },
+    {
         path: "/home",
-        element: <Home />,
-      },
-    ],
-  },
-  {
-    path: "*",
-    element: <p>404 Error - Nothing here...</p>,
-  },
+        element: <Home/>,
+    },
+    {
+        path: "/",
+        element: <Home/>,
+    },
+
+    {
+        element: <ProtectedRoute/>,
+        children: [
+            {
+                path: "/home",
+                element: <Home/>,
+            },
+            {
+                path: "/chat",
+                element: <ChatPage/>,
+            }
+        ],
+    },
+    {
+        path: "*",
+        element: <p>404 Error - Nothing here...</p>,
+    },
 ]);
 
 export default router;
