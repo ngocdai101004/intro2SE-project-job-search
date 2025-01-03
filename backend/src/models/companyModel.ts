@@ -97,7 +97,9 @@ const companySchema = new mongoose.Schema(
       required: true,
     },
 
-    legal_document_url: String,
+    legal_document_url: {
+      type: String,
+    },
 
     // Reviews
     reviews: [

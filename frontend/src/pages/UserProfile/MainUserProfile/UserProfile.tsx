@@ -76,12 +76,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userID, isOwer}) => {
     >
       <MyHeader mydefaultActiveKey="/user"/>
       <EditingContext.Provider value={isEditing}>
-      <UserHeader  myState={myActiveKey} setMyState={setMyActiveKey} userData={
-          {
-            user: user,
-            userInfo: userInfo
-          }
-        }/>
+      <UserHeader  myState={myActiveKey} setMyState={setMyActiveKey} user={user}/>
         <UserMainProfile  userData={
           {
             user: user,

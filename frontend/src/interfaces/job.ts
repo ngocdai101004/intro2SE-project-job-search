@@ -15,7 +15,7 @@ export interface IJob {
   requirements?: string[];
   benefits?: string[];
   responsibilities?: string[];
-  deadline: Date;
+  deadline?: Date;
   open_time: Date;
   createdAt?: Date; // Added by timestamps option
   updatedAt?: Date; // Added by timestamps option
@@ -24,4 +24,14 @@ export interface IJob {
 export interface IJobCard extends IJob {
   company_name: string;
   company_avatar: string;
+}
+
+export interface JobListProps {
+  jobs: IJobCard[];
+  selectedJob: IJobCard | null;
+  onJobSelect: (job: IJobCard) => void;
+}
+
+export interface JobDetailProps {
+  job: IJobCard;
 }

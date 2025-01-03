@@ -78,6 +78,14 @@ export interface UserProfileProps {
   isOwnProfile?: boolean;
 }
 
+export interface JobSearchCVProps {
+  userData: {
+    user: IUser;
+    userInfo: IUserInfo;
+  };
+  isOwnProfile?: boolean;
+}
+
 export interface ICompanyReviewer {
   name: string;
   avatar: string;
