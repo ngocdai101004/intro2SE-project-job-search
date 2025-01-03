@@ -1,10 +1,10 @@
 // UserRegistrationForm.tsx
 import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
-import PersonalInfo from "./InfoCards/PersonalInfo";
+import PersonalInfo from "./InfoCards/CompanyInfo.tsx";
 import DescriptionInfo from "./InfoCards/DescriptionInfo.tsx";
 import AddressInfo from "./InfoCards/AddressInfo";
-// import AvatarUpload from "./InfoCards/AvatarUpload";
+import AvatarUpload from "./InfoCards/AvatarUpload";
 import axios from "axios";
 import axiosInstance from "../../common/axiosInstance";
 import { toast } from "react-toastify";
@@ -110,12 +110,8 @@ const UserRegistrationForm: React.FC = () => {
         return <DescriptionInfo data={formData} onChange={handleChange} />;
       case "address":
         return <AddressInfo data={formData} onChange={handleChange} />;
-      //   case "avatar":
-      //     return (
-      //       <AvatarUpload
-      //         onAvatarChange={(value) => handleChange("avatar", value)}
-      //       />
-      //     );
+      case "avatar":
+        return <AvatarUpload data={formData} onChange={handleChange} />;
     }
   };
 
@@ -157,16 +153,13 @@ const UserRegistrationForm: React.FC = () => {
   return (
     <div>
       <div className="d-flex flex-column min-vh-100">
-        <MyHeader mydefaultActiveKey="/home" className="fixed-top" />
-        <Container
-          className="center"
-          style={{ paddingTop: "150px", width: "60%" }}
-        >
+        <MyHeader mydefaultActiveKey="/home" />
+        <Container className="center mt-5" style={{ width: "60%" }}>
           <h2 className="text-center mb-4">Build Your Profile</h2>
           {renderProgressBar()}
           <Form onSubmit={handleSubmit}>
             <div
-              className="min-vh-50"
+              className="min-vh-60 mt-5"
               style={{
                 height: "35vh",
                 overflowY: "auto",
@@ -178,17 +171,19 @@ const UserRegistrationForm: React.FC = () => {
             </div>
 
             <div className="d-flex justify-content-between mt-4 fixed-bottom-buttons">
-              {currentStep !== "personal" && (
+              {currentStep !== "personal" ? (
                 <Button variant="secondary" onClick={previousStep}>
                   Previous
                 </Button>
+              ) : (
+                <div></div>
               )}
               {currentStep !== "avatar" ? (
                 <Button variant="primary" onClick={nextStep}>
                   Next
                 </Button>
               ) : (
-                <Button variant="success" type="submit">
+                <Button variant="success" type="submit" onClick={handleSubmit}>
                   Submit
                 </Button>
               )}
