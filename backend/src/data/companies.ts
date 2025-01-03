@@ -3,7 +3,7 @@ import { users } from "./users";
 
 export const companies = [
   {
-    _id: new ObjectId(),
+    _id: new ObjectId("67773cd820a2ca18b092cf8b"),
     owner_id: users[0]._id,
     admin_id: [users[1]._id, users[2]._id],
     company_name: "TechVibes Inc.",
@@ -46,7 +46,7 @@ export const companies = [
     ],
   },
   {
-    _id: new ObjectId(),
+    _id: new ObjectId("67773cd820a2ca18b092cf8c"),
     owner_id: users[1]._id,
     admin_id: [users[0]._id, users[2]._id],
     company_name: "GreenTech Solutions",
@@ -89,7 +89,7 @@ export const companies = [
     ],
   },
   {
-    _id: new ObjectId(),
+    _id: new ObjectId("67773cd820a2ca18b092cf90"),
     owner_id: users[2]._id,
     admin_id: [users[1]._id, users[0]._id],
     company_name: "EduGlobal",
