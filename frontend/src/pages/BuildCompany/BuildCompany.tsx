@@ -52,7 +52,7 @@ const UserRegistrationForm: React.FC = () => {
         render: "Profile updated successfully",
         type: "success",
         isLoading: false,
-        autoClose: 2000,
+        autoClose: 1000000,
         onClose: () => navigate("/company-list"),
       });
     } catch (error: unknown) {

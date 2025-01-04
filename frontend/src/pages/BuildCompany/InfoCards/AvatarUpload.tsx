@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import ICompany from "../../../interfaces/company"; // Adjust the path as necessary
+import { uploadFile } from "../../../utils/s3";
+import IFile from "../../../interfaces/file";
+import { Buffer as NodeBuffer } from "buffer";
 
 interface Props {
   data: ICompany; // Expecting data to have an avatar property
@@ -13,17 +16,38 @@ const AvatarUpload: React.FC<Props> = ({ data, onChange }) => {
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    let url =
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/Screenshot%20(1).png"; // Assuming uploadFile is defined elsewhere
+
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
+      const arrayBuffer = await new Promise<ArrayBuffer>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          resolve(reader.result as ArrayBuffer);
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(selectedFile);
+      });
+
+      // Chuyển đổi ArrayBuffer thành Buffer
+      const buffer = NodeBuffer.from(arrayBuffer);
+
+      const file: IFile = {
+        filename: selectedFile.name,
+        buffer: buffer,
+        mimetype: selectedFile.type,
+      };
 
       setLoading(true);
+      console.log("file");
+      console.log(file);
       try {
-        // const url = await uploadFile(formData); // Assuming uploadFile is defined elsewhere
-        const url =
-          "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/Screenshot%20(1).png"; // Assuming uploadFile is defined elsewhere
+        // console.log(file as any);
+        url = await uploadFile("avatar", file); // Assuming uploadFile is defined elsewhere
+
         onChange("avatar", url); // Update the avatar URL in the parent component
+        console.log("Avatar URL:", url);
       } catch (error) {
         console.error("Error uploading file:", error);
       } finally {
