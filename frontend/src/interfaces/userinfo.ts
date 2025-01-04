@@ -1,5 +1,3 @@
-import IUser from "./user";
-
 export interface IReview {
   reviewer: string; // Assuming this is a user ID
   content: string;
@@ -69,21 +67,11 @@ export interface IUserInfo {
 }
 
 export interface UserProfileProps {
-  userData: {
-    user: IUser;
-    userInfo: IUserInfo;
-  };
-  setUser?: React.Dispatch<React.SetStateAction<IUser>>;
-  setUserInfo: React.Dispatch<React.SetStateAction<IUserInfo>>;
-  isOwnProfile?: boolean;
+  userID?: string | null;
 }
 
 export interface JobSearchCVProps {
-  userData: {
-    user: IUser;
-    userInfo: IUserInfo;
-  };
-  isOwnProfile?: boolean;
+  userID?: string | null;
 }
 
 export interface ICompanyReviewer {

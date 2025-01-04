@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 
 const OwnUserProfile = () => {
-    const [userID, setUserID] = React.useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
     const navigate = useNavigate();
     
@@ -15,7 +14,6 @@ const OwnUserProfile = () => {
             const response = await axiosInstance.get('/auth/check');
             if (response.status === 200) {
                 setIsAuthenticated(true);
-                setUserID(response.data.data.userID);
             }
             else {
                 console.log("User not authenticated");
@@ -32,7 +30,7 @@ const OwnUserProfile = () => {
 
     
     return (
-        <UserProfile userID={userID} isOwer={true}/>
+        <UserProfile userID={null} isOwer={true}/>
     );
 };
 

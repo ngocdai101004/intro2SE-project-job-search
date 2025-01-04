@@ -1,17 +1,35 @@
 import React from "react";
 import { Card, Col, Nav, Row, Image } from "react-bootstrap";
 import IUser from "../../../interfaces/user";
+import { useState, useEffect } from "react";
+import axiosInstance from "../../../common/axiosInstance";
 
 interface UserHeaderProps {
   myState?: string;
   setMyState?: React.Dispatch<React.SetStateAction<string>>;
-  user: IUser;
+  userID?: string | null;
 }
 
 
-const UserHeader = ({ myState, setMyState, user }: UserHeaderProps) => {
+const UserHeader = ({ myState, setMyState, userID }: UserHeaderProps) => {
   const myActiveKey = myState || "/snapshot";
   const setMyActiveKey = setMyState || (() => {});
+  const [user, setUser] = useState<IUser>();
+  useEffect(() => {
+      const fetchUserInfo = async () => {
+          try {
+              console.log("userID", userID);
+              const response = userID
+                  ? await axiosInstance.get(`/user/${userID}/profile`)
+                  : await axiosInstance.get("/user/profile");
+              setUser(response.data.data.user);
+          } catch (error) {
+              console.error("Error fetching user data:", error);
+          }
+      };
+      fetchUserInfo();
+  }, []);
+
   
   return (
     <div className="bg-cyan py-3 pb-0">
@@ -32,15 +50,15 @@ const UserHeader = ({ myState, setMyState, user }: UserHeaderProps) => {
               </Col>
               <Col className="d-flex flex-column justify-content-center">
                 <h5 className="mb-1">
-                  {(user.first_name || "") +
+                  {(user?.first_name || "") +
                     " " +
-                    (user.last_name || "") || "Company"}
+                    (user?.last_name || "") || "Company"}
                 </h5>
                 <small
                   className="text-muted"
                   style={{ wordWrap: "break-word", maxWidth: "300px" }}
                 >
-                  {user.short_bio || "User Bio"}
+                  {user?.short_bio || "User Bio"}
                 </small>
               </Col>
             </Row>
@@ -53,22 +71,22 @@ const UserHeader = ({ myState, setMyState, user }: UserHeaderProps) => {
             <Row className="mb-2">
               <Col xs="auto" className="d-flex align-items-center">
                 <i className="bi bi-envelope"></i>
-                <span className="ms-2">{user.email}</span>
+                <span className="ms-2">{user?.email}</span>
               </Col>
             </Row>
             <Row className="mb-2">
               <Col xs="auto" className="d-flex align-items-center">
                 <i className="bi bi-telephone"></i>
-                <span className="ms-2">{user.phone}</span>
+                <span className="ms-2">{user?.phone}</span>
               </Col>
             </Row>
             <Row>
               <Col xs="auto" className="d-flex align-items-center">
                 <i className="bi bi-geo-alt"></i>
                 <span className="ms-2">
-                  {(user.address?.city_state || "") +
+                  {(user?.address?.city_state || "") +
                     ", " +
-                    (user.address?.country || "")}
+                    (user?.address?.country || "")}
                 </span>
               </Col>
             </Row>

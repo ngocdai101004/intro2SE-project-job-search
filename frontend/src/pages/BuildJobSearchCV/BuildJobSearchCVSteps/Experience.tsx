@@ -1,27 +1,31 @@
 import React, { useState } from 'react';
 import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
-import { BuildJobSearhCVProps } from '../../../interfaces/userinfo';
 import { IExperience } from '../../../interfaces/userinfo';
 
-const Experience: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
+interface ExperienceProps {
+    experience: IExperience[];
+    setExperience: (experience: IExperience[]) => void;
+}
+
+const Experience: React.FC<ExperienceProps> = ({ experience, setExperience }) => {
     const [warning, setWarning] = useState<string | null>(null);
 
     const addExperience = () => {
-        setData({
-            ...data,
-            experience: [...data.experience, {
+        setExperience([
+            ...experience,
+            {
                 job_title: '',
                 company_name: '',
                 begin: new Date(),
                 end: undefined,
                 description: ''
-            }]
-        });
+            }
+        ]);
     };
 
     const removeExperience = (index: number) => {
-        const newExperience = data.experience.filter((_: IExperience, i: number) => i !== index);
-        setData({ ...data, experience: newExperience });
+        const newExperience = experience.filter((_, i) => i !== index);
+        setExperience(newExperience);
     };
 
     const updateExperience = (index: number, field: string, value: string | Date | undefined) => {
@@ -34,16 +38,16 @@ const Experience: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
                 setWarning(null);
             }
         }
-        const newExperience = [...data.experience];
+        const newExperience = [...experience];
         newExperience[index] = { ...newExperience[index], [field]: value };
-        setData({ ...data, experience: newExperience });
+        setExperience(newExperience);
     };
 
     return (
         <div className="bg-light p-4">
             <h4 className="mb-4">Work Experience</h4>
             {warning && <Alert variant="warning">{warning}</Alert>}
-            {data.experience.map((exp: IExperience, index: number) => (
+            {experience.map((exp, index) => (
                 <div key={index} className="mb-4 p-3 border rounded position-relative">
                     <Button 
                         variant="link" 

@@ -7,8 +7,37 @@ import ExperienceSection from '../UserInfoCards/ExperienceSection';
 import EducationSection from '../UserInfoCards/EducationSection';
 import SkillsSection from '../UserInfoCards/SkillsSection';
 import CertificationsSection from '../UserInfoCards/CertificationsSection';
+import IUserInfo from '../../../interfaces/userinfo';
+import { useState, useEffect } from 'react';
+import axiosInstance from '../../../common/axiosInstance';
 
-const JobSearchCVBody: React.FC<JobSearchCVProps> = ({ userData }) => {
+const JobSearchCVBody: React.FC<JobSearchCVProps> = ({ userID }) => {
+   
+    console.log("User ID in MainUserProfile:", userID);
+    const [userInfo, setUserInfo] = useState<IUserInfo>({user_id: "", ready_to_work: false});
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          if (!userID) {
+            const response = await axiosInstance.get("/user/profile/info");
+            setUserInfo(response.data.data.userInfo);
+  
+          }
+          else if (userID) {
+            const response = await axiosInstance.get("/user/" + userID + "/profile/info");
+            setUserInfo(response.data.data.userInfo);
+          }
+          else {
+            return;
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
+      fetchData();
+    }, [userID]);
+
+  
     return (
         <div
             className="container mt-4"
@@ -16,17 +45,17 @@ const JobSearchCVBody: React.FC<JobSearchCVProps> = ({ userData }) => {
         >
             <Row className="mb-4">
                 <Col>
-                    <SummarySection summary={userData.userInfo.summary} />
+                    <SummarySection summary={userInfo.summary} />
                     <hr  style={{ width: '95%' }}/>
-                    <PersonalInfoSection user={userData.user} />
+                    <PersonalInfoSection userID={userID} />
                     <hr  style={{ width: '95%' }}/>
-                    <ExperienceSection experiences={userData.userInfo.experience} />
+                    <ExperienceSection experiences={userInfo.experience} />
                     <hr  style={{ width: '95%' }}/>
-                    <EducationSection education={userData.userInfo.education} />
+                    <EducationSection education={userInfo.education} />
                     <hr  style={{ width: '95%' }}/>
-                    <SkillsSection skills={userData.userInfo.skills} />
+                    <SkillsSection skills={userInfo.skills} />
                     <hr  style={{ width: '95%' }}/>
-                    <CertificationsSection certifications={userData.userInfo.certifications} />
+                    <CertificationsSection certifications={userInfo.certifications} />
                 </Col>
             </Row>
         </div>

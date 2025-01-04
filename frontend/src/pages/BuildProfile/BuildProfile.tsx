@@ -36,12 +36,16 @@ const UserRegistrationForm: React.FC = () => {
         console.log("Formatdata", formData);
         e.preventDefault();
         const toastId = toast.loading('Updating...');
-        toast.loading('Updating...');
         try {
             const response = await axiosInstance.patch('/user/profile', formData);
             console.log(response.data);
-            toast.success('Profile updated successfully');
-            navigate('/user/build-job-search-cv');
+            toast.update(toastId, {
+                render: 'Profile updated successfully',
+                type: 'success',
+                isLoading: false,
+                autoClose: 2000,
+                onClose: () => navigate('/user/build-job-search-cv')
+            });
             
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
@@ -49,14 +53,14 @@ const UserRegistrationForm: React.FC = () => {
                     render: error.response.data?.message || 'An error occurred.',
                     type: 'error',
                     isLoading: false, 
-                    autoClose: 3000,
+                    autoClose: 2000,
                 });
             } else {
                 toast.update(toastId, {
                     render: 'Update failed. Please try again.',
                     type: 'error',
                     isLoading: false,
-                    autoClose: 3000,
+                    autoClose: 2000,
                 });
                 console.log('Update failed:', error);
             }
@@ -177,7 +181,7 @@ const UserRegistrationForm: React.FC = () => {
             <Container className="center" style={{ paddingTop: '150px', width: '60%' }}>
                 <h2 className="text-center mb-4">Build Your Profile</h2>
                 {renderProgressBar()}
-                <Form onSubmit={handleSubmit}>
+                <Form>
                     <div className="min-vh-50" style={{ height: '35vh' }}>
                         {renderStepContent()}
                     </div>
@@ -201,7 +205,8 @@ const UserRegistrationForm: React.FC = () => {
                         ) : (
                             <Button 
                                 variant="success" 
-                                type="submit"
+                                type="button"
+                                onClick={handleSubmit}
                             >
                                 Submit
                             </Button>

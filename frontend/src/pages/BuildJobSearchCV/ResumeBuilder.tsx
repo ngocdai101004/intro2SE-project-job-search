@@ -12,7 +12,14 @@ import JobPreferences from './BuildJobSearchCVSteps/JobPreferences';
 import ReviewStep from './BuildJobSearchCVSteps/ReviewJobSearchCV';
 import axiosInstance from "../../common/axiosInstance";
 import axios from 'axios';
-import { ResumeData } from '../../interfaces/userinfo';
+import { useEffect } from 'react';
+import { ResumeData,
+    IEducation,
+    IQualification,
+    IExperience,
+    ICertification,
+    IJobPreference
+ } from '../../interfaces/userinfo';
 import MyHeader from "../../components/MyHeader.tsx";
 import { useNavigate } from 'react-router-dom';
 type FormStep = 'summary' | 'education' | 'qualifications' | 'skills' | 
@@ -23,16 +30,38 @@ type FormStep = 'summary' | 'education' | 'qualifications' | 'skills' |
 const ResumeBuilder: React.FC = () => {
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState<FormStep>('summary');
+    const [education, setEducation] = useState<IEducation[]>([]);
+    const [qualifications, setQualifications] = useState<IQualification[]>([]);
+    const [skills, setSkills] = useState<string[]>([]);
+    const [experience, setExperience] = useState<IExperience[]>([]);
+    const [certifications, setCertifications] = useState<ICertification[]>([]);
+    const [jobPreferences, setJobPreferences] = useState<IJobPreference[]>([]);
+    const [readyToWork, setReadyToWork] = useState<boolean>(false);
+    const [summary, setSummary] = useState<string>('');
+
     const [formData, setFormData] = useState<ResumeData>({
-        summary: '',
-        education: [],
-        qualifications: [],
-        skills: [],
-        experience: [],
-        certifications: [],
-        job_preferences: [],
-        ready_to_work: false
+        summary: summary,
+        education: education,
+        qualifications: qualifications,
+        skills: skills,
+        experience: experience,
+        certifications: certifications,
+        job_preferences: jobPreferences,
+        ready_to_work: readyToWork
     });
+
+    useEffect(() => {
+        setFormData({
+            summary: summary,
+            education: education,
+            qualifications: qualifications,
+            skills: skills,
+            experience: experience,
+            certifications: certifications,
+            job_preferences: jobPreferences,
+            ready_to_work: readyToWork
+        });
+    }, [summary, education, qualifications, skills, experience, certifications, jobPreferences, readyToWork]);
 
     const steps: FormStep[] = [
         'summary',
@@ -47,15 +76,13 @@ const ResumeBuilder: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // Display loading toast
+        console.log('Submit resume');
         const toastId = toast.loading('Updating resume...');
 
         try {
             setFormData(validateData(formData));
             const response = await axiosInstance.post('/user/profile/info', formData);
             console.log('Resume updated:', response.data);
-            // Update toast on success
             toast.update(toastId, {
                 render: 'Resume updated successfully!',
                 type: 'success',
@@ -71,7 +98,7 @@ const ResumeBuilder: React.FC = () => {
                     render: error.response.data?.message || 'An error occurred.',
                     type: 'error',
                     isLoading: false,
-                    autoClose: 3000,
+                    autoClose: 2000,
                 });
             } else {
                 // Handle general error
@@ -79,7 +106,7 @@ const ResumeBuilder: React.FC = () => {
                     render: 'Error updating resume. Please try again.',
                     type: 'error',
                     isLoading: false,
-                    autoClose: 3000,
+                    autoClose: 2000,
                 });
                 console.error('Error updating resume:', error);
             }
@@ -160,29 +187,29 @@ const ResumeBuilder: React.FC = () => {
         };
     };
     const renderStepContent = () => {
-        const commonProps = {
-            data: formData,
-            setData: setFormData
-        };
 
+        
         switch (currentStep) {
             case 'summary':
-                return <Summary {...commonProps} />;
+                return <Summary summary={summary} setSummary={setSummary} />;
             case 'education':
-                return <Education {...commonProps} />;
+                return <Education education={education} setEducation={setEducation} />;
             case 'qualifications':
-                return <Qualifications {...commonProps} />;
+                return <Qualifications qualifications={qualifications} setQualifications={setQualifications} />;
             case 'skills':
-                return <Skills {...commonProps} />;
+                return <Skills skills={skills} setSkills={setSkills} />;
             case 'experience':
-                return <Experience {...commonProps} />;
+                return <Experience experience={experience} setExperience={setExperience} />;
             case 'certifications':
-                return <Certifications {...commonProps} />;
+                return <Certifications certifications={certifications} setCertifications={setCertifications} />;
             case 'jobPreferences':
-                return <JobPreferences {...commonProps} />;
+                return <JobPreferences job_preferences={jobPreferences} setJobPreferences={setJobPreferences} ready_to_work= {readyToWork} setReadyToWork={setReadyToWork} />;
             case 'review':
                 return <ReviewStep data={validateData(formData)} />;
+            default:
+                return <></>;
         }
+        return <></>;
     };
 
     return (
@@ -195,7 +222,7 @@ const ResumeBuilder: React.FC = () => {
                             <h2 className="text-center mb-4">Build Your Resume</h2>
                             {renderProgressBar()}
                             
-                            <Form onSubmit={handleSubmit}>
+                            <Form>
                                 <div className="min-vh-50 mb-4">
                                     {renderStepContent()}
                                 </div>
@@ -220,8 +247,9 @@ const ResumeBuilder: React.FC = () => {
                                     ) : (
                                         <Button 
                                             variant="primary" 
-                                            type="submit"
+                                            type="button"
                                             style={{ marginRight: '10px' }}
+                                            onClick={handleSubmit}
                                         >
                                             Save Resume
                                         </Button>
