@@ -24,7 +24,7 @@ const AddressInfo: React.FC<Props> = ({ data, onChange }) => {
 
   return (
     <div>
-      <h4>Address Information</h4>
+      <h4>Address</h4>
       <Row>
         <Form.Group className="mb-3" controlId="formDistrict">
           <Form.Label>District</Form.Label>

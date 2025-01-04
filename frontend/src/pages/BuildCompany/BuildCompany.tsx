@@ -13,7 +13,7 @@ import MyHeader from "../../components/MyHeader.tsx";
 import { useNavigate } from "react-router-dom";
 import ICompany from "../../interfaces/company.ts";
 
-type FormStep = "personal" | "contact" | "address" | "avatar";
+type FormStep = "information" | "description" | "address" | "avatar";
 
 const companyInstance: ICompany = {
   company_name: "",
@@ -37,7 +37,7 @@ const companyInstance: ICompany = {
 
 const UserRegistrationForm: React.FC = () => {
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState<FormStep>("personal");
+  const [currentStep, setCurrentStep] = useState<FormStep>("information");
   const [formData, setFormData] = useState<ICompany>(companyInstance);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -84,10 +84,10 @@ const UserRegistrationForm: React.FC = () => {
 
   const nextStep = () => {
     switch (currentStep) {
-      case "personal":
-        setCurrentStep("contact");
+      case "information":
+        setCurrentStep("description");
         break;
-      case "contact":
+      case "description":
         setCurrentStep("address");
         break;
       case "address":
@@ -98,11 +98,11 @@ const UserRegistrationForm: React.FC = () => {
 
   const previousStep = () => {
     switch (currentStep) {
-      case "contact":
-        setCurrentStep("personal");
+      case "description":
+        setCurrentStep("information");
         break;
       case "address":
-        setCurrentStep("contact");
+        setCurrentStep("description");
         break;
       case "avatar":
         setCurrentStep("address");
@@ -112,9 +112,9 @@ const UserRegistrationForm: React.FC = () => {
 
   const renderStepContent = () => {
     switch (currentStep) {
-      case "personal":
+      case "information":
         return <PersonalInfo data={formData} onChange={handleChange} />;
-      case "contact":
+      case "description":
         return <DescriptionInfo data={formData} onChange={handleChange} />;
       case "address":
         return <AddressInfo data={formData} onChange={handleChange} />;
@@ -124,7 +124,7 @@ const UserRegistrationForm: React.FC = () => {
   };
 
   const renderProgressBar = () => {
-    const steps = ["personal", "contact", "address", "avatar"];
+    const steps = ["personal", "description", "address", "avatar"];
     const currentIndex = steps.indexOf(currentStep);
     const progress = ((currentIndex + 1) / steps.length) * 100;
 
@@ -141,11 +141,11 @@ const UserRegistrationForm: React.FC = () => {
           />
         </div>
         <div className="d-flex justify-content-between mt-2">
-          <span className={currentStep === "personal" ? "fw-bold" : ""}>
-            Personal
+          <span className={currentStep === "information" ? "fw-bold" : ""}>
+            Information
           </span>
-          <span className={currentStep === "contact" ? "fw-bold" : ""}>
-            Contact
+          <span className={currentStep === "description" ? "fw-bold" : ""}>
+            Description
           </span>
           <span className={currentStep === "address" ? "fw-bold" : ""}>
             Address
@@ -179,7 +179,7 @@ const UserRegistrationForm: React.FC = () => {
             </div>
 
             <div className="d-flex justify-content-between mt-4 fixed-bottom-buttons">
-              {currentStep !== "personal" ? (
+              {currentStep !== "information" ? (
                 <Button variant="secondary" onClick={previousStep}>
                   Previous
                 </Button>

@@ -12,6 +12,7 @@ import {
   deleteCompanyReview,
   getCompanyReviews,
   isReviewed,
+  isFollowed,
 } from "../controllers/companyController";
 
 const router = Router();
@@ -24,6 +25,7 @@ router.put("/:companyID", verifyUser, updateCompany);
 router.get("/:companyID", getCompany);
 router.delete("/:companyID", verifyUser, deleteCompany);
 
+router.get("/:companyID/isFollowed", verifyUser, isFollowed);
 router.post("/:companyID/follow", verifyUser, followCompany);
 router.post("/:companyID/unfollow", verifyUser, unfollowCompany);
 

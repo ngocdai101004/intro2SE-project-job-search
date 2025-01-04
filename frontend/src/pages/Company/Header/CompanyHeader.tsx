@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Nav, Row, Image } from "react-bootstrap";
+import { Col, Nav, Row, Image, Container } from "react-bootstrap";
 import ICompany from "../../../interfaces/interfaces";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../../common/axiosInstance";
+import { toast } from "react-toastify";
 
 interface CompanyHeaderProps {
   myState?: string;
@@ -14,10 +17,39 @@ const CompanyHeader = ({
   companyData,
 }: CompanyHeaderProps) => {
   const myActiveKey = myState || "/snapshot";
+  const [followed, setFollowed] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
   const [companyRating, setCompanyRating] = useState(0);
+  const [follows, setFollows] = useState<number>(0);
   const setMyActiveKey = setMyState || (() => {});
+  const navigate = useNavigate();
+
+  const fetchFollowed = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/company/${companyData?._id}/isFollowed`
+      );
+      console.log(response.data.message);
+      setMessage(response.data.message);
+      if (response.data.data.isFollowed !== undefined) {
+        setFollowed(response.data.data.isFollowed);
+        return true;
+      } else {
+        return false;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error(error.message);
+      console.error(error);
+    }
+    return false;
+  };
 
   useEffect(() => {
+    setFollows(companyData ? companyData.followers.length : 0);
+    if (companyData) {
+      fetchFollowed();
+    }
     const sumRating = companyData
       ? companyData.reviews.reduce((acc, review) => acc + review.rating, 0)
       : 0;
@@ -29,14 +61,47 @@ const CompanyHeader = ({
     const rating = sumRating / len;
 
     setCompanyRating(rating);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [companyData]);
+
+  const handleFollow = async () => {
+    const toastId = toast.loading("Updating...");
+    console.log(message);
+    if (await fetchFollowed()) {
+      if (followed) {
+        await axiosInstance.post(`/company/${companyData?._id}/unfollow`);
+        setFollowed(false);
+        setFollows(follows - 1);
+      } else {
+        await axiosInstance.post(`/company/${companyData?._id}/follow`);
+        setFollowed(true);
+        setFollows(follows + 1);
+      }
+      // window.location.reload();
+      toast.update(toastId, {
+        render: message,
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
+    } else {
+      console.log("failed to fetch followed status");
+      toast.update(toastId, {
+        render: message,
+        type: "error",
+        isLoading: false,
+        autoClose: 2000,
+      });
+    }
+  };
 
   return (
     <div className="bg-cyan py-3 pb-0">
-      <div className="container">
+      <Container>
         {/* Header Section */}
-        <div className="row">
-          <Card
+        <Row>
+          <Col
+            xs={9}
             className="col-auto d-flex mb-3 mb-md-0"
             style={{ backgroundColor: "#00000000", border: "none" }}
           >
@@ -70,37 +135,44 @@ const CompanyHeader = ({
                 </small>
               </Col>
             </Row>
-          </Card>
+          </Col>
 
-          <Card
-            className="col-auto d-flex justify-content-center ms-md-auto"
-            style={{ backgroundColor: "#00000000", border: "none" }}
-          >
-            <Row className="mb-2">
+          <Col xs={3} style={{ backgroundColor: "#00000000", border: "none" }}>
+            <Row className="mb-2 d-flex justify-content-between">
               <Col xs="auto" className="d-flex justify-content-center">
-                <button className="btn btn-primary">Follow</button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    handleFollow();
+                  }}
+                >
+                  {followed ? "Unfollow" : "Follow"}
+                </button>
               </Col>
               <Col xs="auto" className="d-flex justify-content-center">
-                <button className="btn btn-outline-primary">
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={() => {
+                    navigate("./../reviews");
+                    window.location.reload();
+                  }}
+                >
                   Write a review
                 </button>
               </Col>
             </Row>
             <Row>
               <Col xs="auto" className="d-flex justify-content-center">
-                <small className="text-muted">
-                  {" "}
-                  {companyData ? companyData.followers?.length : 0} followers
-                </small>
+                <small className="text-muted"> {follows} followers</small>
               </Col>
-              <Col xs="auto" className="d-flex justify-content-center">
+              <Col xs="auto" className="d-flex justify-content-center ms-5">
                 <small className="text-muted">
                   {companyData ? companyData.employees?.length : 0} employees{" "}
                 </small>
               </Col>
             </Row>
-          </Card>
-        </div>
+          </Col>
+        </Row>
 
         {/* Navbar Section */}
         <div className="row">
@@ -151,7 +223,7 @@ const CompanyHeader = ({
             </Nav>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };
