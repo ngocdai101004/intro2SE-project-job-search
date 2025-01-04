@@ -37,7 +37,6 @@ const JobList: React.FC = () => {
   const [incompleteJobs, setIncompleteJobs] = useState<{
     [key: string]: boolean;
   }>({});
-  const [localJobAdded, setLocalJobAdded] = useState<boolean>(false);
 
   const fetchJobs = async (page: number = 1) => {
     setLoading(true);
@@ -64,7 +63,6 @@ const JobList: React.FC = () => {
           };
           fetchedJobs.push(localJob);
           setIncompleteJobs({ [localJob._id]: true });
-          setLocalJobAdded(true);
           limit -= 1; // Giảm limit để đảm bảo chỉ hiển thị 2 item trên trang đầu tiên
         }
       }
