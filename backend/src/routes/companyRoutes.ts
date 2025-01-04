@@ -33,4 +33,6 @@ router.get("/:companyID/isReviewed", verifyUser, isReviewed);
 
 router.get("/:companyID/reviews", getCompanyReviews);
 
+router.post("/build-company", verifyUser, createCompany);
+
 export default router;

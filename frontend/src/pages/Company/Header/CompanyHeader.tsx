@@ -21,7 +21,11 @@ const CompanyHeader = ({
     const sumRating = companyData
       ? companyData.reviews.reduce((acc, review) => acc + review.rating, 0)
       : 0;
-    const len = companyData ? companyData.reviews.length : 1;
+    const len = companyData
+      ? companyData.reviews.length == 0
+        ? 1
+        : companyData.reviews.length
+      : 1;
     const rating = sumRating / len;
 
     setCompanyRating(rating);
@@ -39,7 +43,7 @@ const CompanyHeader = ({
             <Row>
               <Col xs="auto" className="d-flex justify-content-center">
                 <Image
-                  src="\company-avatar.jpg" // Đặt đường dẫn tới logo
+                  src={companyData ? companyData.avatar : "/company-avatar.jpg"} // Đặt đường dẫn tới logo
                   roundedCircle
                   style={{ width: "80px" }}
                 />
@@ -56,10 +60,13 @@ const CompanyHeader = ({
                     {"★".repeat(Math.floor(companyRating))}
                     {"☆".repeat(5 - Math.floor(companyRating))}
                   </div>
-                  <small className="text-muted ms-2">2.0k reviews</small>
+                  <small className="text-muted ms-2">
+                    {companyData ? companyData.reviews.length : 0} reviews
+                  </small>
                 </div>
                 <small className="text-muted">
-                  21,000 others have applied here
+                  {companyData ? companyData.applicant?.length : 0} others have
+                  applied here
                 </small>
               </Col>
             </Row>
@@ -87,7 +94,9 @@ const CompanyHeader = ({
                 </small>
               </Col>
               <Col xs="auto" className="d-flex justify-content-center">
-                <small className="text-muted">1K-5K employees </small>
+                <small className="text-muted">
+                  {companyData ? companyData.employees?.length : 0} employees{" "}
+                </small>
               </Col>
             </Row>
           </Card>

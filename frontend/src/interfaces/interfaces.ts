@@ -59,6 +59,7 @@ interface ICompany {
   admin_id?: string[];
 
   // Header
+  avatar: string;
   company_name: string;
   applicant?: string[];
   employees?: string[];

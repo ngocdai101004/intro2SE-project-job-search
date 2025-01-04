@@ -16,8 +16,7 @@ const AvatarUpload: React.FC<Props> = ({ data, onChange }) => {
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    let url =
-      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/Screenshot%20(1).png"; // Assuming uploadFile is defined elsewhere
+    let url = "/company.png"; // Assuming uploadFile is defined elsewhere
 
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {

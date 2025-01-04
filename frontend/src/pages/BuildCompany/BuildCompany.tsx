@@ -46,13 +46,16 @@ const UserRegistrationForm: React.FC = () => {
     const toastId = toast.loading("Updating...");
 
     try {
-      const response = await axiosInstance.patch("/user/profile", formData);
+      const response = await axiosInstance.post(
+        "/company/build-company",
+        formData
+      );
       console.log(response.data);
       toast.update(toastId, {
         render: "Profile updated successfully",
         type: "success",
         isLoading: false,
-        autoClose: 1000000,
+        autoClose: 2000,
         onClose: () => navigate("/company-list"),
       });
     } catch (error: unknown) {
