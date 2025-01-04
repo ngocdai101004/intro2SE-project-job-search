@@ -64,7 +64,6 @@ const JobList: React.FC = () => {
           };
           fetchedJobs.push(localJob);
           setIncompleteJobs({ [localJob._id]: true });
-          setLocalJobAdded(true);
           limit -= 1; // Giảm limit để đảm bảo chỉ hiển thị 2 item trên trang đầu tiên
         }
       }

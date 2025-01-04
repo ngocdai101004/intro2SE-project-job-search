@@ -65,8 +65,7 @@ const DescribeJob: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post("/job/create", formattedData);
-      console.log("Job created:", response.data);
+      await axiosInstance.post("/job/create", formattedData);
 
       // Xóa dữ liệu trong localStorage
       localStorage.removeItem("jobPostData");
@@ -75,10 +74,10 @@ const DescribeJob: React.FC = () => {
       navigate("/my-company/job-list");
     } catch (error: unknown) {
       console.error("Error creating job:", error);
-      // alert(
-      //   error?.response?.data?.message ||
-      //     "Failed to create job. Please try again."
-      // );
+      alert(
+        error.response?.data?.message ||
+          "Failed to create job. Please try again."
+      );
     } finally {
       setLoading(false);
     }
