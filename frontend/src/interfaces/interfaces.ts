@@ -59,10 +59,11 @@ interface ICompany {
   admin_id?: string[];
 
   // Header
+  avatar: string;
   company_name: string;
-  applicant?: string[];
-  employees?: string[];
-  followers?: string[];
+  applicant: string[];
+  employees: string[];
+  followers: string[];
 
   // Snapshot
   address?: Address;

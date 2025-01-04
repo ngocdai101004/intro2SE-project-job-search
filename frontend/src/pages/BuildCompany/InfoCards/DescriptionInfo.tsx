@@ -27,7 +27,7 @@ const DescriptionInfo: React.FC<Props> = ({ data, onChange }) => {
 
   return (
     <div>
-      <h4>Description Information</h4>
+      <h4>Description</h4>
 
       <Row>
         <Form.Group className="mb-3" controlId="formCompanySize">

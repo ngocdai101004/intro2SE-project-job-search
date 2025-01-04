@@ -72,7 +72,7 @@ const DescribeJob: React.FC = () => {
 
       // Chuyển đến trang danh sách công việc
       navigate("/my-company/job-list");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating job:", error);
       alert(
         error.response?.data?.message ||

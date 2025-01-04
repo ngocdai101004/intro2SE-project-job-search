@@ -37,6 +37,7 @@ const JobList: React.FC = () => {
   const [incompleteJobs, setIncompleteJobs] = useState<{
     [key: string]: boolean;
   }>({});
+  const [, setLocalJobAdded] = useState<boolean>(false);
 
   const fetchJobs = async (page: number = 1) => {
     setLoading(true);
