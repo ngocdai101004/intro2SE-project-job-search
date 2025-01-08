@@ -23,6 +23,10 @@ const Candidates: React.FC = () => {
   const [candidates, setCandidates] = useState<Candidate[]>([]); // State lưu danh sách ứng viên
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [error, setError] = useState<string>(""); // Error state
+  const [editingFeedbackId, setEditingFeedbackId] = useState<string | null>(
+    null
+  ); // ID của feedback đang chỉnh sửa
+  const [editedFeedback, setEditedFeedback] = useState<string>(""); // Feedback được chỉnh sửa
 
   // Phân trang
   const [pagination, setPagination] = useState<Pagination>({
@@ -68,6 +72,44 @@ const Candidates: React.FC = () => {
   useEffect(() => {
     fetchCandidates(); // Gọi API khi component mount
   }, []);
+
+  // Xử lý khi click vào feedback để chỉnh sửa
+  const handleEditFeedback = (id: string, currentFeedback: string) => {
+    setEditingFeedbackId(id); // Chuyển ID vào state
+    setEditedFeedback(currentFeedback); // Cập nhật feedback hiện tại
+  };
+
+  // Xử lý thay đổi feedback trong textarea
+  const handleFeedbackChange = (value: string) => {
+    setEditedFeedback(value); // Cập nhật giá trị feedback trong state
+  }; // Xử lý lưu feedback lên server
+  const handleSaveFeedback = async (id: string) => {
+    try {
+      // Gửi yêu cầu API cập nhật feedback
+      await axiosInstance.patch(`/applicant/${id}/feedback`, {
+        feedback: editedFeedback,
+      });
+
+      // Cập nhật lại feedback trong danh sách ứng viên
+      const updatedCandidates = candidates.map((candidate) =>
+        candidate.id === id
+          ? { ...candidate, feedback: editedFeedback }
+          : candidate
+      );
+      setCandidates(updatedCandidates);
+
+      // Thoát chế độ chỉnh sửa
+      setEditingFeedbackId(null);
+    } catch (error) {
+      console.error("Failed to update feedback:", error);
+    }
+  };
+
+  // Hủy chỉnh sửa feedback
+  const handleCancelEdit = () => {
+    setEditingFeedbackId(null); // Thoát chế độ chỉnh sửa
+    setEditedFeedback(""); // Xóa feedback được chỉnh sửa
+  };
 
   return (
     <MainLayout>
@@ -127,9 +169,54 @@ const Candidates: React.FC = () => {
                             </span>
                           </td>
                           <td>
-                            <span>
-                              {candidate.feedback || "No feedback provided"}
-                            </span>
+                            {editingFeedbackId === candidate.id ? (
+                              // Hiển thị chế độ chỉnh sửa nếu đang chỉnh sửa feedback
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <textarea
+                                  value={editedFeedback}
+                                  onChange={(e) =>
+                                    handleFeedbackChange(e.target.value)
+                                  }
+                                  style={{ width: "100%", marginRight: "10px" }}
+                                />
+                                <button
+                                  className="btn btn-success"
+                                  onClick={() =>
+                                    handleSaveFeedback(candidate.id)
+                                  }
+                                  style={{ marginRight: "5px" }}
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  className="btn btn-secondary"
+                                  onClick={handleCancelEdit}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            ) : (
+                              // Hiển thị feedback dưới dạng văn bản nếu không chỉnh sửa
+                              <span
+                                style={{
+                                  cursor: "pointer",
+                                }}
+                                onClick={() =>
+                                  handleEditFeedback(
+                                    candidate.id,
+                                    candidate.feedback
+                                  )
+                                }
+                              >
+                                {candidate.feedback || "No feedback"}{" "}
+                                {/* Hiển thị feedback */}
+                              </span>
+                            )}
                           </td>
                           <td>
                             <div className="candidate-intersted">

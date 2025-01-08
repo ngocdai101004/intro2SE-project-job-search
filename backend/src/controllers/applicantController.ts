@@ -69,3 +69,39 @@ export const getApplicantInfos = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server Error", error });
   }
 };
+
+// Cập nhật feedback cho ứng viên
+export const updateApplicantFeedback = async (req: Request, res: Response) => {
+  try {
+    const { applicantId } = req.params; // Lấy ID ứng viên từ URL
+    const { feedback } = req.body; // Lấy feedback từ body
+
+    // Kiểm tra nếu feedback trống
+    if (!feedback) {
+      res.status(400).json({ message: "Feedback cannot be empty." });
+    }
+
+    // Tìm và cập nhật feedback trong database
+    const updatedApplication = await ApplicationDB.findByIdAndUpdate(
+      applicantId,
+      { feedback }, // Cập nhật feedback
+      { new: true } // Trả về dữ liệu mới sau khi cập nhật
+    );
+
+    // Kiểm tra ứng viên có tồn tại không
+    if (!updatedApplication) {
+      res.status(404).json({ message: "Applicant not found." });
+    }
+
+    // Trả về kết quả thành công
+    res.status(200).json({
+      message: "Feedback updated successfully.",
+      data: updatedApplication,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to update feedback.",
+      error: (error as any).message,
+    });
+  }
+};
