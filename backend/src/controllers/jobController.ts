@@ -79,10 +79,15 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
           status: "reviewing",
         });
 
+        const formattedCreatedAt = job.createdAt
+          ? new Date(job.createdAt).toISOString().split("T")[0]
+          : null;
+
         return {
           ...job.toObject(),
           applicantsCount,
           awaitingsCount,
+          createdAt: formattedCreatedAt, // Gán lại ngày đã định dạng
         };
       })
     );
@@ -166,5 +171,41 @@ export const getRecommendedJobs = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(400).json({ message: (error as any).message, data: [] });
+  }
+};
+
+// Cập nhật trạng thái công việc
+export const updateJobStatus = async (req: Request, res: Response) => {
+  try {
+    const { jobID } = req.params; // Lấy jobID từ params
+    const { status } = req.body; // Lấy status từ body
+
+    console.log(jobID, status);
+
+    // Kiểm tra trạng thái hợp lệ
+    const validStatuses = ["open", "closed", "draft"];
+    if (!validStatuses.includes(status)) {
+      res.status(400).json({ message: "Invalid status" });
+    }
+
+    // Tìm và cập nhật trạng thái công việc
+    const updatedJob = await Job.findByIdAndUpdate(
+      jobID,
+      { status: status },
+      { new: true } // Trả về dữ liệu mới sau khi cập nhật
+    );
+
+    if (!updatedJob) {
+      res.status(404).json({ message: "Job not found" });
+    }
+
+    res.status(200).json({
+      message: "Job status updated successfully",
+      data: updatedJob,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: (error as any).message || "Failed to update job status",
+    });
   }
 };

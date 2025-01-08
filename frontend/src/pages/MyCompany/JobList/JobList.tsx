@@ -117,11 +117,30 @@ const JobList: React.FC = () => {
     fetchJobs();
   }, []);
 
-  const handleStatusChange = (jobId: string, status: string) => {
+  const updateJobStatus = async (jobId: string, newStatus: string) => {
+    try {
+      await axiosInstance.patch(`/job/${jobId}/status`, {
+        status: newStatus, // Trạng thái mới
+      });
+
+      // Cập nhật trạng thái trong state
+      const updatedJobs = jobs.map((job) =>
+        job._id === jobId ? { ...job, status: newStatus } : job
+      );
+      setJobs(updatedJobs);
+    } catch (error: any) {
+      console.error("Failed to update job status:", error);
+      alert(error.response?.data?.message || "Failed to update job status.");
+    }
+  };
+
+  const handleStatusChange = (jobId: string, newStatus: string) => {
     setJobStatus((prev) => ({
       ...prev,
-      [jobId]: status,
+      [jobId]: newStatus,
     }));
+
+    updateJobStatus(jobId, newStatus);
   };
 
   const handlePageChange = (newPage: number) => {
@@ -248,7 +267,6 @@ const JobList: React.FC = () => {
                           )}
                         </td>
                         <td>
-                          <p>5 minutes ago</p>
                           <p>{job.createdAt}</p>
                         </td>
                         <td>
@@ -260,7 +278,7 @@ const JobList: React.FC = () => {
                             style={{ padding: "5px", width: "100%" }}
                           >
                             <option value="closed">Closed</option>
-                            <option value="paused">Paused</option>
+                            <option value="draft">Paused</option>
                             <option value="open">Open</option>
                           </select>
                         </td>
