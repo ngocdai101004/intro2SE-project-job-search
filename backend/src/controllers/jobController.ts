@@ -74,7 +74,7 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
           status: "applied",
         });
 
-        const awaitingCount = await Application.countDocuments({
+        const awaitingsCount = await Application.countDocuments({
           job_id: job._id,
           status: "reviewing",
         });
@@ -82,7 +82,7 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
         return {
           ...job.toObject(),
           applicantsCount,
-          awaitingCount,
+          awaitingsCount,
         };
       })
     );
