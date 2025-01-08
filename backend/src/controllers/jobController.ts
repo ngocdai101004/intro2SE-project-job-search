@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import Job from "../models/jobModel";
-import User from "../models/userModel";
 import UserInfo from "../models/userInfoModel";
 import stringSimilarity from "string-similarity";
 import mongoose from "mongoose";
+import Application from "../models/applicationModel";
 import exp from "constants";
 
 // Create a new job
@@ -42,11 +42,9 @@ export const getJobs = async (req: Request, res: Response) => {
   }
 };
 
-// Controller lấy jobs theo companyId
 export const getJobsByCompanyId = async (req: Request, res: Response) => {
   try {
-    // Lấy dữ liệu từ params và query
-    const { companyId } = req.params; // Đổi tên tham số để đồng bộ với route
+    const { companyId } = req.params;
     const { page = 1, limit = 10 } = req.query;
 
     // Kiểm tra companyId hợp lệ
@@ -54,25 +52,51 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
       res.status(400).json({ message: "Invalid company ID", data: [] });
     }
 
-    // Tính toán phân trang
+    // Phân trang
     const pageNumber = parseInt(page as string, 10) || 1;
     const pageSize = parseInt(limit as string, 10) || 10;
     const skip = (pageNumber - 1) * pageSize;
 
-    // Truy vấn dữ liệu từ database
+    // Lấy danh sách jobs
     const jobs = await Job.find({ company_id: companyId })
       .skip(skip)
       .limit(pageSize)
       .sort({ createdAt: -1 });
 
-    // Đếm tổng số công việc
+    // Đếm tổng số jobs
     const totalJobs = await Job.countDocuments({ company_id: companyId });
+
+    // Tính số lượng applicants và awaiting cho từng job
+    const jobsWithCounts = await Promise.all(
+      jobs.map(async (job) => {
+        const applicantsCount = await Application.countDocuments({
+          job_id: job._id,
+          status: "applied",
+        });
+
+        const awaitingsCount = await Application.countDocuments({
+          job_id: job._id,
+          status: "reviewing",
+        });
+
+        const formattedCreatedAt = job.createdAt
+          ? new Date(job.createdAt).toISOString().split("T")[0]
+          : null;
+
+        return {
+          ...job.toObject(),
+          applicantsCount,
+          awaitingsCount,
+          createdAt: formattedCreatedAt, // Gán lại ngày đã định dạng
+        };
+      })
+    );
 
     // Trả về dữ liệu
     res.status(200).json({
       message: "Jobs fetched successfully",
       data: {
-        jobs,
+        jobs: jobsWithCounts,
         totalJobs,
         currentPage: pageNumber,
         totalPages: Math.ceil(totalJobs / pageSize),
@@ -147,5 +171,41 @@ export const getRecommendedJobs = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(400).json({ message: (error as any).message, data: [] });
+  }
+};
+
+// Cập nhật trạng thái công việc
+export const updateJobStatus = async (req: Request, res: Response) => {
+  try {
+    const { jobID } = req.params; // Lấy jobID từ params
+    const { status } = req.body; // Lấy status từ body
+
+    console.log(jobID, status);
+
+    // Kiểm tra trạng thái hợp lệ
+    const validStatuses = ["open", "closed", "draft"];
+    if (!validStatuses.includes(status)) {
+      res.status(400).json({ message: "Invalid status" });
+    }
+
+    // Tìm và cập nhật trạng thái công việc
+    const updatedJob = await Job.findByIdAndUpdate(
+      jobID,
+      { status: status },
+      { new: true } // Trả về dữ liệu mới sau khi cập nhật
+    );
+
+    if (!updatedJob) {
+      res.status(404).json({ message: "Job not found" });
+    }
+
+    res.status(200).json({
+      message: "Job status updated successfully",
+      data: updatedJob,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: (error as any).message || "Failed to update job status",
+    });
   }
 };

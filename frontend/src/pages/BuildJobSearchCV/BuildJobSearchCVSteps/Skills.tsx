@@ -1,25 +1,22 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { BuildJobSearhCVProps } from '../../../interfaces/userinfo';
 
-const Skills: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
+interface SkillsProps {
+    skills: string[];
+    setSkills: (skills: string[]) => void;
+}
+const Skills: React.FC<SkillsProps> = ({ skills, setSkills }) => {
     const [newSkill, setNewSkill] = React.useState('');
 
     const addSkill = () => {
-        if (newSkill.trim() && !data.skills.includes(newSkill.trim())) {
-            setData({
-                ...data,
-                skills: [...data.skills, newSkill.trim()]
-            });
+        if (newSkill.trim() && !skills.includes(newSkill.trim())) {
+            setSkills([...skills, newSkill.trim()]);
             setNewSkill('');
         }
     };
 
     const removeSkill = (skillToRemove: string) => {
-        setData({
-            ...data,
-            skills: data.skills.filter((skill: string) => skill !== skillToRemove)
-        });
+        setSkills(skills.filter((skill: string) => skill !== skillToRemove));
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -49,7 +46,7 @@ const Skills: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
             </Form.Group>
             <h5>Skills added</h5>
             <ul className="list-unstyled ">
-                {data.skills.map((skill: string, index: number) => (
+                {skills.map((skill: string, index: number) => (
                     <li key={index} className="d-flex align-items-center mb-2 border p-2 rounded bg-white">
                         <span className="me-2">{skill}</span>
                         <Button

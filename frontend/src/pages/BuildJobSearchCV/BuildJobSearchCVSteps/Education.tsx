@@ -1,51 +1,55 @@
 import React, { useState } from 'react';
 import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
-import { BuildJobSearhCVProps } from '../../../interfaces/userinfo';
 import { IEducation } from '../../../interfaces/userinfo';
 
-const Education: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
-    const [error, setError] = useState<string | null>(null);
+interface EducationProps {
+    education: IEducation[];
+    setEducation: (education: IEducation[]) => void;
+}
 
+const Education: React.FC<EducationProps> = ({ education, setEducation }) => {
+    const [error, setError] = useState<string | null>(null);
+    console.log("Education", education);
     const addEducation = () => {
-        setData({
-            ...data,
-            education: [...data.education, {
+        setEducation([
+            ...education,
+            {
                 education_level: '',
                 study_field: '',
                 school_name: '',
                 begin: new Date(),
                 end: undefined,
                 additional_details: ''
-            }]
-        });
+            }
+        ]);
     };
 
     const updateEducation = (index: number, field: string, value: string | Date) => {
-        const newEducation = [...data.education];
+        const newEducation = [...education];
         newEducation[index] = { ...newEducation[index], [field]: value };
-        setData({ ...data, education: newEducation });
+        setEducation(newEducation);
     };
 
     const handleDateChange = (index: number, field: string, value: string) => {
-            const date = new Date(value);
-            if (isNaN(date.getTime())) {
-                setError('Invalid date value');
-            } else {
-                setError(null);
-                updateEducation(index, field, date);
-            }
-        };
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+            setError('Invalid date value');
+        } else {
+            setError(null);
+            updateEducation(index, field, date);
+        }
+    };
 
     const removeEducation = (index: number) => {
-        const newEducation = data.education.filter((_, i) => i !== index);
-        setData({ ...data, education: newEducation });
+        const newEducation = education.filter((_, i) => i !== index);
+        setEducation(newEducation);
     };
 
     return (
         <div className="bg-light p-4">
             <h4>Education</h4>
             {error && <Alert variant="warning">{error}</Alert>}
-            {data.education.map((edu: IEducation, index: number) => (
+            {education.map((edu: IEducation, index: number) => (
                 <div key={index} className="mb-4 p-3 border rounded bg-white position-relative">
                     <Button 
                         variant="link" 

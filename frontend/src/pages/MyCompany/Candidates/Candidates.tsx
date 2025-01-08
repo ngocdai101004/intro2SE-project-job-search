@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Dropdown,
-  InputGroup,
-  FormControl,
-} from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import axiosInstance from "../../../common/axiosInstance";
 import "./Candidates.css";
+import { useParams } from "react-router-dom";
 
 interface Candidate {
   id: string;
@@ -20,28 +14,119 @@ interface Candidate {
   status: string;
 }
 
+interface Pagination {
+  totalCandidates: number;
+  currentPage: number;
+  totalPages: number;
+}
+
 const Candidates: React.FC = () => {
+  const { company_id } = useParams<{ company_id: string }>();
   const [candidates, setCandidates] = useState<Candidate[]>([]); // State lưu danh sách ứng viên
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
+  const [error, setError] = useState<string>(""); // Error state
+  const [editingFeedbackId, setEditingFeedbackId] = useState<string | null>(
+    null
+  ); // ID của feedback đang chỉnh sửa
+  const [editedFeedback, setEditedFeedback] = useState<string>(""); // Feedback được chỉnh sửa
+
+  // Phân trang
+  const [pagination, setPagination] = useState<Pagination>({
+    totalCandidates: 0,
+    currentPage: 1,
+    totalPages: 1,
+  });
 
   // Fetch dữ liệu từ API
-  useEffect(() => {
-    const fetchCandidates = async () => {
-      try {
-        const companyId = "6776acea66277d8c90632d9f"; // ID công ty
-        const { data } = await axiosInstance.get(
-          `/applicant/${companyId}` // API endpoint
-        );
-        setCandidates(data); // Lưu dữ liệu vào state
-      } catch (error) {
-        console.error("Error fetching candidates:", error);
-      }
-    };
+  const fetchCandidates = async (page: number = 1) => {
+    setLoading(true);
+    try {
+      // Truy vấn dữ liệu với tham số phân trang
+      const response = await axiosInstance.get(
+        `/applicant/${company_id}?page=${page}&limit=2` // Giới hạn 5 ứng viên mỗi trang
+      );
 
+      // Nhận dữ liệu trả về
+      const { data } = response;
+      setCandidates(data.candidates || []);
+      setPagination({
+        totalCandidates: data.totalCandidates,
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+      });
+    } catch (error) {
+      console.error("Error fetching candidates:", error);
+      setError("Failed to fetch candidates. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Xử lý chuyển trang
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      fetchCandidates(newPage);
+    }
+  };
+
+  useEffect(() => {
     fetchCandidates(); // Gọi API khi component mount
   }, []);
 
+  // Xử lý khi click vào feedback để chỉnh sửa
+  const handleEditFeedback = (id: string, currentFeedback: string) => {
+    setEditingFeedbackId(id); // Chuyển ID vào state
+    setEditedFeedback(currentFeedback); // Cập nhật feedback hiện tại
+  };
+
+  // Xử lý thay đổi feedback trong textarea
+  const handleFeedbackChange = (value: string) => {
+    setEditedFeedback(value); // Cập nhật giá trị feedback trong state
+  }; // Xử lý lưu feedback lên server
+  const handleSaveFeedback = async (id: string) => {
+    try {
+      // Gửi yêu cầu API cập nhật feedback
+      await axiosInstance.patch(`/applicant/${id}/feedback`, {
+        feedback: editedFeedback,
+      });
+
+      // Cập nhật lại feedback trong danh sách ứng viên
+      const updatedCandidates = candidates.map((candidate) =>
+        candidate.id === id
+          ? { ...candidate, feedback: editedFeedback }
+          : candidate
+      );
+      setCandidates(updatedCandidates);
+
+      // Thoát chế độ chỉnh sửa
+      setEditingFeedbackId(null);
+    } catch (error) {
+      console.error("Failed to update feedback:", error);
+    }
+  };
+
+  // Hủy chỉnh sửa feedback
+  const handleCancelEdit = () => {
+    setEditingFeedbackId(null); // Thoát chế độ chỉnh sửa
+    setEditedFeedback(""); // Xóa feedback được chỉnh sửa
+  };
+
+  const updateApplicantStatus = async (id: string, status: string) => {
+    try {
+      await axiosInstance.patch(`/applicant/${id}/status`, { status });
+
+      // Cập nhật trạng thái trong danh sách
+      const updatedCandidates = candidates.map((candidate) =>
+        candidate.id === id ? { ...candidate, status } : candidate
+      );
+      setCandidates(updatedCandidates);
+    } catch (error) {
+      console.error("Failed to update status:", error);
+    }
+  };
+
   return (
-    <MainLayout>
+    <MainLayout company_id={company_id!}>
       <Container fluid className="candidate-post-container">
         <Row>
           <Col style={{ paddingLeft: "0px", paddingRight: "0px" }}>
@@ -50,124 +135,172 @@ const Candidates: React.FC = () => {
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h1>Candidates</h1>
                 </div>
-                <div className="filter-bar">
-                  <InputGroup style={{ maxWidth: "400px" }}>
-                    <InputGroup.Text>
-                      <i className="bi bi-filter"></i>
-                    </InputGroup.Text>
-                    <FormControl placeholder="Sort by: Apply date (newest first)" />
-                    <Dropdown>
-                      <Dropdown.Toggle
-                        variant="outline-secondary"
-                        id="dropdown-basic"
-                        bsPrefix="custom-dropdown-toggle"
-                      >
-                        <i className="bi bi-chevron-down"></i>
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <Dropdown.Item href="#">Option 1</Dropdown.Item>
-                        <Dropdown.Item href="#">Option 2</Dropdown.Item>
-                        <Dropdown.Item href="#">Option 3</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </InputGroup>
-                </div>
               </div>
-              <table
-                className="candidate-table table table-spacing"
-                style={{ width: "100%" }}
-              >
-                <thead>
-                  <tr>
-                    <th>
-                      <input type="checkbox" />
-                    </th>
-                    <th>Candidates</th>
-                    <th>Job applied to</th>
-                    <th style={{ width: "40%" }}>Feedback</th>
-                    <th>Interested?</th>
-                  </tr>
-                </thead>
-                {/* <tbody>
-                  <tr>
-                    <td>
-                      <input type="checkbox" />
-                    </td>
-                    <td>
-                      <p className="candidate-name">Nguyen Van A</p>
-                      <div className="candidate-state">Awaiting Review</div>
-                      <p
-                        className="location"
-                        style={{ fontSize: "12px", opacity: 0.7 }}
-                      >
-                        Applied: Oct 31
-                      </p>
-                    </td>
-                    <td>
-                      <span className="candidate-job">AI engineering</span>
-                    </td>
-                    <td>
-                      <span>
-                        We didn’t find matching qualifications. Review the
-                        candidate’s profile to see their skills and experience.
-                      </span>
-                    </td>
-                    <td>
-                      <div className="candidate-intersted">
-                        <span className="icon">&#10003;</span>
-                        <span className="icon">?</span>
-                        <span className="icon">&#10007;</span>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody> */}
-                <tbody>
-                  {candidates.length > 0 ? (
-                    candidates.map((candidate, index) => (
-                      <tr key={index}>
-                        <td>
-                          <input type="checkbox" />
-                        </td>
-                        <td>
-                          <p className="candidate-name">
-                            {candidate.candidateName}
-                          </p>
-                          <div className="candidate-state">Awaiting Review</div>
-                          <p
-                            className="location"
-                            style={{ fontSize: "12px", opacity: 0.7 }}
-                          >
-                            Applied: {candidate.appliedDate}
-                          </p>
-                        </td>
-                        <td>
-                          <span className="candidate-job">
-                            {candidate.jobTitle}
-                          </span>
-                        </td>
-                        <td>
-                          <span>
-                            {candidate.feedback || "No feedback provided"}
-                          </span>
-                        </td>
-                        <td>
-                          <div className="candidate-intersted">
-                            <span className="icon">&#10003;</span>
-                            <span className="icon">?</span>
-                            <span className="icon">&#10007;</span>
-                          </div>
+              {loading ? (
+                <p>Loading candidates...</p>
+              ) : error ? (
+                <p style={{ color: "red" }}>{error}</p>
+              ) : (
+                <table
+                  className="candidate-table table table-spacing"
+                  style={{ width: "100%" }}
+                >
+                  <thead>
+                    <tr>
+                      <th>{/* <input type="checkbox" /> */}</th>
+                      <th>Candidates</th>
+                      <th>Job applied to</th>
+                      <th style={{ width: "40%" }}>Feedback</th>
+                      <th>Interested?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {candidates.length > 0 ? (
+                      candidates.map((candidate, index) => (
+                        <tr key={index}>
+                          <td>
+                            <input type="checkbox" />
+                          </td>
+                          <td>
+                            <p className="candidate-name">
+                              {candidate.candidateName}
+                            </p>
+                            <div className="candidate-state">
+                              {candidate.status === "reviewing"
+                                ? "Awaiting Review"
+                                : candidate.status === "rejected"
+                                ? "Rejected"
+                                : "Applied"}
+                            </div>
+                            <p
+                              className="location"
+                              style={{ fontSize: "12px", opacity: 0.7 }}
+                            >
+                              Applied: {candidate.appliedDate}
+                            </p>
+                          </td>
+                          <td>
+                            <span className="candidate-job">
+                              {candidate.jobTitle}
+                            </span>
+                          </td>
+                          <td>
+                            {editingFeedbackId === candidate.id ? (
+                              // Hiển thị chế độ chỉnh sửa nếu đang chỉnh sửa feedback
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <textarea
+                                  value={editedFeedback}
+                                  onChange={(e) =>
+                                    handleFeedbackChange(e.target.value)
+                                  }
+                                  style={{ width: "100%", marginRight: "10px" }}
+                                />
+                                <button
+                                  className="btn btn-success"
+                                  onClick={() =>
+                                    handleSaveFeedback(candidate.id)
+                                  }
+                                  style={{ marginRight: "5px" }}
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  className="btn btn-secondary"
+                                  onClick={handleCancelEdit}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            ) : (
+                              // Hiển thị feedback dưới dạng văn bản nếu không chỉnh sửa
+                              <span
+                                style={{
+                                  cursor: "pointer",
+                                }}
+                                onClick={() =>
+                                  handleEditFeedback(
+                                    candidate.id,
+                                    candidate.feedback
+                                  )
+                                }
+                              >
+                                {candidate.feedback || "No feedback"}{" "}
+                                {/* Hiển thị feedback */}
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            <div className="candidate-intersted">
+                              <span
+                                className="icon"
+                                onClick={() =>
+                                  updateApplicantStatus(candidate.id, "applied")
+                                }
+                              >
+                                &#10003;
+                              </span>
+                              <span
+                                className="icon"
+                                onClick={() =>
+                                  updateApplicantStatus(
+                                    candidate.id,
+                                    "reviewing"
+                                  )
+                                }
+                              >
+                                ?
+                              </span>
+                              <span
+                                className="icon"
+                                onClick={() =>
+                                  updateApplicantStatus(
+                                    candidate.id,
+                                    "rejected"
+                                  )
+                                }
+                              >
+                                &#10007;
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={6} style={{ textAlign: "center" }}>
+                          No candidates found.
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={6} style={{ textAlign: "center" }}>
-                        No candidates found.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                    )}
+                  </tbody>
+                </table>
+              )}
+
+              {/* Phân trang */}
+              <div className="pagination-controls d-flex justify-content-center mt-3">
+                <Button
+                  variant="outline-primary"
+                  onClick={() => handlePageChange(pagination.currentPage - 1)}
+                  disabled={pagination.currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <span className="mx-3">
+                  Page {pagination.currentPage} of {pagination.totalPages}
+                </span>
+                <Button
+                  variant="outline-primary"
+                  onClick={() => handlePageChange(pagination.currentPage + 1)}
+                  disabled={pagination.currentPage >= pagination.totalPages}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </Col>
         </Row>

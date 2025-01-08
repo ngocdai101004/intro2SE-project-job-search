@@ -1,16 +1,14 @@
 import React from "react";
 import MyHeader from "../../../components/MyHeader";
-import axiosInstance from "../../../common/axiosInstance";
-import { useEffect, createContext} from "react";
-import { useState } from "react";
-import IUser from "../../../interfaces/user"
+import { useEffect} from "react";
+import { useState, useContext} from "react";
 import UserHeader from "../UserHeader/UserHeader";
-import IUserInfo from  "../../../interfaces/userinfo";
 import JobSearchCVBody from "./JobSearchCVBody";
 import { useNavigate } from 'react-router-dom';
 import {BsPencilSquare} from "react-icons/bs";
-import {Button} from "react-bootstrap";
-export const EditingContext = createContext(false);
+import {Button, Modal} from "react-bootstrap";
+import ResumeForm from "../../BuildJobSearchCV/ResumeForm";
+import { EditingContext } from "../MainUserProfile/UserProfile";
 
 
 interface UserProfileProps {
@@ -20,41 +18,14 @@ interface UserProfileProps {
 
 const UserProfile: React.FC<UserProfileProps> = ({ userID, isOwer}) => {
   const [myActiveKey, setMyActiveKey] = React.useState("/job-search-cv");
-  const [user, setUser] = useState<IUser>({});
-  const [userInfo, setUserInfo] = useState<IUserInfo>({user_id: "", ready_to_work: false});
-  const [isOwnProfile, setIsOwnProfile] = useState<boolean>(isOwer || false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(useContext(EditingContext));
   const navigate = useNavigate();
-
+  const isOwnProfile = isOwer || false;
+  const [showModal, setShowModal] = useState(false);
   
   
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let response1;
-        let response2;
-        
-        if (!userID && isEditing) {
-          response1 = await axiosInstance.get("/user/profile");
-          response2 = await axiosInstance.get("/user/profile/info");
-          setIsOwnProfile(true);
+  
 
-        }
-        else if (userID && !isEditing) {
-          response1 = await axiosInstance.get("/user/" + userID + "/profile");
-          response2 = await axiosInstance.get("/user/" + userID + "/profile/info");
-        }
-        else {
-          return;
-        }
-        setUser(response1.data.data.user);
-        setUserInfo(response2.data.data.userInfo);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchData();
-  }, [userID, isEditing]);
 
   useEffect(() => {
     if (myActiveKey === "/snapshot") {
@@ -76,36 +47,47 @@ const UserProfile: React.FC<UserProfileProps> = ({ userID, isOwer}) => {
     >
       <MyHeader mydefaultActiveKey="/user" />
       <EditingContext.Provider value={isEditing}>
-      <UserHeader  myState={myActiveKey} setMyState={setMyActiveKey} user={user}/>
-      <JobSearchCVBody userData={
-          {
-            user: user,
-            userInfo: userInfo
-          }
-        }
-        isOwnProfile={isOwnProfile}
+      <UserHeader  myState={myActiveKey} setMyState={setMyActiveKey} userID={userID}/>
+      <JobSearchCVBody 
+        userID={userID} 
       />;
       </EditingContext.Provider>
       {isOwnProfile && (
-        <Button
-            onClick={() => setIsEditing(!isEditing)}
-            className="position-fixed"
-            style={{
-                bottom: "1rem",
-                right: "1rem",
-                borderRadius: "50%",
-                width: "3rem",
-                height: "3rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-            }}
-            variant="primary"
-        >
-          <BsPencilSquare size={20}/>
-        </Button>
-    )}
+                <Button
+                    onClick={() => {
+                        setShowModal(true);
+                        setIsEditing(!isEditing);
+                    }}
+                    className="position-fixed"
+                    style={{
+                        bottom: "1rem",
+                        right: "1rem",
+                        borderRadius: "50%",
+                        width: "3rem",
+                        height: "3rem",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                    }}
+                    variant="primary"
+                >
+                  <BsPencilSquare size={20}/>
+                  
+                </Button>
+            )}
+
+            <Modal show={showModal} onHide={() => {
+              setShowModal(false)
+              setIsEditing(false)}} 
+              centered size="xl" style={{ height: "80%", marginTop: "5%" }}>
+                <Modal.Header closeButton style={{ backgroundColor: "#f8f9fa", position: "sticky", top: "0", zIndex: 1 }}>
+                    <Modal.Title>Edit Your JobSearch CV</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <ResumeForm isFirstTime={false}/>
+                </Modal.Body>
+            </Modal>
     </div>
   );
 }

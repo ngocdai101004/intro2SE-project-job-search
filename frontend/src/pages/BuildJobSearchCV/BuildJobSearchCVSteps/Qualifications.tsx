@@ -1,35 +1,38 @@
 import React from 'react';
-import { Form, Button} from 'react-bootstrap';
-import { BuildJobSearhCVProps } from '../../../interfaces/userinfo';
+import { Form, Button } from 'react-bootstrap';
 import { IQualification } from '../../../interfaces/userinfo';
 
+interface QualificationsProps {
+    qualifications: IQualification[];
+    setQualifications: (qualifications: IQualification[]) => void;
+}
 
-const Qualifications: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
+const Qualifications: React.FC<QualificationsProps> = ({ qualifications, setQualifications }) => {
     const addQualification = () => {
-        setData({
-            ...data,
-            qualifications: [...data.qualifications, {
+        setQualifications([
+            ...qualifications,
+            {
                 title: '',
                 description: ''
-            }]
-        });
+            }
+        ]);
     };
 
     const removeQualification = (index: number) => {
-        const newQualifications = data.qualifications.filter((_: IQualification, i: number) => i !== index);
-        setData({ ...data, qualifications: newQualifications });
+        const newQualifications = qualifications.filter((_, i) => i !== index);
+        setQualifications(newQualifications);
     };
 
     const updateQualification = (index: number, field: string, value: string) => {
-        const newQualifications = [...data.qualifications];
+        const newQualifications = [...qualifications];
         newQualifications[index] = { ...newQualifications[index], [field]: value };
-        setData({ ...data, qualifications: newQualifications });
+        setQualifications(newQualifications);
     };
 
     return (
         <div className="bg-light p-4">
             <h4 className="mb-4">Qualifications</h4>
-            {data.qualifications.map((qual: IQualification, index: number) => (
+            {qualifications.map((qual, index) => (
                 <div key={index} className="mb-4 p-3 border rounded position-relative">
                     <Button 
                         variant="link" 

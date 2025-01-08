@@ -1,25 +1,29 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { BuildJobSearhCVProps } from '../../../interfaces/userinfo';
 import { ICertification } from '../../../interfaces/userinfo';
 
-const Certifications: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
+interface CertificationsProps {
+    certifications: ICertification[];
+    setCertifications: (certifications: ICertification[]) => void;
+}
+
+const Certifications: React.FC<CertificationsProps> = ({ certifications, setCertifications }) => {
     const [warning, setWarning] = useState<string | null>(null);
 
     const addCertification = () => {
-        setData({
-            ...data,
-            certifications: [...data.certifications, {
+        setCertifications([
+            ...certifications,
+            {
                 name: '',
                 issuing_organization: '',
                 issue_date: new Date()
-            }]
-        });
+            }
+        ]);
     };
 
     const removeCertification = (index: number) => {
-        const newCertifications = data.certifications.filter((_: ICertification, i: number) => i !== index);
-        setData({ ...data, certifications: newCertifications });
+        const newCertifications = certifications.filter((_, i) => i !== index);
+        setCertifications(newCertifications);
     };
 
     const updateCertification = (index: number, field: string, value: string | Date) => {
@@ -32,16 +36,16 @@ const Certifications: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
                 setWarning(null);
             }
         }
-        const newCertifications = [...data.certifications];
+        const newCertifications = [...certifications];
         newCertifications[index] = { ...newCertifications[index], [field]: value };
-        setData({ ...data, certifications: newCertifications });
+        setCertifications(newCertifications);
     };
 
     return (
         <div className="bg-light p-4">
             <h4 className="mb-4">Certifications</h4>
             {warning && <Alert variant="warning">{warning}</Alert>}
-            {data.certifications.map((cert: ICertification, index: number) => (
+            {certifications.map((cert, index) => (
                 <div key={index} className="mb-4 p-3 border rounded position-relative">
                     <Button 
                         variant="link" 

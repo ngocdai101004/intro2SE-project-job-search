@@ -67,6 +67,8 @@ const Home: React.FC = () => {
             setSelectedJob(updatedJobs[0]);
           }
         }
+
+        console.log("Selected Job:", selectedJob);
       } catch (error) {
         console.error("Error fetching jobs:", error);
       }

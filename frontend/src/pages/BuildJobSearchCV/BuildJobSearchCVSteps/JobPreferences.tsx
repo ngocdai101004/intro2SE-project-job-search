@@ -1,31 +1,36 @@
 import React from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { BuildJobSearhCVProps } from '../../../interfaces/userinfo';
-import { IJobPreference} from '../../../interfaces/userinfo';
+import { IJobPreference } from '../../../interfaces/userinfo';
 
+interface JobPreferencesProps {
+    job_preferences: IJobPreference[];
+    ready_to_work: boolean;
+    setJobPreferences: (job_preferences: IJobPreference[]) => void;
+    setReadyToWork: (ready_to_work: boolean) => void;
+}
 
-const JobPreferences: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
+const JobPreferences: React.FC<JobPreferencesProps> = ({ job_preferences, ready_to_work, setJobPreferences, setReadyToWork }) => {
     const addJobPreference = () => {
-        setData({
-            ...data,
-            job_preferences: [...data.job_preferences, {
+        setJobPreferences([
+            ...job_preferences,
+            {
                 job_title: '',
                 industry: '',
                 relocate_preference: 'flexible',
                 salary_expectation: undefined
-            }]
-        });
+            }
+        ]);
     };
 
     const removeJobPreference = (index: number) => {
-        const newPreferences = data.job_preferences.filter((_: IJobPreference, i: number) => i !== index);
-        setData({ ...data, job_preferences: newPreferences });
+        const newPreferences = job_preferences.filter((_: IJobPreference, i: number) => i !== index);
+        setJobPreferences(newPreferences);
     };
 
     const updateJobPreference = (index: number, field: string, value: string | number | undefined) => {
-        const newPreferences = [...data.job_preferences];
+        const newPreferences = [...job_preferences];
         newPreferences[index] = { ...newPreferences[index], [field]: value };
-        setData({ ...data, job_preferences: newPreferences });
+        setJobPreferences(newPreferences);
     };
 
     return (
@@ -35,12 +40,12 @@ const JobPreferences: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
                 <Form.Check
                     type="checkbox"
                     label="I am ready to work"
-                    checked={data.ready_to_work}
-                    onChange={(e) => setData({ ...data, ready_to_work: e.target.checked })}
+                    checked={ready_to_work}
+                    onChange={(e) => setReadyToWork(e.target.checked)}
                 />
             </Form.Group>
 
-            {data.job_preferences.map((pref: IJobPreference, index: number) => (
+            {job_preferences.map((pref: IJobPreference, index: number) => (
                 <div key={index} className="mb-4 p-3 border rounded position-relative">
                     <Button 
                         variant="link" 

@@ -1,10 +1,14 @@
 // ResumeSteps/Summary.tsx
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import { BuildJobSearhCVProps } from '../../../interfaces/userinfo';
 
 
-const Summary: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
+interface SummaryProps {
+    summary: string;
+    setSummary: (summary: string) => void;
+}
+
+const Summary: React.FC<SummaryProps> = ({ summary, setSummary }) => {
     return (
         <div className="bg-light p-4">
             <h4>Professional Summary</h4>
@@ -13,8 +17,8 @@ const Summary: React.FC<BuildJobSearhCVProps> = ({ data, setData }) => {
                 <Form.Control
                     as="textarea"
                     rows={5}
-                    value={data.summary} 
-                    onChange={(e) => setData({ ...data, summary: e.target.value })}
+                    value={summary} 
+                    onChange={(e) => setSummary(e.target.value )}
                     placeholder="Write a professional summary highlighting your key strengths and career objectives..."
                 />
             </Form.Group>

@@ -25,6 +25,25 @@ const getUser = async (req: Request, res: Response) => {
   }
 };
 
+// Get User by Email
+const getUserByEmail = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.query as { email: string };
+    const user = await User.findOne({ email }).select("_id");
+    if (user) {
+      res.status(200).json({ message: "User found", data: { user } });
+    } else {
+      res.status(400).json({ message: "User not found", data: {} });
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message, data: {} });
+    } else {
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
+    }
+  }
+};
+
 // Update user
 const updateUser = async (req: Request, res: Response) => {
   try {
@@ -972,6 +991,7 @@ const deleteQualification = async (req: Request, res: Response) => {
 
 export {
   getUser,
+  getUserByEmail,
   updateUser,
   deleteUser,
   createUserInfo,

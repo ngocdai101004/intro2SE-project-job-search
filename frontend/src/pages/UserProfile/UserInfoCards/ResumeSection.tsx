@@ -2,13 +2,12 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 
 interface ResumeSectionProps {
-    userID?: string;
+    userID?: string | null;
     resumes?: string[];
-    isOwnProfile?: boolean;
 }
 
-const ResumeSection: React.FC<ResumeSectionProps> = ({userID, resumes, isOwnProfile}) => {
-    const jobSearchCVUrl = isOwnProfile ? `/user/${userID}/profile/job-search-cv` : `/user/profile/job-search-cv`;
+const ResumeSection: React.FC<ResumeSectionProps> = ({userID, resumes}) => {
+    const jobSearchCVUrl = userID ? `/user/${userID}/profile/job-search-cv` : `/user/profile/job-search-cv`;
 
     return (
         <Card className="p-3 mb-3 border-0 shadow-sm" style={{ maxWidth: '95%', margin: '0 auto' }}>
