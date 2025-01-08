@@ -12,8 +12,9 @@ import { MyToastContainer } from "../../components/MyToastContainer.tsx";
 import MyHeader from "../../components/MyHeader.tsx";
 import { useNavigate } from "react-router-dom";
 import ICompany from "../../interfaces/company.ts";
+import AdminInfo from "./InfoCards/AdminInfo.tsx";
 
-type FormStep = "information" | "description" | "address" | "avatar";
+type FormStep = "information" | "description" | "address" | "avatar" | "admin";
 
 const companyInstance: ICompany = {
   company_name: "",
@@ -33,6 +34,7 @@ const companyInstance: ICompany = {
     country: "",
   },
   avatar: "",
+  admin_id: [],
 };
 
 const UserRegistrationForm: React.FC = () => {
@@ -56,7 +58,8 @@ const UserRegistrationForm: React.FC = () => {
         type: "success",
         isLoading: false,
         autoClose: 2000,
-        onClose: () => navigate("/company-list"),
+        onClose: () =>
+          navigate(`/my-company/${response.data.data.company._id}/job-list`),
       });
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
@@ -93,6 +96,9 @@ const UserRegistrationForm: React.FC = () => {
       case "address":
         setCurrentStep("avatar");
         break;
+      case "avatar":
+        setCurrentStep("admin");
+        break;
     }
   };
 
@@ -107,6 +113,9 @@ const UserRegistrationForm: React.FC = () => {
       case "avatar":
         setCurrentStep("address");
         break;
+      case "admin":
+        setCurrentStep("avatar");
+        break;
     }
   };
 
@@ -120,11 +129,13 @@ const UserRegistrationForm: React.FC = () => {
         return <AddressInfo data={formData} onChange={handleChange} />;
       case "avatar":
         return <AvatarUpload data={formData} onChange={handleChange} />;
+      case "admin":
+        return <AdminInfo data={formData} onChange={handleChange} />;
     }
   };
 
   const renderProgressBar = () => {
-    const steps = ["personal", "description", "address", "avatar"];
+    const steps = ["personal", "description", "address", "avatar", "admin"];
     const currentIndex = steps.indexOf(currentStep);
     const progress = ((currentIndex + 1) / steps.length) * 100;
 
@@ -152,6 +163,9 @@ const UserRegistrationForm: React.FC = () => {
           </span>
           <span className={currentStep === "avatar" ? "fw-bold" : ""}>
             Avatar
+          </span>
+          <span className={currentStep === "admin" ? "fw-bold" : ""}>
+            Admin
           </span>
         </div>
       </div>
@@ -186,7 +200,7 @@ const UserRegistrationForm: React.FC = () => {
               ) : (
                 <div></div>
               )}
-              {currentStep !== "avatar" ? (
+              {currentStep !== "admin" ? (
                 <Button variant="primary" onClick={nextStep}>
                   Next
                 </Button>
