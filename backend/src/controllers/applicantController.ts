@@ -105,3 +105,39 @@ export const updateApplicantFeedback = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateApplicantStatus = async (req: Request, res: Response) => {
+  try {
+    const { applicantId } = req.params; // Lấy ID ứng viên từ URL
+    const { status } = req.body; // Lấy trạng thái mới từ body
+
+    // Danh sách trạng thái hợp lệ
+    const validStatuses = ["applied", "reviewing", "rejected"];
+    if (!validStatuses.includes(status)) {
+      res.status(400).json({ message: "Invalid status" });
+    }
+
+    // Cập nhật trạng thái trong database
+    const updatedApplication = await ApplicationDB.findByIdAndUpdate(
+      applicantId,
+      { status },
+      { new: true } // Trả về dữ liệu sau khi cập nhật
+    );
+
+    // Kiểm tra nếu ứng viên không tồn tại
+    if (!updatedApplication) {
+      res.status(404).json({ message: "Applicant not found" });
+    }
+
+    // Phản hồi thành công
+    res.status(200).json({
+      message: "Status updated successfully",
+      data: updatedApplication,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to update status",
+      error: (error as any).message,
+    });
+  }
+};

@@ -111,6 +111,20 @@ const Candidates: React.FC = () => {
     setEditedFeedback(""); // Xóa feedback được chỉnh sửa
   };
 
+  const updateApplicantStatus = async (id: string, status: string) => {
+    try {
+      await axiosInstance.patch(`/applicant/${id}/status`, { status });
+
+      // Cập nhật trạng thái trong danh sách
+      const updatedCandidates = candidates.map((candidate) =>
+        candidate.id === id ? { ...candidate, status } : candidate
+      );
+      setCandidates(updatedCandidates);
+    } catch (error) {
+      console.error("Failed to update status:", error);
+    }
+  };
+
   return (
     <MainLayout>
       <Container fluid className="candidate-post-container">
@@ -154,7 +168,11 @@ const Candidates: React.FC = () => {
                               {candidate.candidateName}
                             </p>
                             <div className="candidate-state">
-                              Awaiting Review
+                              {candidate.status === "reviewing"
+                                ? "Awaiting Review"
+                                : candidate.status === "rejected"
+                                ? "Rejected"
+                                : "Applied"}
                             </div>
                             <p
                               className="location"
@@ -220,9 +238,36 @@ const Candidates: React.FC = () => {
                           </td>
                           <td>
                             <div className="candidate-intersted">
-                              <span className="icon">&#10003;</span>
-                              <span className="icon">?</span>
-                              <span className="icon">&#10007;</span>
+                              <span
+                                className="icon"
+                                onClick={() =>
+                                  updateApplicantStatus(candidate.id, "applied")
+                                }
+                              >
+                                &#10003;
+                              </span>
+                              <span
+                                className="icon"
+                                onClick={() =>
+                                  updateApplicantStatus(
+                                    candidate.id,
+                                    "reviewing"
+                                  )
+                                }
+                              >
+                                ?
+                              </span>
+                              <span
+                                className="icon"
+                                onClick={() =>
+                                  updateApplicantStatus(
+                                    candidate.id,
+                                    "rejected"
+                                  )
+                                }
+                              >
+                                &#10007;
+                              </span>
                             </div>
                           </td>
                         </tr>
