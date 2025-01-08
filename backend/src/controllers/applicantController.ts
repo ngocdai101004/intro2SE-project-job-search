@@ -3,9 +3,15 @@ import JobDB from "../models/jobModel";
 import ApplicationDB from "../models/applicationModel";
 import UserDB from "../models/userModel";
 
+// Lấy thông tin ứng viên với phân trang
 export const getApplicantInfos = async (req: Request, res: Response) => {
   try {
     const companyId = req.params.companyId;
+
+    // Lấy tham số phân trang từ query (page và limit)
+    const page = parseInt(req.query.page as string) || 1; // Mặc định trang 1
+    const limit = parseInt(req.query.limit as string) || 5; // Mặc định 5 ứng viên mỗi trang
+    const skip = (page - 1) * limit; // Tính toán số lượng bỏ qua
 
     // Lấy danh sách công việc thuộc công ty
     const jobs = await JobDB.find({ company_id: companyId });
@@ -16,10 +22,18 @@ export const getApplicantInfos = async (req: Request, res: Response) => {
       return acc;
     }, {} as Record<string, string>);
 
-    // Lấy danh sách ứng tuyển
+    // Lấy danh sách ứng tuyển có phân trang
     const applications = await ApplicationDB.find({
       job_id: { $in: jobs.map((job) => job._id) },
-    }).sort({ createdAt: -1 });
+    })
+      .sort({ createdAt: -1 }) // Sắp xếp theo ngày ứng tuyển mới nhất
+      .skip(skip)
+      .limit(limit);
+
+    // Lấy tổng số lượng ứng viên
+    const totalApplicants = await ApplicationDB.countDocuments({
+      job_id: { $in: jobs.map((job) => job._id) },
+    });
 
     // Lấy thông tin người dùng
     const userIds = applications.map((app) => app.user_id);
@@ -43,7 +57,13 @@ export const getApplicantInfos = async (req: Request, res: Response) => {
       status: app.status,
     }));
 
-    res.status(200).json(result);
+    // Trả về kết quả kèm phân trang
+    res.status(200).json({
+      candidates: result,
+      totalCandidates: totalApplicants,
+      currentPage: page,
+      totalPages: Math.ceil(totalApplicants / limit),
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error", error });
