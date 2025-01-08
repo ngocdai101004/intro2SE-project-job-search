@@ -10,14 +10,31 @@ interface Props {
 
 const AdminInfo: React.FC<Props> = ({ data, onChange }) => {
   const [adminInput, setAdminInput] = useState<string>("");
+  const [adminInfo, setAdminInfo] = useState<string[]>([]);
 
   const handleAddAdmin = async () => {
     if (adminInput) {
       try {
-        const response = await axiosInstance.get(`/users?email=${adminInput}`);
-        const data = await response.data;
+        const response = await axiosInstance.get(`/user?email=${adminInput}`);
+        const user = response.data.data.user;
 
-        const updatedLinks = [data.data.user_id, ...(data.admin_id || [])];
+        if (data.admin_id?.includes(user._id)) {
+          alert("User already added");
+          return;
+        }
+        if (user._id === data.owner_id) {
+          alert("User is the owner of the company");
+          return;
+        }
+
+        const updatedLinks = [user._id, ...(data.admin_id || [])];
+
+        setAdminInfo([
+          user.first_name + " " + user.last_name + " | " + user.email,
+          ...(adminInfo || []),
+        ]);
+        console.log("adminInfo", adminInfo);
+        console.log("updatedLinks", updatedLinks);
         onChange("admin_id", updatedLinks);
         setAdminInput(""); // Clear the input after adding
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,18 +70,18 @@ const AdminInfo: React.FC<Props> = ({ data, onChange }) => {
               Add
             </Button>
           </div>
-          <ul>
-            {data.description?.links?.map((link, index) => (
+          <ul className="mt-2" style={{ fontSize: "0.9rem" }}>
+            {data.admin_id?.map((admin, index) => (
               <li
                 key={index}
                 className="d-flex justify-content-between align-items-center"
               >
-                {link}
+                <span>{adminInfo[index]}</span>
                 <Button
                   className="m-2"
                   variant="outline-danger"
                   size="sm"
-                  onClick={() => handleDeleteLink(link)}
+                  onClick={() => handleDeleteLink(admin)}
                   style={{
                     backgroundColor: "white",
                     color: "red",
