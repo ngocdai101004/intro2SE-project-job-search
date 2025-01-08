@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { verifyUser } from "../middlewares/verifyUser";
 import {
+  getUserByEmail,
   getUser,
   updateUser,
   deleteUser,
@@ -42,6 +43,7 @@ import {
 
 const router = Router();
 
+router.get("/", getUserByEmail);
 router.get("/:userID/profile", getUser);
 router.get("/profile", verifyUser, getUser);
 router.patch("/profile", verifyUser, updateUser);
