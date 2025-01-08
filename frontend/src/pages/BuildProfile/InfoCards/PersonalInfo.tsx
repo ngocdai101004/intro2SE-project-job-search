@@ -1,25 +1,30 @@
 import React, { useState } from 'react';
 import { Form, Row, Col, Alert } from 'react-bootstrap';
-import { IUser } from '../../../interfaces/user';
 
 interface Props {
+    firstName?: string;
+    lastName?: string;
     gender?: "male" | "female";
     dateOfBirth?: Date;
     shortBio?: string;
-    onChange: (field: keyof IUser, value: string | Date) => void;
+    setFirstName: (firstName: string) => void;
+    setLastName: (lastName: string) => void;
+    setGender: (gender: 'male' | 'female') => void;
+    setDateOfBirth: (dateOfBirth: Date) => void;
+    setShortBio: (shortBio: string) => void;   
 }
 
-const PersonalInfo: React.FC<Props> = ({ gender, dateOfBirth, shortBio, onChange }) => {
+const PersonalInfo: React.FC<Props> = ({ firstName, lastName, gender, dateOfBirth, shortBio, setFirstName, setLastName, setGender, setDateOfBirth, setShortBio }) => {
     const [bioError, setBioError] = useState<string | null>(null);
     const [dateError, setDateError] = useState<string | null>(null);
 
     const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const bio = e.target.value;
-        if (bio.length > 100) {
-            setBioError('Bio cannot exceed 100 characters');
+        if (bio.length > 200) {
+            setBioError('Bio cannot exceed 200 characters');
         } else {
             setBioError(null);
-            onChange('short_bio', bio);
+            setShortBio(bio);
         }
     };
 
@@ -29,7 +34,7 @@ const PersonalInfo: React.FC<Props> = ({ gender, dateOfBirth, shortBio, onChange
             setDateError('Invalid date value');
         } else {
             setDateError(null);
-            onChange('date_of_birth', dateValue);
+            setDateOfBirth(dateValue);
         }
     };
 
@@ -39,10 +44,32 @@ const PersonalInfo: React.FC<Props> = ({ gender, dateOfBirth, shortBio, onChange
             <Row>
                 <Col md={6}>
                     <Form.Group className="mb-3">
+                        <Form.Label>First Name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                    </Form.Group>
+                </Col>
+                <Col md={6}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Last Name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                    </Form.Group>
+                </Col>
+            </Row>
+            <Row>
+                <Col md={6}>
+                    <Form.Group className="mb-3">
                         <Form.Label>Gender</Form.Label>
                         <Form.Select
                             value={gender}
-                            onChange={(e) => onChange('gender', e.target.value)}
+                            onChange={(e) => setGender(e.target.value as 'male' | 'female')}
                         >
                             <option value="male">Male</option>
                             <option value="female">Female</option>

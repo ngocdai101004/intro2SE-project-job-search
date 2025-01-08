@@ -8,8 +8,9 @@ import EducationSection from '../UserInfoCards/EducationSection';
 import SkillsSection from '../UserInfoCards/SkillsSection';
 import CertificationsSection from '../UserInfoCards/CertificationsSection';
 import IUserInfo from '../../../interfaces/userinfo';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axiosInstance from '../../../common/axiosInstance';
+import { EditingContext } from '../MainUserProfile/UserProfile';
 
 const JobSearchCVBody: React.FC<JobSearchCVProps> = ({ userID }) => {
    
@@ -35,7 +36,7 @@ const JobSearchCVBody: React.FC<JobSearchCVProps> = ({ userID }) => {
         }
       };
       fetchData();
-    }, [userID]);
+    }, [userID, useContext(EditingContext)]); 
 
   
     return (

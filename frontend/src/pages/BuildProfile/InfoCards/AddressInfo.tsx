@@ -5,10 +5,10 @@ import { IAddress } from '../../../interfaces/user';
 
 interface Props {
     address?: IAddress;
-    onChange: (address: Partial<IAddress>) => void;
+    setAddress: (address: IAddress) => void;
 }
 
-const AddressInfo: React.FC<Props> = ({ address, onChange }) => {
+const AddressInfo: React.FC<Props> = ({ address, setAddress }) => {
     return (
         <div>
             <h4>Address</h4>
@@ -19,7 +19,7 @@ const AddressInfo: React.FC<Props> = ({ address, onChange }) => {
                         <Form.Control
                             type="text"
                             value={address?.district}
-                            onChange={(e) => onChange({ district: e.target.value })}
+                            onChange={(e) => setAddress({ ...address, district: e.target.value || '', zip_code: address?.zip_code || '', city_state: address?.city_state || '', country: address?.country || '' })}
                         />
                     </Form.Group>
                 </Col>
@@ -29,7 +29,7 @@ const AddressInfo: React.FC<Props> = ({ address, onChange }) => {
                         <Form.Control
                             type="text"
                             value={address?.city_state}
-                            onChange={(e) => onChange({ city_state: e.target.value })}
+                            onChange={(e) => setAddress({ ...address, city_state: e.target.value || '', district: address?.district || '', zip_code: address?.zip_code || '', country: address?.country || '' })}
                         />
                     </Form.Group>
                 </Col>
@@ -41,7 +41,7 @@ const AddressInfo: React.FC<Props> = ({ address, onChange }) => {
                         <Form.Control
                             type="text"
                             value={address?.zip_code}
-                            onChange={(e) => onChange({ zip_code: e.target.value })}
+                            onChange={(e) => setAddress({ ...address, zip_code: e.target.value || '', district: address?.district || '', city_state: address?.city_state || '', country: address?.country || '' })}
                         />
                     </Form.Group>
                 </Col>
@@ -51,7 +51,7 @@ const AddressInfo: React.FC<Props> = ({ address, onChange }) => {
                         <Form.Control
                             type="text"
                             value={address?.country}
-                            onChange={(e) => onChange({ country: e.target.value })}
+                            onChange={(e) => setAddress({ ...address, country: e.target.value || '', district: address?.district || '', city_state: address?.city_state || '', zip_code: address?.zip_code || '' })}
                         />
                     </Form.Group>
                 </Col>

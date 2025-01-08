@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css'; // Import style cho react-phone-input-2
-import { IUser } from '../../../interfaces/user';
 
 interface Props {
     phone?: string;
-    onChange: (field: keyof IUser, value: string) => void;
+    setPhone: (phone: string) => void;
 }
 
-const ContactInfo: React.FC<Props> = ({ phone, onChange }) => {
+const ContactInfo: React.FC<Props> = ({ phone, setPhone }) => {
     const [error, setError] = useState<string | null>(null);
 
     const handlePhoneChange = (value: string) => {
@@ -20,7 +19,7 @@ const ContactInfo: React.FC<Props> = ({ phone, onChange }) => {
             setError(null);
         }
 
-        onChange('phone', value);
+        setPhone(value);
     };
 
     return (

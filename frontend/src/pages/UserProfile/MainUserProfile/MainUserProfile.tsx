@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import axiosInstance from '../../../common/axiosInstance';
 import { ICompanyReviewer, UserProfileProps } from '../../../interfaces/userinfo';
@@ -12,12 +12,12 @@ import IUserInfo, {
     // IJobPreference,
     // IQualification
 } from "../../../interfaces/userinfo.ts";
+import { EditingContext } from './UserProfile.tsx';
 
 
 const MainUserProfile: React.FC<UserProfileProps> = ({ 
         userID
 }) => {
-    console.log("User ID in MainUserProfile:", userID);
     const [userInfo, setUserInfo] = useState<IUserInfo>({user_id: "", ready_to_work: false});
     useEffect(() => {
       const fetchData = async () => {
@@ -39,7 +39,7 @@ const MainUserProfile: React.FC<UserProfileProps> = ({
         }
       };
       fetchData();
-    }, [userID]);
+    }, [userID, useContext(EditingContext)]);
 
 
 

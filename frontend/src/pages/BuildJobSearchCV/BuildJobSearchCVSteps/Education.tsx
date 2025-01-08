@@ -9,7 +9,7 @@ interface EducationProps {
 
 const Education: React.FC<EducationProps> = ({ education, setEducation }) => {
     const [error, setError] = useState<string | null>(null);
-
+    console.log("Education", education);
     const addEducation = () => {
         setEducation([
             ...education,

@@ -7,7 +7,8 @@ import UserHeader from "../UserHeader/UserHeader";
 import UserMainProfile from "./MainUserProfile";
 import { useNavigate } from 'react-router-dom';
 import {BsPencilSquare} from "react-icons/bs";
-import {Button} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
+import ResumeForm from "../../BuildJobSearchCV/ResumeForm";
 export const EditingContext = createContext(false);
 
 
@@ -21,6 +22,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ userID, isOwer}) => {
   const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
   const isOwnProfile = isOwer || false;
   const [isEditing, setIsEditing] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  
   
 
   useEffect(() => {
@@ -49,7 +52,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ userID, isOwer}) => {
       </EditingContext.Provider>
       {isOwnProfile && (
                 <Button
-                    onClick={() => setIsEditing(!isEditing)}
+                    onClick={() => {
+                        setShowModal(true);
+                        setIsEditing(!isEditing);
+                    }}
                     className="position-fixed"
                     style={{
                         bottom: "1rem",
@@ -65,8 +71,21 @@ const UserProfile: React.FC<UserProfileProps> = ({ userID, isOwer}) => {
                     variant="primary"
                 >
                   <BsPencilSquare size={20}/>
+                  
                 </Button>
             )}
+
+            <Modal show={showModal} onHide={() => {
+              setShowModal(false)
+              setIsEditing(false)
+            }} centered size="xl" style={{ height: "80%", marginTop: "5%" }}>
+                <Modal.Header closeButton style={{ backgroundColor: "#f8f9fa", position: "sticky", top: "0", zIndex: 1 }}>
+                    <Modal.Title>Edit Your JobSearch CV</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <ResumeForm isFirstTime={false}/>
+                </Modal.Body>
+            </Modal>
     </div>
   );
 }

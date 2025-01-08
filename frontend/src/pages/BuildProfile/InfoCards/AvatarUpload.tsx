@@ -4,10 +4,10 @@ import { Form, Button } from 'react-bootstrap';
 
 interface Props {
     avatar?: string;
-    onAvatarChange: (value: string) => void;
+    setAvatar: (value: string) => void;
 }
 
-const AvatarUpload: React.FC<Props> = ({ avatar, onAvatarChange }) => {
+const AvatarUpload: React.FC<Props> = ({ avatar, setAvatar }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,14 +15,14 @@ const AvatarUpload: React.FC<Props> = ({ avatar, onAvatarChange }) => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                onAvatarChange(reader.result as string);
+                setAvatar(reader.result as string);
             };
             reader.readAsDataURL(file);
         }
     };
 
     const handleRemoveAvatar = () => {
-        onAvatarChange('');
+        setAvatar('');
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
