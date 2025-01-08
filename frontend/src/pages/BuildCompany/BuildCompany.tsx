@@ -13,34 +13,17 @@ import MyHeader from "../../components/MyHeader.tsx";
 import { useNavigate } from "react-router-dom";
 import ICompany from "../../interfaces/company.ts";
 import AdminInfo from "./InfoCards/AdminInfo.tsx";
+import IUser from "../../interfaces/user.ts";
 
 type FormStep = "information" | "description" | "address" | "avatar" | "admin";
 
-const companyInstance: ICompany = {
-  company_name: "",
-  short_description: "",
-  description: {
-    company_size: [],
-    industry: "",
-    headquarters: "",
-    links: [],
-    founded: new Date(),
-    specialities: [],
-  },
-  address: {
-    district: "",
-    city_state: "",
-    zip_code: "",
-    country: "",
-  },
-  avatar: "",
-  admin_id: [],
-};
+const companyInstance: ICompany = {};
 
 const UserRegistrationForm: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<FormStep>("information");
   const [formData, setFormData] = useState<ICompany>(companyInstance);
+  const [adminInfos, setAdminInfos] = useState<IUser[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     console.log("Formatdata", formData);
@@ -54,7 +37,7 @@ const UserRegistrationForm: React.FC = () => {
       );
       console.log(response.data);
       toast.update(toastId, {
-        render: "Profile updated successfully",
+        render: "Company updated successfully",
         type: "success",
         isLoading: false,
         autoClose: 2000,
@@ -130,7 +113,14 @@ const UserRegistrationForm: React.FC = () => {
       case "avatar":
         return <AvatarUpload data={formData} onChange={handleChange} />;
       case "admin":
-        return <AdminInfo data={formData} onChange={handleChange} />;
+        return (
+          <AdminInfo
+            data={formData}
+            onChange={handleChange}
+            adminInfos={adminInfos}
+            setAdminInfos={setAdminInfos}
+          />
+        );
     }
   };
 
@@ -177,7 +167,7 @@ const UserRegistrationForm: React.FC = () => {
       <div className="d-flex flex-column min-vh-100">
         <MyHeader mydefaultActiveKey="/home" />
         <Container className="center mt-5" style={{ width: "60%" }}>
-          <h2 className="text-center mb-4">Build Your Profile</h2>
+          <h2 className="text-center mb-4">Build Your Company</h2>
           {renderProgressBar()}
           <Form>
             <div

@@ -109,14 +109,14 @@ export default function MyHeader({
                       href="/view-company"
                       onClick={(e) => e.currentTarget.classList.add("active")}
                     >
-                      View companies
+                      View my companies
                     </a>
                     <a
                       className="dropdown-item"
                       href="/build-company"
                       onClick={(e) => e.currentTarget.classList.add("active")}
                     >
-                      Creat new company
+                      Create new company
                     </a>
                   </>
                 </div>

@@ -2,15 +2,22 @@ import { Form, Row, Button } from "react-bootstrap";
 import { useState } from "react";
 import ICompany from "../../../interfaces/company";
 import axiosInstance from "../../../common/axiosInstance";
+import IUser from "../../../interfaces/user";
 
 interface Props {
   data: ICompany;
   onChange: (field: keyof ICompany, value: unknown) => void;
+  adminInfos: IUser[];
+  setAdminInfos: React.Dispatch<React.SetStateAction<IUser[]>>;
 }
 
-const AdminInfo: React.FC<Props> = ({ data, onChange }) => {
+const AdminInfo: React.FC<Props> = ({
+  data,
+  onChange,
+  adminInfos,
+  setAdminInfos,
+}) => {
   const [adminInput, setAdminInput] = useState<string>("");
-  const [adminInfo, setAdminInfo] = useState<string[]>([]);
 
   const handleAddAdmin = async () => {
     if (adminInput) {
@@ -29,11 +36,8 @@ const AdminInfo: React.FC<Props> = ({ data, onChange }) => {
 
         const updatedLinks = [user._id, ...(data.admin_id || [])];
 
-        setAdminInfo([
-          user.first_name + " " + user.last_name + " | " + user.email,
-          ...(adminInfo || []),
-        ]);
-        console.log("adminInfo", adminInfo);
+        setAdminInfos([user, ...(adminInfos || [])]);
+        console.log("adminInfo", adminInfos);
         console.log("updatedLinks", updatedLinks);
         onChange("admin_id", updatedLinks);
         setAdminInput(""); // Clear the input after adding
@@ -51,13 +55,22 @@ const AdminInfo: React.FC<Props> = ({ data, onChange }) => {
     onChange("admin_id", updatedLinks);
   };
 
+  function handleUserItem(index: number): import("react").ReactNode {
+    return (
+      adminInfos[index].first_name +
+      " " +
+      adminInfos[index].last_name +
+      " | " +
+      adminInfos[index].email
+    );
+  }
+
   return (
     <div>
       <h4>Admin list</h4>
 
       <Row>
         <Form.Group className="mb-3" controlId="formLinks">
-          <Form.Label>Admin</Form.Label>
           <div className="d-flex">
             <Form.Control
               type="text"
@@ -76,7 +89,7 @@ const AdminInfo: React.FC<Props> = ({ data, onChange }) => {
                 key={index}
                 className="d-flex justify-content-between align-items-center"
               >
-                <span>{adminInfo[index]}</span>
+                <span>{handleUserItem(index)}</span>
                 <Button
                   className="m-2"
                   variant="outline-danger"

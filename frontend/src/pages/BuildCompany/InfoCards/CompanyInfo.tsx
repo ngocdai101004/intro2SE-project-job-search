@@ -15,7 +15,7 @@ const PersonalInfo: React.FC<Props> = ({ data, onChange }) => {
           <Form.Label>Company name</Form.Label>
           <Form.Control
             type="email"
-            placeholder={data.company_name}
+            placeholder={data.company_name || "Enter company name"}
             onChange={(e) => {
               onChange("company_name", e.target.value);
             }}
@@ -27,7 +27,7 @@ const PersonalInfo: React.FC<Props> = ({ data, onChange }) => {
           <Form.Label>Short description</Form.Label>
           <Form.Control
             type="email"
-            placeholder={data.short_description}
+            placeholder={data.short_description || "Enter short description"}
             onChange={(e) => {
               onChange("short_description", e.target.value);
             }}
