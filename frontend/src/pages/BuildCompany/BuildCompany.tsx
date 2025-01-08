@@ -12,33 +12,18 @@ import { MyToastContainer } from "../../components/MyToastContainer.tsx";
 import MyHeader from "../../components/MyHeader.tsx";
 import { useNavigate } from "react-router-dom";
 import ICompany from "../../interfaces/company.ts";
+import AdminInfo from "./InfoCards/AdminInfo.tsx";
+import IUser from "../../interfaces/user.ts";
 
-type FormStep = "information" | "description" | "address" | "avatar";
+type FormStep = "information" | "description" | "address" | "avatar" | "admin";
 
-const companyInstance: ICompany = {
-  company_name: "",
-  short_description: "",
-  description: {
-    company_size: [],
-    industry: "",
-    headquarters: "",
-    links: [],
-    founded: new Date(),
-    specialities: [],
-  },
-  address: {
-    district: "",
-    city_state: "",
-    zip_code: "",
-    country: "",
-  },
-  avatar: "",
-};
+const companyInstance: ICompany = {};
 
 const UserRegistrationForm: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<FormStep>("information");
   const [formData, setFormData] = useState<ICompany>(companyInstance);
+  const [adminInfos, setAdminInfos] = useState<IUser[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     console.log("Formatdata", formData);
@@ -52,12 +37,12 @@ const UserRegistrationForm: React.FC = () => {
       );
       console.log(response.data);
       toast.update(toastId, {
-        render: "Profile updated successfully",
+        render: "Company updated successfully",
         type: "success",
         isLoading: false,
         autoClose: 2000,
         onClose: () =>
-          navigate("/my-company/${response.data.data.company._id}/job-list"),
+          navigate(`/my-company/${response.data.data.company._id}/job-list`),
       });
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
@@ -94,6 +79,9 @@ const UserRegistrationForm: React.FC = () => {
       case "address":
         setCurrentStep("avatar");
         break;
+      case "avatar":
+        setCurrentStep("admin");
+        break;
     }
   };
 
@@ -108,6 +96,9 @@ const UserRegistrationForm: React.FC = () => {
       case "avatar":
         setCurrentStep("address");
         break;
+      case "admin":
+        setCurrentStep("avatar");
+        break;
     }
   };
 
@@ -121,11 +112,20 @@ const UserRegistrationForm: React.FC = () => {
         return <AddressInfo data={formData} onChange={handleChange} />;
       case "avatar":
         return <AvatarUpload data={formData} onChange={handleChange} />;
+      case "admin":
+        return (
+          <AdminInfo
+            data={formData}
+            onChange={handleChange}
+            adminInfos={adminInfos}
+            setAdminInfos={setAdminInfos}
+          />
+        );
     }
   };
 
   const renderProgressBar = () => {
-    const steps = ["personal", "description", "address", "avatar"];
+    const steps = ["personal", "description", "address", "avatar", "admin"];
     const currentIndex = steps.indexOf(currentStep);
     const progress = ((currentIndex + 1) / steps.length) * 100;
 
@@ -154,6 +154,9 @@ const UserRegistrationForm: React.FC = () => {
           <span className={currentStep === "avatar" ? "fw-bold" : ""}>
             Avatar
           </span>
+          <span className={currentStep === "admin" ? "fw-bold" : ""}>
+            Admin
+          </span>
         </div>
       </div>
     );
@@ -164,7 +167,7 @@ const UserRegistrationForm: React.FC = () => {
       <div className="d-flex flex-column min-vh-100">
         <MyHeader mydefaultActiveKey="/home" />
         <Container className="center mt-5" style={{ width: "60%" }}>
-          <h2 className="text-center mb-4">Build Your Profile</h2>
+          <h2 className="text-center mb-4">Build Your Company</h2>
           {renderProgressBar()}
           <Form>
             <div
@@ -187,7 +190,7 @@ const UserRegistrationForm: React.FC = () => {
               ) : (
                 <div></div>
               )}
-              {currentStep !== "avatar" ? (
+              {currentStep !== "admin" ? (
                 <Button variant="primary" onClick={nextStep}>
                   Next
                 </Button>
