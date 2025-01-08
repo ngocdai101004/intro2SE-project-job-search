@@ -56,7 +56,8 @@ const UserRegistrationForm: React.FC = () => {
         type: "success",
         isLoading: false,
         autoClose: 2000,
-        onClose: () => navigate("/company-list"),
+        onClose: () =>
+          navigate("/my-company/${response.data.data.company._id}/job-list"),
       });
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {

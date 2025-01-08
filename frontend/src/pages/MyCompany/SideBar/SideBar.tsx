@@ -32,14 +32,20 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   );
 };
 
-const SideBar: React.FC = () => {
+interface SideBarProps {
+  company_id: string;
+}
+
+const SideBar: React.FC<SideBarProps> = ({ company_id }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   // Xác định mục active dựa trên pathname
   const getActiveItem = () => {
-    if (location.pathname === "/my-company/job-list") return "Jobs";
-    if (location.pathname === "/my-company/candidates") return "Candidates";
+    if (location.pathname === `/my-company/${company_id}/job-list`)
+      return "Jobs";
+    if (location.pathname === `/my-company/${company_id}/candidates`)
+      return "Candidates";
     return "Create New"; // Mặc định là Create New cho các đường dẫn khác
   };
 
@@ -48,19 +54,19 @@ const SideBar: React.FC = () => {
       label: "Create New",
       showIcon: true,
       icon: <FaPlus />,
-      link: "/my-company/create-job-post",
+      link: `/my-company/${company_id}/create-job-post`,
     },
     {
       label: "Jobs",
       showIcon: true,
       icon: <FaBriefcase />,
-      link: "/my-company/job-list",
+      link: `/my-company/${company_id}/job-list`,
     },
     {
       label: "Candidates",
       showIcon: true,
       icon: <FaUser />,
-      link: "/my-company/candidates",
+      link: `/my-company/${company_id}/candidates`,
     },
   ];
 

@@ -3,6 +3,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import axiosInstance from "../../../common/axiosInstance";
 import "./Candidates.css";
+import { useParams } from "react-router-dom";
 
 interface Candidate {
   id: string;
@@ -20,6 +21,7 @@ interface Pagination {
 }
 
 const Candidates: React.FC = () => {
+  const { company_id } = useParams<{ company_id: string }>();
   const [candidates, setCandidates] = useState<Candidate[]>([]); // State lưu danh sách ứng viên
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [error, setError] = useState<string>(""); // Error state
@@ -39,11 +41,9 @@ const Candidates: React.FC = () => {
   const fetchCandidates = async (page: number = 1) => {
     setLoading(true);
     try {
-      const companyId = "6776acea66277d8c90632d9f"; // ID công ty
-
       // Truy vấn dữ liệu với tham số phân trang
       const response = await axiosInstance.get(
-        `/applicant/${companyId}?page=${page}&limit=2` // Giới hạn 5 ứng viên mỗi trang
+        `/applicant/${company_id}?page=${page}&limit=2` // Giới hạn 5 ứng viên mỗi trang
       );
 
       // Nhận dữ liệu trả về
@@ -126,7 +126,7 @@ const Candidates: React.FC = () => {
   };
 
   return (
-    <MainLayout>
+    <MainLayout company_id={company_id!}>
       <Container fluid className="candidate-post-container">
         <Row>
           <Col style={{ paddingLeft: "0px", paddingRight: "0px" }}>
@@ -147,9 +147,7 @@ const Candidates: React.FC = () => {
                 >
                   <thead>
                     <tr>
-                      <th>
-                        <input type="checkbox" />
-                      </th>
+                      <th>{/* <input type="checkbox" /> */}</th>
                       <th>Candidates</th>
                       <th>Job applied to</th>
                       <th style={{ width: "40%" }}>Feedback</th>

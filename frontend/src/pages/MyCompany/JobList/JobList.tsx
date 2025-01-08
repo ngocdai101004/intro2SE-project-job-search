@@ -4,6 +4,7 @@ import MainLayout from "../MainLayout/MainLayout";
 import axiosInstance from "../../../common/axiosInstance";
 import "./JobList.css";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 interface Job {
   _id: string;
@@ -24,6 +25,7 @@ interface Pagination {
 }
 
 const JobList: React.FC = () => {
+  const { company_id } = useParams<{ company_id: string }>();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
@@ -72,9 +74,8 @@ const JobList: React.FC = () => {
       }
 
       // Fetch dữ liệu từ database
-      const companyId = "6776acea66277d8c90632d9f";
       const response = await axiosInstance.get(
-        `/job/company/${companyId}?page=${page}&limit=${limit}`
+        `/job/company/${company_id}?page=${page}&limit=${limit}`
       );
 
       const {
@@ -161,7 +162,7 @@ const JobList: React.FC = () => {
   };
 
   return (
-    <MainLayout>
+    <MainLayout company_id={company_id!}>
       <Container fluid className="job-post-container">
         <Row>
           <Col style={{ paddingLeft: "0px", paddingRight: "0px" }}>
@@ -190,7 +191,7 @@ const JobList: React.FC = () => {
                   <thead>
                     <tr>
                       <th style={{ width: "5%" }}>
-                        <input type="checkbox" />
+                        {/* <input type="checkbox" /> */}
                       </th>
                       <th style={{ width: "20%" }}>Job title</th>
                       <th style={{ width: "35%" }}>Candidates</th>
@@ -199,91 +200,99 @@ const JobList: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {jobs.map((job) => (
-                      <tr key={job._id}>
-                        <td>
-                          <input type="checkbox" />
-                        </td>
-                        <td>
-                          <span
-                            className="job-title"
-                            style={{
-                              fontWeight: "bold",
-                              textDecoration: "underline",
-                            }}
-                          >
-                            {job.title}
-                          </span>
-                          <p
-                            className="location"
-                            style={{ fontSize: "12px", opacity: 0.7 }}
-                          >
-                            Ho Chi Minh City
-                          </p>
-                        </td>
-                        <td>
-                          {incompleteJobs[job._id] ? (
-                            <div className="candidates-incomplete">
-                              <i
-                                className="bi bi-info-circle-fill"
-                                style={{ color: "#D9534F", fontSize: "20px" }}
-                              ></i>
-                              <div style={{ flexGrow: 1 }}>
-                                <p
-                                  style={{
-                                    fontWeight: "bold",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Your job posting is incomplete.
-                                </p>
-                                <button
-                                  className="complete-btn btn btn-primary"
-                                  onClick={handleCompleteJob}
-                                >
-                                  Finish job posting
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="candidates-complete">
-                              <div className="candidates-applicants">
-                                <div className="icon-number">
-                                  <i className="bi bi-person"></i>
-                                  <span>{job.applicantsCount}</span>
+                    {jobs.length > 0 ? (
+                      jobs.map((job) => (
+                        <tr key={job._id}>
+                          <td>
+                            <input type="checkbox" />
+                          </td>
+                          <td>
+                            <span
+                              className="job-title"
+                              style={{
+                                fontWeight: "bold",
+                                textDecoration: "underline",
+                              }}
+                            >
+                              {job.title}
+                            </span>
+                            <p
+                              className="location"
+                              style={{ fontSize: "12px", opacity: 0.7 }}
+                            >
+                              Ho Chi Minh City
+                            </p>
+                          </td>
+                          <td>
+                            {incompleteJobs[job._id] ? (
+                              <div className="candidates-incomplete">
+                                <i
+                                  className="bi bi-info-circle-fill"
+                                  style={{ color: "#D9534F", fontSize: "20px" }}
+                                ></i>
+                                <div style={{ flexGrow: 1 }}>
+                                  <p
+                                    style={{
+                                      fontWeight: "bold",
+                                      marginBottom: "10px",
+                                    }}
+                                  >
+                                    Your job posting is incomplete.
+                                  </p>
+                                  <button
+                                    className="complete-btn btn btn-primary"
+                                    onClick={handleCompleteJob}
+                                  >
+                                    Finish job posting
+                                  </button>
                                 </div>
-                                <p>Applicants</p>
                               </div>
-                              <div className="candidates-awaiting">
-                                <div className="icon-number">
-                                  <i className="bi bi-hourglass-split"></i>
-                                  <span style={{ right: "-7px" }}>
-                                    {job.awaitingsCount}
-                                  </span>
+                            ) : (
+                              <div className="candidates-complete">
+                                <div className="candidates-applicants">
+                                  <div className="icon-number">
+                                    <i className="bi bi-person"></i>
+                                    <span>{job.applicantsCount}</span>
+                                  </div>
+                                  <p>Applicants</p>
                                 </div>
-                                <p>Awaitings</p>
+                                <div className="candidates-awaiting">
+                                  <div className="icon-number">
+                                    <i className="bi bi-hourglass-split"></i>
+                                    <span style={{ right: "-7px" }}>
+                                      {job.awaitingsCount}
+                                    </span>
+                                  </div>
+                                  <p>Awaitings</p>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </td>
-                        <td>
-                          <p>{job.createdAt}</p>
-                        </td>
-                        <td>
-                          <select
-                            value={jobStatus[job._id] || job.status}
-                            onChange={(e) =>
-                              handleStatusChange(job._id, e.target.value)
-                            }
-                            style={{ padding: "5px", width: "100%" }}
-                          >
-                            <option value="closed">Closed</option>
-                            <option value="draft">Paused</option>
-                            <option value="open">Open</option>
-                          </select>
+                            )}
+                          </td>
+                          <td>
+                            <p>{job.createdAt}</p>
+                          </td>
+                          <td>
+                            <select
+                              value={jobStatus[job._id] || job.status}
+                              onChange={(e) =>
+                                handleStatusChange(job._id, e.target.value)
+                              }
+                              style={{ padding: "5px", width: "100%" }}
+                            >
+                              <option value="closed">Closed</option>
+                              <option value="draft">Paused</option>
+                              <option value="open">Open</option>
+                            </select>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={6} style={{ textAlign: "center" }}>
+                          No jobs found.
                         </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               )}
