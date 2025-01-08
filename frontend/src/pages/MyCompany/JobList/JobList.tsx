@@ -13,6 +13,8 @@ interface Job {
   number_of_peoples: number;
   deadline: string;
   createdAt: string;
+  applicantsCount: number;
+  awaitingCount: number;
 }
 
 interface Pagination {
@@ -60,6 +62,8 @@ const JobList: React.FC = () => {
             number_of_peoples: savedData.number_of_peoples || 0,
             deadline: savedData.deadline || "",
             createdAt: new Date().toISOString(),
+            applicantsCount: 0,
+            awaitingCount: 0,
           };
           fetchedJobs.push(localJob);
           setIncompleteJobs({ [localJob._id]: true });
@@ -227,14 +231,16 @@ const JobList: React.FC = () => {
                               <div className="candidates-applicants">
                                 <div className="icon-number">
                                   <i className="bi bi-person"></i>
-                                  <span>1</span>
+                                  <span>{job.applicantsCount}</span>
                                 </div>
                                 <p>Applicants</p>
                               </div>
                               <div className="candidates-awaiting">
                                 <div className="icon-number">
                                   <i className="bi bi-hourglass-split"></i>
-                                  <span style={{ right: "-7px" }}>0</span>
+                                  <span style={{ right: "-7px" }}>
+                                    {job.awaitingCount}
+                                  </span>
                                 </div>
                                 <p>Awaiting</p>
                               </div>
