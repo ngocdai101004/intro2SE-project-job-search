@@ -22,7 +22,10 @@ import CompanyList from "./pages/Company/CompanyList.tsx";
 import Candidates from "./pages/MyCompany/Candidates/Candidates.tsx";
 import AddJobDescription from "./pages/MyCompany/AddJobDescription/AddJobDescription.tsx";
 import BuildProfile from "./pages/BuildProfile/BuildProfile.tsx";
+import ChatPage from "./pages/Chat/Chat.tsx";
+
 import ResumeBuilder from "./pages/BuildJobSearchCV/ResumeBuilder.tsx";
+import BuildCompany from "./pages/BuildCompany/BuildCompany.tsx";
 const router = createBrowserRouter([
   {
     path: "/signin",
@@ -55,52 +58,85 @@ const router = createBrowserRouter([
     path: "/company/:company_id/:active_key",
     element: <Company />,
   },
-
   {
-    path: "/my-company/create-job-post",
+    path: "/my-company/:company_id/create-job-post",
     element: <CreateJobPost />,
   },
   {
-    path: "/my-company/add-job-basics",
+    path: "/my-company/:company_id/add-job-basics",
     element: <AddJobBasics />,
   },
   {
-    path: "/my-company/add-job-details",
+    path: "/my-company/:company_id/add-job-details",
     element: <AddJobDetails />,
   },
   {
-    path: "/my-company/add-pays-and-benefits",
+    path: "/my-company/:company_id/add-pays-and-benefits",
     element: <AddPaysAndBenefits />,
   },
   {
-    path: "/my-company/add-job-description",
+    path: "/my-company/:company_id/add-job-description",
     element: <AddJobDescription />,
   },
   {
-    path: "/my-company/describe-job",
+    path: "/my-company/:company_id/describe-job",
     element: <DescribeJob />,
   },
   {
-    path: "/my-company/preview-job",
+    path: "/my-company/:company_id/preview-job",
     element: <PreviewJob />,
   },
   {
-    path: "/my-company/job-list",
+    path: "/my-company/:company_id/job-list",
     element: <JobList />,
   },
   {
-    path: "/my-company/candidates",
+    path: "/my-company/:company_id/candidates",
     element: <Candidates />,
   },
   {
     path: "user/build-profile",
     element: <BuildProfile />,
-    
   },
   {
     path: "/user/build-job-search-cv",
     element: <ResumeBuilder />,
-
+  },
+  {
+    path: "/build-company",
+    element: <BuildCompany />,
+  },
+  {
+    path: "/user/:userID/profile",
+    element: <GuestUserProfile />,
+  },
+  {
+    path: "/user/:userID/profile/snapshot",
+    element: <GuestUserProfile />,
+  },
+  {
+    path: "/user/:userID/profile/job-search-cv",
+    element: <GuestJobSearchCV />,
+  },
+  {
+    path: "/user/profile/job-search-cv",
+    element: <OwnJobSearchCV />,
+  },
+  {
+    path: "/user/profile",
+    element: <OwnUserProfile />,
+  },
+  {
+    path: "/user/profile/snapshot",
+    element: <OwnUserProfile />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
+  },
+  {
+    path: "/",
+    element: <Home />,
   },
   {
     path: "/user/:userID/profile",
@@ -141,6 +177,10 @@ const router = createBrowserRouter([
       {
         path: "/home",
         element: <Home />,
+      },
+      {
+        path: "/chat",
+        element: <ChatPage />,
       },
     ],
   },

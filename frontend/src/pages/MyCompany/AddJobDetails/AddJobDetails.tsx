@@ -3,9 +3,11 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
 import "./AddJobDetails.css";
+import { useParams } from "react-router-dom";
 
 const AddJobDetails: React.FC = () => {
   const navigate = useNavigate();
+  const { company_id } = useParams<{ company_id: string }>();
 
   // State để lưu dữ liệu từ form
   const [jobTypes, setJobTypes] = useState<string[]>([]);
@@ -45,13 +47,16 @@ const AddJobDetails: React.FC = () => {
       JSON.stringify({ ...existingData, ...currentData })
     );
 
-    localStorage.setItem("currentPage", "/my-company/add-pays-and-benefits");
+    localStorage.setItem(
+      "currentPage",
+      `/my-company/${company_id}/add-pays-and-benefits`
+    );
     // Chuyển đến bước tiếp theo
-    navigate("/my-company/add-pays-and-benefits");
+    navigate(`/my-company/${company_id}/add-pays-and-benefits`);
   };
 
   return (
-    <MainLayout>
+    <MainLayout company_id={company_id!}>
       <Container fluid className="job-post-container">
         <Row>
           <Col>

@@ -8,6 +8,7 @@ import Reviews from "./Body/Reviews";
 import axiosInstance from "../../common/axiosInstance";
 import ICompany from "../../interfaces/interfaces";
 import { Spinner, Alert } from "react-bootstrap";
+import { MyToastContainer } from "../../components/MyToastContainer";
 
 const QA = () => (
   <div className="content-section bg-lightyellow">Q&A Content</div>
@@ -86,7 +87,8 @@ function Company() {
         setMyState={setMyActiveKey}
         companyData={companyData}
       />
-      <div className="">{renderContent()}</div>
+      <div className="flex-grow-1">{renderContent()}</div>
+      <MyToastContainer />
     </div>
   );
 }

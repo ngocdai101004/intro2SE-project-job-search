@@ -4,9 +4,11 @@ import MainLayout from "../MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../common/axiosInstance";
 import "./DescribeJob.css";
+import { useParams } from "react-router-dom";
 
 const DescribeJob: React.FC = () => {
   const navigate = useNavigate();
+  const { company_id } = useParams<{ company_id: string }>();
 
   // State để lưu dữ liệu hiển thị
   const [description, setDescription] = useState<string>(""); // Mô tả công việc
@@ -36,7 +38,7 @@ const DescribeJob: React.FC = () => {
 
     // Xử lý dữ liệu trước khi gửi lên backend
     const formattedData = {
-      company_id: "6776acea66277d8c90632d9f", // Thay bằng ID thực tế
+      company_id: company_id, // Thay bằng ID thực tế
       status: "open",
       title: jobData.title || "Untitled Job",
       number_of_peoples: jobData.number_of_peoples || 1,
@@ -65,17 +67,17 @@ const DescribeJob: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post("/job/create", formattedData);
+      await axiosInstance.post("/job/create", formattedData);
 
       // Xóa dữ liệu trong localStorage
       localStorage.removeItem("jobPostData");
 
       // Chuyển đến trang danh sách công việc
-      navigate("/my-company/job-list");
+      navigate(`/my-company/${company_id}/job-list`);
     } catch (error: any) {
       console.error("Error creating job:", error);
       alert(
-        error?.response?.data?.message ||
+        error.response?.data?.message ||
           "Failed to create job. Please try again."
       );
     } finally {
@@ -88,7 +90,7 @@ const DescribeJob: React.FC = () => {
   };
 
   return (
-    <MainLayout>
+    <MainLayout company_id={company_id!}>
       <Container fluid className="job-post-container">
         <Row>
           <Col>

@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const CreateJobPost: React.FC = () => {
   const navigate = useNavigate();
+  const { company_id } = useParams<{ company_id: string }>();
 
   const [selectedOption, setSelectedOption] = useState<string>("new");
 
@@ -18,7 +20,7 @@ const CreateJobPost: React.FC = () => {
 
     if (!savedPage || Object.keys(savedData).length === 0) {
       // Không có dữ liệu, quay về bước đầu
-      navigate("/my-company/add-job-basics");
+      navigate(`/my-company/${company_id}/add-job-basics`);
     } else {
       navigate(savedPage);
     }
@@ -27,12 +29,12 @@ const CreateJobPost: React.FC = () => {
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
     if (!savedData.title) {
-      navigate("/my-company/create-job-post");
+      navigate(`/my-company/${company_id}/create-job-post`);
     }
   }, []);
 
   return (
-    <MainLayout>
+    <MainLayout company_id={company_id!}>
       {" "}
       {/* Sử dụng layout chung */}
       <Container fluid className="job-post-container">

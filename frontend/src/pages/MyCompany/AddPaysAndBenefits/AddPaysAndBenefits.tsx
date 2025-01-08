@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const AddPaysAndBenefits: React.FC = () => {
   const navigate = useNavigate();
+  const { company_id } = useParams<{ company_id: string }>();
 
   // State để lưu dữ liệu từ form
   const [payType, setPayType] = useState("Range");
@@ -51,18 +53,21 @@ const AddPaysAndBenefits: React.FC = () => {
       JSON.stringify({ ...existingData, ...currentData })
     );
 
-    localStorage.setItem("currentPage", "/my-company/add-job-description");
+    localStorage.setItem(
+      "currentPage",
+      `/my-company/${company_id}/add-job-description`
+    );
 
     // Chuyển đến trang tiếp theo
-    navigate("/my-company/add-job-description");
+    navigate(`/my-company/${company_id}/add-job-description`);
   };
 
   const handleBack = () => {
-    navigate("/my-company/add-job-details");
+    navigate(`/my-company/${company_id}/add-job-details`);
   };
 
   return (
-    <MainLayout>
+    <MainLayout company_id={company_id!}>
       <Container fluid className="job-post-container">
         <Row>
           <Col>

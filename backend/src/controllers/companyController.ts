@@ -112,6 +112,45 @@ export const deleteCompany = async (req: Request, res: Response) => {
 };
 
 // Follow a company
+export const isFollowed = async (req: Request, res: Response) => {
+  try {
+    const { companyID } = req.params;
+    const { userID } = req.body;
+    const company = await Company.findById(companyID);
+    if (!company) {
+      res.status(404).json({ message: "Company not found", data: {} });
+      return;
+    }
+    if (company.admin_id.includes(userID)) {
+      res
+        .status(200)
+        .json({ message: "You are an admin of this company", data: {} });
+      return;
+    }
+    if (company.owner_id.toString() === userID) {
+      res
+        .status(200)
+        .json({ message: "You are the owner of this company", data: {} });
+      return;
+    }
+
+    if (company.followers.includes(userID)) {
+      res.status(200).json({
+        message: "You are already following this company",
+        data: { isFollowed: true },
+      });
+      return;
+    }
+    res.status(200).json({
+      message: "You are now following this company",
+      data: { isFollowed: false },
+    });
+  } catch (error) {
+    res.status(400).json({ message: (error as any).message, data: {} });
+  }
+};
+
+// Follow a company
 export const followCompany = async (req: Request, res: Response) => {
   try {
     const { companyID } = req.params;
@@ -128,9 +167,7 @@ export const followCompany = async (req: Request, res: Response) => {
       return;
     }
     if (company.followers.includes(userID)) {
-      res
-        .status(403)
-        .json({ message: "You are already following this company", data: {} });
+      res.status(408).json({ message: "Request Timeout!", data: {} });
       return;
     }
     await Company.findByIdAndUpdate(
@@ -164,9 +201,7 @@ export const unfollowCompany = async (req: Request, res: Response) => {
       return;
     }
     if (!company.followers.includes(userID)) {
-      res
-        .status(403)
-        .json({ message: "You are not following this company", data: {} });
+      res.status(408).json({ message: "Request Timeout!", data: {} });
       return;
     }
     await Company.findByIdAndUpdate(
