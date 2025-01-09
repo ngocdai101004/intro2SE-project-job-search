@@ -10,6 +10,7 @@ interface Job {
   _id: string;
   title: string;
   location_type: string;
+  address: string;
   status: string;
   number_of_peoples: number;
   deadline: string;
@@ -55,11 +56,15 @@ const JobList: React.FC = () => {
         );
         const currentPage = localStorage.getItem("currentPage");
 
-        if (savedData && currentPage !== "/my-company/describe-job") {
+        if (
+          savedData &&
+          currentPage !== `/my-company/${company_id}/describe-job`
+        ) {
           const localJob = {
             _id: "local",
             title: savedData.title || "Untitled Job",
             location_type: savedData.locationType || "",
+            address: savedData.address || "",
             status: "closed",
             number_of_peoples: savedData.number_of_peoples || 0,
             deadline: savedData.deadline || "",
@@ -220,7 +225,7 @@ const JobList: React.FC = () => {
                               className="location"
                               style={{ fontSize: "12px", opacity: 0.7 }}
                             >
-                              Ho Chi Minh City
+                              {job.address}
                             </p>
                           </td>
                           <td>
