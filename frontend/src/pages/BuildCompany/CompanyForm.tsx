@@ -17,38 +17,57 @@ import IUser from "../../interfaces/user.ts";
 type FormStep = "information" | "description" | "address" | "avatar" | "admin";
 
 interface Props {
-  companyData?: ICompany | null;
+  companyData: ICompany;
+  setCompanyData: React.Dispatch<React.SetStateAction<ICompany>>;
+  isCreating: boolean;
+  _id: string | undefined;
 }
 
-const companyInstance: ICompany = {};
-
-const UserRegistrationForm: React.FC<Props> = ({ companyData }) => {
+const UserRegistrationForm: React.FC<Props> = ({
+  companyData,
+  setCompanyData,
+  isCreating,
+  _id,
+}) => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<FormStep>("information");
-  const [formData, setFormData] = useState<ICompany>(
-    companyData || companyInstance
-  );
+
   const [adminInfos, setAdminInfos] = useState<IUser[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("Formatdata", formData);
+    console.log("Formatdata", companyData);
     e.preventDefault();
     const toastId = toast.loading("Updating...");
+    console.log(isCreating);
+    console.log(companyData._id);
 
     try {
-      const response = await axiosInstance.post(
-        "/company/build-company",
-        formData
-      );
-      console.log(response.data);
-      toast.update(toastId, {
-        render: "Company updated successfully",
-        type: "success",
-        isLoading: false,
-        autoClose: 2000,
-        onClose: () =>
-          navigate(`/my-company/${response.data.data.company._id}/job-list`),
-      });
+      if (isCreating || _id === undefined) {
+        const response = await axiosInstance.post(
+          "/company/build-company",
+          companyData
+        );
+        console.log(response.data);
+        toast.update(toastId, {
+          render: "Company created successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+          onClose: () =>
+            navigate(`/my-company/${response.data.data.company._id}/job-list`),
+        });
+        return;
+      } else {
+        handleChange("_id", _id);
+        const response = await axiosInstance.put(`/${_id}`, companyData);
+        console.log(response.data);
+        toast.update(toastId, {
+          render: "Company updated successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
+      }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
         toast.update(toastId, {
@@ -70,7 +89,7 @@ const UserRegistrationForm: React.FC<Props> = ({ companyData }) => {
   };
 
   const handleChange = (field: keyof ICompany, value: unknown) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setCompanyData((prev) => ({ ...prev, [field]: value }));
   };
 
   const nextStep = () => {
@@ -110,17 +129,17 @@ const UserRegistrationForm: React.FC<Props> = ({ companyData }) => {
   const renderStepContent = () => {
     switch (currentStep) {
       case "information":
-        return <PersonalInfo data={formData} onChange={handleChange} />;
+        return <PersonalInfo data={companyData} onChange={handleChange} />;
       case "description":
-        return <DescriptionInfo data={formData} onChange={handleChange} />;
+        return <DescriptionInfo data={companyData} onChange={handleChange} />;
       case "address":
-        return <AddressInfo data={formData} onChange={handleChange} />;
+        return <AddressInfo data={companyData} onChange={handleChange} />;
       case "avatar":
-        return <AvatarUpload data={formData} onChange={handleChange} />;
+        return <AvatarUpload data={companyData} onChange={handleChange} />;
       case "admin":
         return (
           <AdminInfo
-            data={formData}
+            data={companyData}
             onChange={handleChange}
             adminInfos={adminInfos}
             setAdminInfos={setAdminInfos}

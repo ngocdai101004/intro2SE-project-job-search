@@ -36,10 +36,10 @@ const DescriptionInfo: React.FC<Props> = ({ data, onChange }) => {
             <Form.Control
               type="number"
               placeholder="From"
-              value={data.description?.company_size[0] || ""}
+              value={data.description?.company_size?.[0] ?? ""}
               onChange={(e) => {
                 const from = Number(e.target.value);
-                const to = data.description?.company_size[1] || 0;
+                const to = data.description?.company_size?.[1] ?? 0;
 
                 onChange("description", {
                   ...data.description,
@@ -51,10 +51,10 @@ const DescriptionInfo: React.FC<Props> = ({ data, onChange }) => {
             <Form.Control
               type="number"
               placeholder="To"
-              value={data.description?.company_size[1] || ""}
+              value={data.description?.company_size?.[1] ?? ""}
               onChange={(e) => {
                 const to = Number(e.target.value);
-                const from = data.description?.company_size[0] || 0;
+                const from = data.description?.company_size?.[0] ?? 0;
                 onChange("description", {
                   ...data.description,
                   company_size: [from, to],
@@ -123,7 +123,8 @@ const DescriptionInfo: React.FC<Props> = ({ data, onChange }) => {
           <Form.Control
             type="text"
             placeholder={
-              data.description?.specialities.join(", ") ||
+              data.description?.specialities?.join(", ") ||
+              "" ||
               "Enter specialities separated by commas"
             }
             onChange={(e) => {

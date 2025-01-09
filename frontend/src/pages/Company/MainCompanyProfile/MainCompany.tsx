@@ -6,18 +6,29 @@ import { MyToastContainer } from "../../../components/MyToastContainer";
 import OwnCompany from "./OwnCompany";
 import ICompany from "../../../interfaces/company";
 
-function MainCompany() {
+const companyInstance: ICompany = {};
+
+const MainCompany: React.FC = () => {
   const { company_id } = useParams<{ company_id: string }>(); // Lấy company_id từ URL
   const { active_key } = useParams<{ active_key: string }>(); // Lấy active_key từ URL
 
   const [myActiveKey, setMyActiveKey] = React.useState("/snapshot");
-
-  const [companyData, setCompanyData] = useState<ICompany | null>(null);
+  const [companyData, setCompanyData] = useState<ICompany>(companyInstance);
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
 
   const fetchData = async () => {
     try {
-      const response = await axiosInstance.get(`/company/${company_id}`); // Sử dụng company_id từ URL
-      setCompanyData(response.data.data.company);
+      const companyResponse = await axiosInstance.get(`/company/${company_id}`); // Sử dụng company_id từ URL
+      console.log(
+        "async Main Company data State:",
+        companyResponse.data.data.company
+      );
+      setCompanyData(companyResponse.data.data.company);
+      const owner_id = companyResponse.data.data.company.owner_id;
+
+      const userResponse = await axiosInstance.get("/user/profile");
+      const user_id = userResponse.data.data.user._id;
+      setIsOwnProfile(owner_id === user_id);
     } catch (error) {
       console.error("Error fetching company data:", error);
     }
@@ -47,17 +58,12 @@ function MainCompany() {
       <OwnCompany
         myActiveKey={myActiveKey}
         setMyActiveKey={setMyActiveKey}
-        companyData={companyData}
+        myCompanyData={companyData}
+        isOwnProfile={isOwnProfile}
       />
-      {/* <CompanyHeader
-        myState={myActiveKey}
-        setMyState={setMyActiveKey}
-        companyData={companyData}
-      />
-      <div className="flex-grow-1">{renderContent()}</div> */}
       <MyToastContainer />
     </div>
   );
-}
+};
 
 export default MainCompany;

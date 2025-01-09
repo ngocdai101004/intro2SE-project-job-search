@@ -9,16 +9,18 @@ import ICompany from "../../../interfaces/company";
 interface Props {
   myActiveKey: string;
   setMyActiveKey: React.Dispatch<React.SetStateAction<string>>;
-  companyData: ICompany | null;
+  myCompanyData: ICompany;
+  isOwnProfile: boolean;
 }
 
 const OwnCompany: React.FC<Props> = ({
   myActiveKey,
   setMyActiveKey,
-  companyData,
+  myCompanyData,
+  isOwnProfile,
 }) => {
   //   const navigate = useNavigate();
-  const isOwnProfile = true;
+  const [companyData, setCompanyData] = useState<ICompany>(myCompanyData);
   const [isEditing, setIsEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -27,7 +29,7 @@ const OwnCompany: React.FC<Props> = ({
       <Company
         myActiveKey={myActiveKey}
         setMyActiveKey={setMyActiveKey}
-        companyData={companyData}
+        companyData={myCompanyData}
       />
       {isOwnProfile && (
         <Button
@@ -75,7 +77,12 @@ const OwnCompany: React.FC<Props> = ({
           <Modal.Title>Edit Your Company Information</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ overflowY: "auto", height: "80vh" }}>
-          <CompanyForm companyData={companyData} />
+          <CompanyForm
+            companyData={companyData}
+            setCompanyData={setCompanyData}
+            isCreating={false}
+            _id={companyData._id}
+          />
         </Modal.Body>
       </Modal>
     </div>

@@ -8,7 +8,7 @@ import ICompany from "../../../interfaces/company";
 interface CompanyHeaderProps {
   myState?: string;
   setMyState?: React.Dispatch<React.SetStateAction<string>>;
-  companyData: ICompany | null;
+  companyData: ICompany;
 }
 
 const CompanyHeader = ({
@@ -26,16 +26,19 @@ const CompanyHeader = ({
 
   const fetchFollowed = async () => {
     try {
-      const response = await axiosInstance.get(
-        `/company/${companyData?._id}/isFollowed`
-      );
-      console.log(response.data.message);
-      setMessage(response.data.message);
-      if (response.data.data.isFollowed !== undefined) {
-        setFollowed(response.data.data.isFollowed);
-        return true;
-      } else {
-        return false;
+      console.log("company id: ", companyData?._id);
+      if (companyData?._id !== undefined) {
+        const response = await axiosInstance.get(
+          `/company/${companyData?._id}/isFollowed`
+        );
+        console.log(response.data.message);
+        setMessage(response.data.message);
+        if (response.data.data.isFollowed !== undefined) {
+          setFollowed(response.data.data.isFollowed);
+          return true;
+        } else {
+          return false;
+        }
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -51,8 +54,10 @@ const CompanyHeader = ({
       fetchFollowed();
     }
     const sumRating =
-      companyData?.reviews?.reduce((acc, review) => acc + review.rating, 0) ||
-      0;
+      companyData?.reviews?.reduce(
+        (acc, review) => acc + (review.rating || 0),
+        0
+      ) || 0;
 
     const len =
       (companyData?.reviews?.length || 0) == 0
@@ -63,6 +68,11 @@ const CompanyHeader = ({
     setCompanyRating(rating);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [companyData]);
+
+  useEffect(() => {
+    console.log("Rerender CompanyHeader");
+    console.log(companyData);
+  }, []);
 
   const handleFollow = async () => {
     const toastId = toast.loading("Updating...");

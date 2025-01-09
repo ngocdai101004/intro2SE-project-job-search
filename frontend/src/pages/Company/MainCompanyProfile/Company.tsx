@@ -2,7 +2,7 @@ import Snapshot from "../Body/SnapShot";
 import CompanyHeader from "../Header/CompanyHeader";
 import Jobs from "../Body/Jobs";
 import Reviews from "../Body/Reviews";
-import React from "react";
+import React, { useEffect } from "react";
 import ICompany from "../../../interfaces/company";
 
 const QA = () => (
@@ -12,10 +12,20 @@ const QA = () => (
 interface Props {
   myActiveKey: string;
   setMyActiveKey: React.Dispatch<React.SetStateAction<string>>;
-  companyData: ICompany | null;
+  companyData: ICompany;
 }
 
-function Company({ myActiveKey, setMyActiveKey, companyData }: Props) {
+const Company: React.FC<Props> = ({
+  myActiveKey,
+  setMyActiveKey,
+  companyData,
+}) => {
+  console.log("!! Company data State:", companyData);
+
+  useEffect(() => {
+    console.log("! Company data State:", companyData);
+  }, []);
+
   const renderContent = () => {
     switch (myActiveKey) {
       case "/snapshot":
@@ -49,6 +59,6 @@ function Company({ myActiveKey, setMyActiveKey, companyData }: Props) {
       <div className="flex-grow-1">{renderContent()}</div>
     </div>
   );
-}
+};
 
 export default Company;
