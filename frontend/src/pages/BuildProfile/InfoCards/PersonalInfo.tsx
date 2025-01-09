@@ -17,6 +17,7 @@ interface Props {
 const PersonalInfo: React.FC<Props> = ({ firstName, lastName, gender, dateOfBirth, shortBio, setFirstName, setLastName, setGender, setDateOfBirth, setShortBio }) => {
     const [bioError, setBioError] = useState<string | null>(null);
     const [dateError, setDateError] = useState<string | null>(null);
+    console.log("Date of Birth", dateOfBirth);
 
     const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const bio = e.target.value;
@@ -28,8 +29,9 @@ const PersonalInfo: React.FC<Props> = ({ firstName, lastName, gender, dateOfBirt
         }
     };
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const dateValue = new Date(e.target.value);
+    const handleDateChange = (value: string) => {
+        console.log("Date of Birth as String", value);
+        const dateValue = new Date(value);
         if (isNaN(dateValue.getTime())) {
             setDateError('Invalid date value');
         } else {
@@ -81,8 +83,8 @@ const PersonalInfo: React.FC<Props> = ({ firstName, lastName, gender, dateOfBirt
                         <Form.Label>Date of Birth</Form.Label>
                         <Form.Control
                             type="date"
-                            value={dateOfBirth ? new Date(dateOfBirth).toISOString().split('T')[0] : ''}
-                            onChange={handleDateChange}
+                            value={dateOfBirth instanceof Date ? dateOfBirth.toISOString().split('T')[0] : ''}
+                            onChange={(e) => handleDateChange(e.target.value)}
                         />
                         {dateError && <Alert variant="danger" className="mt-2">{dateError}</Alert>}
                     </Form.Group>

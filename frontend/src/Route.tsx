@@ -25,6 +25,7 @@ import BuildProfile from "./pages/BuildProfile/BuildProfile.tsx";
 import ChatPage from "./pages/Chat/Chat.tsx";
 import ResumeBuilder from "./pages/BuildJobSearchCV/ResumeBuilder.tsx";
 import BuildCompany from "./pages/BuildCompany/BuildCompany.tsx";
+import ViewCompanies from "./pages/MyCompany/ViewCompanies/ViewCompanies.tsx";
 import MainCompany from "./pages/Company/MainCompanyProfile/MainCompany.tsx";
 
 const router = createBrowserRouter([
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
   {
     path: "/company/:company_id/:active_key",
     element: <MainCompany />,
+  },
+  {
+    path: "/view-company",
+    element: <ViewCompanies />,
   },
   {
     path: "/my-company/:company_id/create-job-post",

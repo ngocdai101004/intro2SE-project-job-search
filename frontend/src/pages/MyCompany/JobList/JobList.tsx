@@ -10,6 +10,7 @@ interface Job {
   _id: string;
   title: string;
   location_type: string;
+  address: string;
   status: string;
   number_of_peoples: number;
   deadline: string;
@@ -34,7 +35,7 @@ const JobList: React.FC = () => {
   const [pagination, setPagination] = useState<Pagination>({
     totalJobs: 0,
     currentPage: 1,
-    totalPages: 2,
+    totalPages: 1,
   });
 
   const [jobStatus, setJobStatus] = useState<{ [key: string]: string }>({});
@@ -55,11 +56,15 @@ const JobList: React.FC = () => {
         );
         const currentPage = localStorage.getItem("currentPage");
 
-        if (savedData && currentPage !== "/my-company/describe-job") {
+        if (
+          savedData &&
+          currentPage !== `/my-company/${company_id}/describe-job`
+        ) {
           const localJob = {
             _id: "local",
             title: savedData.title || "Untitled Job",
             location_type: savedData.locationType || "",
+            address: savedData.address || "",
             status: "closed",
             number_of_peoples: savedData.number_of_peoples || 0,
             deadline: savedData.deadline || "",
@@ -190,22 +195,57 @@ const JobList: React.FC = () => {
                 >
                   <thead>
                     <tr>
-                      <th style={{ width: "5%" }}>
-                        {/* <input type="checkbox" /> */}
+                      <th style={{ width: "5%" }}></th>
+                      <th style={{ width: "20%" }}>
+                        Job title
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          className="lucide lucide-chevrons-up-down"
+                        >
+                          <path d="m7 15 5 5 5-5" />
+                          <path d="m7 9 5-5 5 5" />
+                        </svg>
                       </th>
-                      <th style={{ width: "20%" }}>Job title</th>
                       <th style={{ width: "35%" }}>Candidates</th>
-                      <th style={{ width: "25%" }}>Date posted</th>
-                      <th style={{ width: "20%" }}>Job status</th>
+                      <th style={{ width: "25%" }}>
+                        <div className="title-icon">
+                          Date posted
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-chevrons-up-down"
+                          >
+                            <path d="m7 15 5 5 5-5" />
+                            <path d="m7 9 5-5 5 5" />
+                          </svg>
+                        </div>
+                      </th>
+                      <th style={{ width: "20%" }}>
+                        Job status
+                        <i className="bi bi-chevron-down"></i>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {jobs.length > 0 ? (
                       jobs.map((job) => (
                         <tr key={job._id}>
-                          <td>
-                            <input type="checkbox" />
-                          </td>
+                          <td></td>
                           <td>
                             <span
                               className="job-title"
@@ -220,7 +260,7 @@ const JobList: React.FC = () => {
                               className="location"
                               style={{ fontSize: "12px", opacity: 0.7 }}
                             >
-                              Ho Chi Minh City
+                              {job.address}
                             </p>
                           </td>
                           <td>

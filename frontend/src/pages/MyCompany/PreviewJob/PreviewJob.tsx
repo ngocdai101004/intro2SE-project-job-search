@@ -1,17 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PreviewJob.css";
+import axiosInstance from "../../../common/axiosInstance";
+import { useParams } from "react-router-dom";
 
 const PreviewJob: React.FC = () => {
   const navigate = useNavigate();
+  const { company_id } = useParams<{ company_id: string }>();
+  const [address, setAddress] = useState<string>("");
 
   // State để lưu dữ liệu hiển thị
   const [jobData, setJobData] = useState<any>({});
+
+  const fetchCompanyAddress = async () => {
+    try {
+      const response = await axiosInstance.get(`/company/${company_id}`);
+      const addressObj = response.data.data.company.address;
+      const formattedAddress = `${addressObj.district}, ${addressObj.city_state}, ${addressObj.country}`;
+      setAddress(formattedAddress);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // Load dữ liệu từ localStorage khi render lại trang
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("jobPostData") || "{}");
     setJobData(savedData);
+    fetchCompanyAddress();
   }, []);
 
   // Điều hướng trang
@@ -51,22 +67,18 @@ const PreviewJob: React.FC = () => {
           <div className="preview-job-content-header">
             <div className="preview-job-content-header-left">
               <strong>
-                <p style={{ fontSize: "20px" }}>
+                <p style={{ fontSize: "30px" }}>
                   {jobData.title || "Untitled Job"}
                 </p>
               </strong>
               <p>
-                {jobData.advertiseLocation || "Location not specified"} · 25
-                days ago · Over 100 applicants
+                <strong>Location:</strong> {address}
               </p>
               <p>
                 <strong>{jobData.locationType || "Remote"}</strong> ·{" "}
                 {jobData.type?.join(", ") || "N/A"}
               </p>
             </div>
-            <button className="preview-job-content-header-right">
-              Apply Now
-            </button>
           </div>
 
           <hr
@@ -130,7 +142,9 @@ const PreviewJob: React.FC = () => {
         {/* Nút đóng preview */}
         <button
           className="preview-job-close"
-          onClick={() => handleNavigation("/my-company/describe-job")}
+          onClick={() =>
+            handleNavigation(`/my-company/${company_id}/describe-job`)
+          }
         >
           Close Preview
         </button>

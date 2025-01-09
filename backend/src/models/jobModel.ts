@@ -83,6 +83,7 @@ const jobSchema = new mongoose.Schema(
   }
 );
 
+jobSchema.index({ title: "text", description: "text" });
 // Create the model
 const JobDB = mongoose.model("Job", jobSchema);
 

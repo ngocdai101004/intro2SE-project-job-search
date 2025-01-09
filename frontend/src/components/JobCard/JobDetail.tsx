@@ -10,20 +10,23 @@ import { Buffer as NodeBuffer } from "buffer";
 
 const JobDetail: React.FC<JobDetailProps> = ({ job }) => {
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return !!localStorage.getItem("token"); // Kiểm tra người dùng đã đăng nhập chưa
-  });
 
   const [showModal, setShowModal] = useState<boolean>(false); // Trạng thái hiển thị modal
   const [resume, setResume] = useState<File | null>(null); // Lưu file resume
   const [uploading, setUploading] = useState<boolean>(false); // Trạng thái upload
 
-  const handleApplyNow = () => {
-    // if (isAuthenticated) {
-    // } else {
-    //   navigate("/signin"); // Nếu chưa đăng nhập, điều hướng đến trang đăng nhập
-    // }
-    setShowModal(true); // Nếu đã đăng nhập, hiển thị modal upload resume
+  const handleApplyNow = async () => {
+    try {
+      const response = await axiosInstance.get("/user/profile");
+      if (response.data) {
+        setShowModal(true);
+      } else {
+        navigate("/signin");
+      }
+    } catch (error) {
+      console.log("User not signin:", error);
+      navigate("/signin");
+    }
   };
 
   // Hàm xử lý file khi người dùng chọn
@@ -65,17 +68,22 @@ const JobDetail: React.FC<JobDetailProps> = ({ job }) => {
       // Upload file lên S3
       const url = await uploadFile("resumes", file);
 
+      console.log("Resume URL:", url);
+
+      const response = await axiosInstance.get("/user/profile");
+
       // Gửi thông tin ứng tuyển lên server
-      await axiosInstance.post("/application/apply", {
+      await axiosInstance.post("/applicant/apply", {
         job_id: job._id,
+        user_id: response.data.data.user._id,
         resume_url: url,
+        status: "reviewing",
+        feedback: "",
       });
 
-      alert("Application submitted successfully!");
       setShowModal(false); // Đóng modal sau khi gửi thành công
     } catch (error) {
       console.error("Failed to apply:", error);
-      alert("Failed to submit application. Please try again.");
     } finally {
       setUploading(false);
     }

@@ -50,6 +50,7 @@ const ResumeForm: React.FC<Props> = ({ isFirstTime }) => {
   const [jobPreferences, setJobPreferences] = useState<IJobPreference[]>([]);
   const [readyToWork, setReadyToWork] = useState<boolean>(false);
   const [summary, setSummary] = useState<string>("");
+  const [resume, setResume] = useState<string[]>([]);
 
   const [formData, setFormData] = useState<ResumeData>({
     summary: summary,
@@ -60,6 +61,7 @@ const ResumeForm: React.FC<Props> = ({ isFirstTime }) => {
     certifications: certifications,
     job_preferences: jobPreferences,
     ready_to_work: readyToWork,
+    resume: resume,
   });
 
   useEffect(() => {
@@ -72,6 +74,7 @@ const ResumeForm: React.FC<Props> = ({ isFirstTime }) => {
       certifications: certifications,
       job_preferences: jobPreferences,
       ready_to_work: readyToWork,
+      resume: resume,
     });
   }, [
     summary,
@@ -82,6 +85,7 @@ const ResumeForm: React.FC<Props> = ({ isFirstTime }) => {
     certifications,
     jobPreferences,
     readyToWork,
+    resume,
   ]);
 
   useEffect(() => {
@@ -91,6 +95,7 @@ const ResumeForm: React.FC<Props> = ({ isFirstTime }) => {
         if (response.status === 200) {
           const data = response.data.data.userInfo;
           setSummary(data.summary);
+          setResume(data.resume);
           setEducation(data.education);
           setQualifications(data.qualifications);
           setSkills(data.skills);
@@ -253,7 +258,14 @@ const ResumeForm: React.FC<Props> = ({ isFirstTime }) => {
   const renderStepContent = () => {
     switch (currentStep) {
       case "summary":
-        return <Summary summary={summary} setSummary={setSummary} />;
+        return (
+          <Summary
+            summary={summary}
+            setSummary={setSummary}
+            resume={resume}
+            setResume={setResume}
+          />
+        );
       case "education":
         return <Education education={education} setEducation={setEducation} />;
       case "qualifications":

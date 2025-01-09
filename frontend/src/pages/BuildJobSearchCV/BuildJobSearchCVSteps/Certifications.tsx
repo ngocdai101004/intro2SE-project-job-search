@@ -76,7 +76,7 @@ const Certifications: React.FC<CertificationsProps> = ({ certifications, setCert
                         <Form.Label>Issue Date</Form.Label>
                         <Form.Control
                             type="date"
-                            value={cert.issue_date.toISOString().split('T')[0]}
+                            value={new Date(cert.issue_date).toISOString().split('T')[0]}
                             onChange={(e) => updateCertification(index, 'issue_date', new Date(e.target.value) as Date)}
                         />
                     </Form.Group>
