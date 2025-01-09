@@ -34,7 +34,7 @@ const JobList: React.FC = () => {
   const [pagination, setPagination] = useState<Pagination>({
     totalJobs: 0,
     currentPage: 1,
-    totalPages: 2,
+    totalPages: 1,
   });
 
   const [jobStatus, setJobStatus] = useState<{ [key: string]: string }>({});

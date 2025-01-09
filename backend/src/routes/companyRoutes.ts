@@ -13,6 +13,7 @@ import {
   getCompanyReviews,
   isReviewed,
   isFollowed,
+  getAllCompaniesByOwnerAdmin,
 } from "../controllers/companyController";
 
 const router = Router();
@@ -36,5 +37,6 @@ router.get("/:companyID/isReviewed", verifyUser, isReviewed);
 router.get("/:companyID/reviews", getCompanyReviews);
 
 router.post("/build-company", verifyUser, createCompany);
+router.get("/view-company/:userID", getAllCompaniesByOwnerAdmin);
 
 export default router;
