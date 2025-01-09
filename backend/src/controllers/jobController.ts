@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import CompanyDB from "../models/companyModel";
 import {sendEmail} from "../utils/sendEmail";
 import UserDB from "../models/userModel";
+import Application from "../models/applicationModel";
+import exp from "constants";
 
 // Create a new job
 export const createJob = async (req: Request, res: Response) => {
@@ -65,103 +67,103 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
         const {companyId} = req.params;
         const {page = 1, limit = 10} = req.query;
 
-        // Kiểm tra companyId hợp lệ
-        if (!mongoose.Types.ObjectId.isValid(companyId)) {
-            res.status(400).json({message: "Invalid company ID", data: []});
-            return;
-        }
-
-        // Phân trang
-        const pageNumber = parseInt(page as string, 10) || 1;
-        const pageSize = parseInt(limit as string, 10) || 10;
-        const skip = (pageNumber - 1) * pageSize;
-
-        // Lấy danh sách jobs cùng thông tin applicants và awaitings
-        const jobs = await Job.aggregate([
-            {
-                $match: {company_id: new mongoose.Types.ObjectId(companyId)},
-            },
-            {
-                $lookup: {
-                    from: "companies", // Tên collection Company trong MongoDB
-                    localField: "company_id",
-                    foreignField: "_id",
-                    as: "companyInfo",
-                },
-            },
-            {
-                $unwind: "$companyInfo", // Trích xuất thông tin companyInfo
-            },
-            {
-                $lookup: {
-                    from: "applications", // Tên collection Application
-                    localField: "_id", // job._id
-                    foreignField: "job_id", // application.job_id
-                    as: "applications", // Kết quả ghép sẽ nằm trong mảng "applications"
-                },
-            },
-            {
-                $addFields: {
-                    applicantsCount: {
-                        $size: {
-                            $filter: {
-                                input: "$applications",
-                                as: "application",
-                                cond: {$eq: ["$$application.status", "applied"]},
-                            },
-                        },
-                    },
-                    awaitingsCount: {
-                        $size: {
-                            $filter: {
-                                input: "$applications",
-                                as: "application",
-                                cond: {$eq: ["$$application.status", "reviewing"]},
-                            },
-                        },
-                    },
-                    address: "$companyInfo.address.city_state", // Lấy trực tiếp city_state làm address
-                },
-            },
-            {
-                $project: {
-                    _id: 1,
-                    title: 1,
-                    status: 1,
-                    number_of_peoples: 1,
-                    deadline: 1,
-                    createdAt: {
-                        $dateToString: {format: "%Y-%m-%d", date: "$createdAt"},
-                    },
-                    applicantsCount: 1,
-                    awaitingsCount: 1,
-                    address: 1, // Chỉ giữ lại trường address
-                },
-            },
-            {$sort: {createdAt: -1}},
-            {$skip: skip},
-            {$limit: pageSize},
-        ]);
-
-        // Đếm tổng số jobs
-        const totalJobs = await Job.countDocuments({company_id: companyId});
-
-        // Trả về dữ liệu
-        res.status(200).json({
-            message: "Jobs fetched successfully",
-            data: {
-                jobs,
-                totalJobs,
-                currentPage: pageNumber,
-                totalPages: Math.ceil(totalJobs / pageSize),
-            },
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: (error as any).message || "Failed to fetch jobs",
-            data: [],
-        });
+    // Validate companyId
+    if (!mongoose.Types.ObjectId.isValid(companyId)) {
+      res.status(400).json({ message: "Invalid company ID", data: null });
     }
+
+    const pageNumber = parseInt(page as string, 10) || 1;
+    const pageSize = parseInt(limit as string, 10) || 10;
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Fetch company address
+    const company = await CompanyDB.findById(companyId).select(
+      "address.city_state address.country"
+    );
+    if (!company) {
+      res.status(404).json({ message: "Company not found", data: null });
+    }
+    const city_state = company?.address?.city_state || "";
+    const country = company?.address?.country || "";
+    // Format the address as "city_state, country"
+    const formattedAddress = `${city_state}${city_state && country ? ", " : ""}${country}`;
+
+    // Fetch jobs with pagination
+    const jobs = await Job.aggregate([
+      { $match: { company_id: new mongoose.Types.ObjectId(companyId) } },
+      { $sort: { createdAt: -1 } }, 
+      { $skip: skip },
+      { $limit: pageSize },
+      {
+        $lookup: {
+          from: "applications",
+          localField: "_id",
+          foreignField: "job_id",
+          as: "applications",
+        },
+      },
+      {
+        $addFields: {
+          applicantsCount: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "application",
+                cond: { $eq: ["$$application.status", "applied"] },
+              },
+            },
+          },
+          awaitingsCount: {
+            $size: {
+              $filter: {
+                input: "$applications",
+                as: "application",
+                cond: { $eq: ["$$application.status", "reviewing"] },
+              },
+            },
+          },
+          address: formattedAddress,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          location_type: 1,
+          status: 1,
+          number_of_peoples: 1,
+          deadline: 1,
+          createdAt: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+          },
+          applicantsCount: 1,
+          awaitingsCount: 1,
+          address: 1,
+        },
+      },
+      // { $sort: { createdAt: -1 } }, 
+      // { $skip: skip },
+      // { $limit: pageSize },
+    ]);
+
+    // Total job count
+    const totalJobs = await Job.countDocuments({ company_id: companyId });
+
+    res.status(200).json({
+      message: "Jobs fetched successfully",
+      data: {
+        jobs,
+        totalJobs,
+        currentPage: pageNumber,
+        totalPages: Math.ceil(totalJobs / pageSize),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: (error as any).message || "Failed to fetch jobs",
+      data: [],
+    });
+  }
 };
 
 // Get job by ID in params
@@ -227,14 +229,11 @@ export const getRecommendedJobs = async (req: Request, res: Response) => {
         res.status(400).json({message: (error as any).message, data: []});
     }
 };
-
 // Cập nhật trạng thái công việc
 export const updateJobStatus = async (req: Request, res: Response) => {
     try {
         const {jobID} = req.params; // Lấy jobID từ params
         const {status} = req.body; // Lấy status từ body
-
-        console.log(jobID, status);
 
         // Kiểm tra trạng thái hợp lệ
         const validStatuses = ["open", "closed", "draft"];
@@ -261,5 +260,5 @@ export const updateJobStatus = async (req: Request, res: Response) => {
         res.status(500).json({
             message: (error as any).message || "Failed to update job status",
         });
-    }
+    };
 };
