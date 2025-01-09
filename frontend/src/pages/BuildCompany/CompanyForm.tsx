@@ -59,13 +59,17 @@ const UserRegistrationForm: React.FC<Props> = ({
         return;
       } else {
         handleChange("_id", _id);
-        const response = await axiosInstance.put(`/${_id}`, companyData);
+        const response = await axiosInstance.put(
+          `/company/${_id}`,
+          companyData
+        );
         console.log(response.data);
         toast.update(toastId, {
           render: "Company updated successfully",
           type: "success",
           isLoading: false,
           autoClose: 2000,
+          onClose: () => window.location.reload(),
         });
       }
     } catch (error: unknown) {

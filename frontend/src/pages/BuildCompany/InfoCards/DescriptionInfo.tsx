@@ -35,8 +35,11 @@ const DescriptionInfo: React.FC<Props> = ({ data, onChange }) => {
           <div className="d-flex">
             <Form.Control
               type="number"
-              placeholder="From"
-              value={data.description?.company_size?.[0] ?? ""}
+              placeholder={
+                (data.description?.company_size?.[0] ?? 0) === 0
+                  ? "From"
+                  : "" + data.description?.company_size?.[0]
+              }
               onChange={(e) => {
                 const from = Number(e.target.value);
                 const to = data.description?.company_size?.[1] ?? 0;
@@ -50,8 +53,11 @@ const DescriptionInfo: React.FC<Props> = ({ data, onChange }) => {
             />
             <Form.Control
               type="number"
-              placeholder="To"
-              value={data.description?.company_size?.[1] ?? ""}
+              placeholder={
+                (data.description?.company_size?.[1] ?? 0) === 0
+                  ? "To"
+                  : "" + data.description?.company_size?.[1]
+              }
               onChange={(e) => {
                 const to = Number(e.target.value);
                 const from = data.description?.company_size?.[0] ?? 0;
@@ -105,7 +111,7 @@ const DescriptionInfo: React.FC<Props> = ({ data, onChange }) => {
           <Form.Control
             type="date"
             value={
-              data.description?.founded
+              data.description?.founded instanceof Date
                 ? data.description.founded.toISOString().split("T")[0]
                 : ""
             }

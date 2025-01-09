@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Company from "./Company";
 // import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
@@ -23,6 +23,10 @@ const OwnCompany: React.FC<Props> = ({
   const [companyData, setCompanyData] = useState<ICompany>(myCompanyData);
   const [isEditing, setIsEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    setCompanyData(myCompanyData);
+  }, [myCompanyData]);
 
   return (
     <div>

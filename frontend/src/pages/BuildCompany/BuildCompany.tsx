@@ -15,6 +15,7 @@ const UserRegistrationForm: React.FC = () => {
         companyData={companyData}
         setCompanyData={setCompanyData}
         isCreating={true}
+        _id={undefined}
       />
     </div>
   );

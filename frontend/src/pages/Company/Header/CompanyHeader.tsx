@@ -69,11 +69,6 @@ const CompanyHeader = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [companyData]);
 
-  useEffect(() => {
-    console.log("Rerender CompanyHeader");
-    console.log(companyData);
-  }, []);
-
   const handleFollow = async () => {
     const toastId = toast.loading("Updating...");
     console.log(message);
@@ -118,14 +113,14 @@ const CompanyHeader = ({
             <Row>
               <Col xs="auto" className="d-flex justify-content-center">
                 <Image
-                  src={companyData ? companyData.avatar : "/company-avatar.jpg"} // Đặt đường dẫn tới logo
+                  src={companyData?.avatar || "/company-avatar.jpg"} // Đặt đường dẫn tới logo
                   roundedCircle
-                  style={{ width: "80px" }}
+                  style={{ width: "80px", height: "80px", objectFit: "cover" }}
                 />
               </Col>
               <Col className="d-flex flex-column justify-content-center">
                 <h5 className="mb-1">
-                  {companyData ? companyData.company_name : "Fusodoya Company"}
+                  {companyData?.company_name || "Fusodoya Company"}
                 </h5>
                 <div className="d-flex align-items-center mb-1">
                   <span className="me-2 text-primary fw-bold">
@@ -136,12 +131,11 @@ const CompanyHeader = ({
                     {"☆".repeat(5 - Math.floor(companyRating))}
                   </div>
                   <small className="text-muted ms-2">
-                    {companyData ? companyData.reviews?.length || 0 : 0} reviews
+                    {companyData?.reviews?.length || 0} reviews
                   </small>
                 </div>
                 <small className="text-muted">
-                  {companyData ? companyData.applicant?.length : 0} others have
-                  applied here
+                  {companyData?.applicant?.length || 0} others have applied here
                 </small>
               </Col>
             </Row>
@@ -222,12 +216,6 @@ const CompanyHeader = ({
                   className="text-dark fs-5"
                 >
                   Reviews
-                </Nav.Link>
-              </Nav.Item>
-
-              <Nav.Item className="me-2 me-md-5">
-                <Nav.Link eventKey="/qa" href="qa" className="text-dark fs-5">
-                  Q&A
                 </Nav.Link>
               </Nav.Item>
             </Nav>

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Container, ListGroup } from "react-bootstrap";
 import axiosInstance from "../../../common/axiosInstance";
 import MyHeader from "../../../components/MyHeader";
-import ICompany from "../../../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
+import ICompany from "../../../interfaces/company";
 
 const CompanyList = () => {
   const [companyList, setCompanyList] = useState<ICompany[]>([]);
