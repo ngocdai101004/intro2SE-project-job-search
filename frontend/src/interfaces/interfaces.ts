@@ -8,22 +8,6 @@ export interface IUser {
   createdAt: string;
 }
 
-interface Address {
-  district: string;
-  city_state: string;
-  zip_code: string;
-  country: string;
-}
-
-interface Description {
-  company_size: number[];
-  industry: string;
-  headquarters: string;
-  links: string[];
-  founded: Date;
-  specialities: string[];
-}
-
 export interface IReview {
   user_id?: string;
   rating: number;
@@ -47,35 +31,3 @@ export interface IJob {
   createdAt?: string;
   updatedAt?: string;
 }
-
-interface IQA {
-  question: string;
-  answer: string;
-}
-
-interface ICompany {
-  _id?: string;
-  owner_id?: string;
-  admin_id?: string[];
-
-  // Header
-  avatar: string;
-  company_name: string;
-  applicant: string[];
-  employees: string[];
-  followers: string[];
-
-  // Snapshot
-  address?: Address;
-  description: Description;
-  short_description: string;
-  legal_document_url?: string;
-
-  // Reviews
-  reviews: IReview[];
-
-  // QA
-  qa: IQA[];
-}
-
-export default ICompany;
