@@ -1,66 +1,115 @@
-import { useEffect, useState } from "react";
-import { Container, ListGroup } from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+import {Card, Col, Container, FormControl, InputGroup, Row, Spinner} from "react-bootstrap";
 import axiosInstance from "../../common/axiosInstance";
 import MyHeader from "../../components/MyHeader";
 import ICompany from "../../interfaces/interfaces";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const CompanyList = () => {
-  const [companyList, setCompanyList] = useState<ICompany[]>([]);
-  const navigate = useNavigate();
+    const [companyList, setCompanyList] = useState<ICompany[]>([]);
+    const [filteredCompanies, setFilteredCompanies] = useState<ICompany[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosInstance.get("/company");
-        setCompanyList(response.data.data);
-      } catch (error) {
-        console.error("Error fetching company data:", error);
-      }
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axiosInstance.get("/company");
+                setCompanyList(response.data.data);
+                setFilteredCompanies(response.data.data); // Initialize filtered list
+            } catch (error) {
+                console.error("Error fetching company data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value.toLowerCase();
+        setSearchQuery(query);
+        setFilteredCompanies(
+            companyList.filter((company) =>
+                company.company_name.toLowerCase().includes(query)
+            )
+        );
     };
-    fetchData();
-  }, []);
-  console.log("Company data State:", companyList);
 
-  return (
-    <div>
-      <MyHeader mydefaultActiveKey="/company" />
-      <Container className="container mt-4">
-        <h3 className="mb-3">Company List</h3>
+    return (
+        <div>
+            <MyHeader mydefaultActiveKey="/company"/>
+            <Container className="container mt-4">
+                <h3 className="mb-3">Company List</h3>
 
-        <ListGroup
-          style={{ overflow: "scroll", scrollbarWidth: "none", height: "75vh" }}
-        >
-          {companyList.map((company) => (
-            <ListGroup.Item
-              key={company._id}
-              action
-              onClick={() => {
-                navigate("/company/" + company._id + "/snapshot");
-              }}
-              style={{
-                border: "1px solid lightgray",
-                borderRadius: "8px",
-                marginBottom: "0.5rem",
-                backgroundColor: "#f8f9fa",
-                cursor: "pointer",
-              }}
-            >
-              <div style={{ fontWeight: "bold", fontSize: "15px" }}>
-                {company.company_name}
-              </div>
-              <div className="text-muted" style={{ fontSize: "13px" }}>
-                {company.address?.country || "Address not available"}
-              </div>
-              <div className="text-muted" style={{ fontSize: "13px" }}>
-                {company.admin_id}
-              </div>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      </Container>
-    </div>
-  );
+                {/* Search Bar */}
+                <InputGroup className="mb-4">
+                    <FormControl
+                        placeholder="Search for a company..."
+                        value={searchQuery}
+                        onChange={handleSearch}
+                    />
+                </InputGroup>
+
+                {/* Loader */}
+                {isLoading ? (
+                    <div className="d-flex justify-content-center mt-5">
+                        <Spinner animation="border"/>
+                    </div>
+                ) : filteredCompanies.length === 0 ? (
+                    <div className="text-center text-muted mt-5">
+                        <p>No companies found</p>
+                    </div>
+                ) : (
+                    <Row>
+                        {filteredCompanies.map((company) => (
+                            <Col key={company._id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                                <Card
+                                    onClick={() => navigate(`/company/${company._id}/snapshot`)}
+                                    style={{
+                                        cursor: "pointer",
+                                        borderRadius: "10px",
+                                        border: "1px solid darkgray",
+                                    }}
+                                >
+                                    <Card.Img
+                                        variant="top"
+                                        src={company.avatar || "https://via.placeholder.com/150"}
+                                        alt={`${company.company_name} avatar`}
+                                        style={{
+                                            height: "150px",
+                                            objectFit: "cover",
+                                            borderRadius: "10px 10px 0 0",
+                                        }}
+                                    />
+                                    <Card.Body>
+                                        <Card.Title style={{fontSize: "16px", fontWeight: "bold"}}>
+                                            {company.company_name}
+                                        </Card.Title>
+                                        <Card.Text className="text-muted" style={{fontSize: "14px"}}>
+                                            {company.address?.country || "Address not available"}
+                                        </Card.Text>
+                                        <Card.Text style={{fontSize: "13px", color: "#6c757d"}}>
+                                            {company.short_description || "No description available"}
+                                        </Card.Text>
+                                        <Card.Text style={{fontSize: "13px", color: "#6c757d"}}>
+                                            {"Employees: " + company.employees.length || "No description available"}
+                                        </Card.Text>
+                                        <Card.Text style={{fontSize: "13px", color: "#6c757d"}}>
+                                            {"Followers: " + company.followers.length || "No description available"}
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
+                )}
+            </Container>
+        </div>
+    );
 };
+
 
 export default CompanyList;
