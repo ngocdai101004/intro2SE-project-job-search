@@ -274,14 +274,14 @@ const ResumeForm: React.FC<Props> = ({isFirstTime})  => {
                                 </div>
 
                                 <div className="d-flex justify-content-between">
-                                    {currentStep !== 'summary' && (
+                                    {currentStep !== 'summary' ? (
                                         <Button 
                                             variant="outline-primary" 
                                             onClick={previousStep}
                                         >
                                             Previous
                                         </Button>
-                                    )}
+                                    ):  <div></div>}
                                     
                                     {currentStep !== 'review' ? (
                                         <Button 
