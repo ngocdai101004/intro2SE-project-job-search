@@ -53,9 +53,10 @@ const UserProfileForm: React.FC<Props> = ({isFirstTime}) => {
             phone: phone,
             address: address,
             avatar: avatar,
-            short_bio: shortBio
+            short_bio: shortBio,
+            date_of_birth: date_of_birth,
         });
-    }, [firstName, lastName, phone, address, avatar, shortBio]);
+    }, [firstName, lastName, phone, address, avatar, shortBio, date_of_birth]);
 
 
     // Fetch user data
@@ -76,6 +77,7 @@ const UserProfileForm: React.FC<Props> = ({isFirstTime}) => {
                 });
                 setAvatar(userData.avatar || '');
                 setShortBio(userData.short_bio || '');
+                setDateOfBirth(new Date(userData.date_of_birth));
             } catch (error: unknown) {
                 if (axios.isAxiosError(error) && error.response) {
                     console.log(error.response.data?.message || 'An error occurred.');

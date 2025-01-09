@@ -90,6 +90,7 @@ export interface ResumeData {
   certifications: ICertification[];
   job_preferences: IJobPreference[];
   ready_to_work: boolean;
+  resume: string[];
 }
 
 export interface BuildJobSearhCVProps {

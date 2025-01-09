@@ -45,7 +45,7 @@ const UserHeader = ({ myState, setMyState, userID }: UserHeaderProps) => {
             <Row>
               <Col xs="auto" className="d-flex justify-content-center">
                 <Image
-                  src="\company-avatar.jpg"
+                  src= {user?.avatar || "https://via.placeholder.com/150"}
                   roundedCircle
                   style={{ width: "80px", height: "80px" }}
                 />
