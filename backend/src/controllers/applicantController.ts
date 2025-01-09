@@ -141,3 +141,32 @@ export const updateApplicantStatus = async (req: Request, res: Response) => {
     });
   }
 };
+
+// Hàm để lưu thông tin applicant
+export const saveApplicant = async (req: Request, res: Response) => {
+  try {
+    const { job_id, user_id, resume_url, status, feedback } = req.body;
+
+    // Kiểm tra các giá trị bắt buộc
+    if (!job_id || !user_id || !resume_url || !status) {
+      res.status(400).json({ message: "Missing required fields." });
+    }
+
+    // Tạo một ứng dụng mới trong cơ sở dữ liệu
+    const newApplication = await ApplicationDB.create({
+      job_id: job_id,
+      user_id: user_id,
+      resume_url,
+      status,
+      feedback,
+    });
+
+    res.status(201).json({
+      message: "Application saved successfully.",
+      data: newApplication,
+    });
+  } catch (error) {
+    console.error("Error saving applicant:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
