@@ -1,17 +1,61 @@
 // SearchBar.tsx
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../../common/axiosInstance";
+import { IJob } from "../../interfaces/interfaces";
+import { IJobCard } from "../../interfaces/job";
 
 interface SearchBarProps {
-  onSearch: (searchTerm: string) => void;
+  onSearch: (searchedJobs: IJobCard[]) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const handleSearch = () => {
+  const [jobs, setJobs] = useState<IJobCard[]>([]);
+
+  const handleSearch = async () => {
     const searchTerm = (
       document.getElementById("searchInput") as HTMLInputElement
     ).value;
-    onSearch(searchTerm);
+    try {
+      const response = await axiosInstance.get(`/job/search`, {
+        params: { query: searchTerm },
+      });
+      const jobList = response.data.data.jobs || [];
+
+      const companiesResponse = await axiosInstance.get("/company");
+      const companies = companiesResponse.data.data || [];
+
+      const updatedJobs = jobList.map((job: IJob) => {
+        const company = companies.find(
+          (company: { _id: string }) => company._id === job.company_id
+        );
+        return {
+          ...job,
+          company_name: company?.company_name,
+          company_avatar: company?.avatar,
+        };
+      });
+
+      setJobs(updatedJobs);
+      onSearch(jobs);
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        handleSearch();
+      }
+    };
+
+    const searchInput = document.getElementById("searchInput");
+    searchInput?.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      searchInput?.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <div

@@ -80,8 +80,9 @@ const Home: React.FC = () => {
     };
   }, [isAuthenticated]);
 
-  const handleSearch = (searchTerm: string) => {
-    console.log("Searching for:", searchTerm);
+  const handleSearch = (searchedJobs: IJobCard[]) => {
+    setJobs(searchedJobs);
+    setSelectedJob(searchedJobs[0]);
   };
 
   return (
