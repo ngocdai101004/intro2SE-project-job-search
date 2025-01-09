@@ -110,11 +110,11 @@ const ViewCompanies: React.FC = () => {
               >
                 <thead>
                   <tr>
-                    <th></th>
-                    <th>Name Company</th>
-                    <th>Date Created</th>
-                    <th>Role</th>
-                    <th>Go to page</th>
+                    <th style={{ width: "5%" }}></th>
+                    <th style={{ width: "25%" }}>Name Company</th>
+                    <th style={{ width: "25%" }}>Date Created</th>
+                    <th style={{ width: "25%" }}>Role</th>
+                    <th style={{ width: "20%" }}>Go to page</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -141,7 +141,9 @@ const ViewCompanies: React.FC = () => {
                         </td>
                         <td>{company.createdAt}</td>
                         <td>
-                          <span>{company.role}</span>
+                          <strong>
+                            <span>{company.role}</span>
+                          </strong>
                         </td>
                         <td>
                           <Button
