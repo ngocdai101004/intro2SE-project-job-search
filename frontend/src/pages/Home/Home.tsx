@@ -11,11 +11,22 @@ import JobList from "../../components/JobCard/JobList.tsx";
 import JobDetail from "../../components/JobCard/JobDetail.tsx";
 import "./Home.css";
 import { Col, Row } from "react-bootstrap";
+import SortBar from "./SortBar.tsx";
 
+export interface ISortStatus {
+  sortByRelavant: string;
+  sortByDate: string;
+  sortBySalary: string;
+}
 const Home: React.FC = () => {
   const [jobs, setJobs] = useState<IJobCard[]>([]);
   const [selectedJob, setSelectedJob] = useState<IJobCard | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [sortStatus, setSortStatus] = useState<ISortStatus>({
+    sortByRelavant: "desc",
+    sortByDate: "",
+    sortBySalary: "",
+  });
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -80,17 +91,58 @@ const Home: React.FC = () => {
     };
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    const sortJobs = () => {
+      const sortedJobs = [...jobs];
+
+      if (sortStatus.sortBySalary === "asc") {
+        sortedJobs.sort((a, b) => {
+          if (!a.salary && !b.salary) return 0;
+          if (!a.salary) return -1;
+          if (!b.salary) return 1;
+          return a.salary.max - b.salary.max;
+        });
+      } else if (sortStatus.sortBySalary === "desc") {
+        sortedJobs.sort((a, b) => {
+          if (!a.salary && !b.salary) return 0;
+          if (!a.salary) return 1;
+          if (!b.salary) return -1;
+          return b.salary.max - a.salary.max;
+        });
+      }
+
+      if (sortStatus.sortByDate === "desc") {
+        sortedJobs.sort((a, b) => new Date(a.open_time).getTime() - new Date(b.open_time).getTime());
+      } else if (sortStatus.sortByDate === "asc") {
+        sortedJobs.sort((a, b) => new Date(b.open_time).getTime() - new Date(a.open_time).getTime());
+      }
+
+      setJobs(sortedJobs);
+      if (sortedJobs.length > 0) {
+        setSelectedJob(sortedJobs[0]);
+      }
+    };
+
+    sortJobs();
+  }
+  , [sortStatus]);
+
+  
   const handleSearch = (searchedJobs: IJobCard[]) => {
+    console.log("Searched Jobs in Home", searchedJobs);
     setJobs(searchedJobs);
     setSelectedJob(searchedJobs[0]);
   };
 
+
+  console.log("Jobs in Home", jobs);
   return (
     <div>
       <div className="d-flex flex-column vh-100">
         <MyHeader mydefaultActiveKey="/home" className="fixed-top" />
 
         <SearchBar onSearch={handleSearch} />
+        <SortBar sortStatus={sortStatus} setSortStatus={setSortStatus} />
 
         <div className="jobs-section text-center">
           <h2>Jobs for you</h2>
@@ -107,7 +159,7 @@ const Home: React.FC = () => {
               style={{
                 overflow: "scroll",
                 scrollbarWidth: "none",
-                height: "60vh",
+                height: "100vh",
               }}
             >
               <JobList
