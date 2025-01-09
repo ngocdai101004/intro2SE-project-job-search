@@ -29,7 +29,7 @@ const getUser = async (req: Request, res: Response) => {
 const getUserByEmail = async (req: Request, res: Response) => {
   try {
     const { email } = req.query as { email: string };
-    const user = await User.findOne({ email }).select("_id");
+    const user = await User.findOne({ email });
     if (user) {
       res.status(200).json({ message: "User found", data: { user } });
     } else {

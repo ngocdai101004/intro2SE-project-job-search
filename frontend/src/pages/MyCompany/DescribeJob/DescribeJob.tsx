@@ -174,7 +174,9 @@ const DescribeJob: React.FC = () => {
                     <Button
                       variant="outline-primary"
                       onClick={() =>
-                        handleNavigation("/my-company/preview-job")
+                        handleNavigation(
+                          `/my-company/${company_id}/preview-job`
+                        )
                       }
                     >
                       Preview <i className="bi bi-eye"></i>

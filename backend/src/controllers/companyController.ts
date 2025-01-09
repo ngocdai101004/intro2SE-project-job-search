@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Company from "../models/companyModel";
+import mongoose from "mongoose";
 
 // Create a new company
 export const createCompany = async (req: Request, res: Response) => {
@@ -321,6 +322,83 @@ export const getCompanyReviews = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(400).json({ message: (error as any).message, data: {} });
+  }
+};
+
+// Get all companies by owner/admin
+export const getAllCompaniesByOwnerAdmin = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { userID } = req.params; // Lấy userID từ params
+    const { page = 1, limit = 10 } = req.query;
+
+    if (!userID) {
+      res.status(400).json({ message: "Missing userID", data: [] });
+      return;
+    }
+
+    // Chuyển userID thành ObjectId
+    const userObjectId = new mongoose.Types.ObjectId(userID);
+
+    // Xử lý phân trang
+    const pageNumber = parseInt(page as string, 10) || 1;
+    const pageSize = parseInt(limit as string, 10) || 10;
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Lấy tổng số công ty
+    const totalCompanies = await Company.countDocuments({
+      $or: [{ owner_id: userObjectId }, { admin_id: userObjectId }],
+    });
+
+    // Lấy danh sách công ty với phân trang
+    const companies = await Company.aggregate([
+      {
+        $match: {
+          $or: [{ owner_id: userObjectId }, { admin_id: userObjectId }],
+        },
+      },
+      {
+        $addFields: {
+          role: {
+            $cond: {
+              if: { $eq: ["$owner_id", userObjectId] },
+              then: "Owner",
+              else: "Admin",
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          company_name: 1,
+          role: 1,
+          createdAt: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+          }, // Định dạng ngày
+          address: "$address.city_state",
+        },
+      },
+      { $sort: { createdAt: -1 } }, // Sắp xếp theo ngày tạo mới nhất
+      { $skip: skip }, // Bỏ qua số lượng bản ghi
+      { $limit: pageSize }, // Lấy số lượng bản ghi theo pageSize
+    ]);
+
+    // Trả về dữ liệu
+    res.status(200).json({
+      message: "Companies retrieved successfully.",
+      data: {
+        companies,
+        totalCompanies,
+        currentPage: pageNumber,
+        totalPages: Math.ceil(totalCompanies / pageSize),
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching companies:", error);
+    res.status(500).json({ message: "Internal server error", data: [] });
   }
 };
 
