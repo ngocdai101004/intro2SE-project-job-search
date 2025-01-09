@@ -32,10 +32,12 @@ const JobList: React.FC = () => {
   const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
+  console.log(typeof company_id)
+
   const [pagination, setPagination] = useState<Pagination>({
     totalJobs: 0,
     currentPage: 1,
-    totalPages: 1,
+    totalPages: 2,
   });
 
   const [jobStatus, setJobStatus] = useState<{ [key: string]: string }>({});
@@ -46,41 +48,8 @@ const JobList: React.FC = () => {
   const fetchJobs = async (page: number = 1) => {
     setLoading(true);
     try {
-      let fetchedJobs: Job[] = [];
-
-      // Kiểm tra dữ liệu từ localStorage chỉ khi ở trang đầu tiên
-      let limit = 2;
-      if (page === 1) {
-        const savedData = JSON.parse(
-          localStorage.getItem("jobPostData") || "null"
-        );
-        const currentPage = localStorage.getItem("currentPage");
-
-        if (
-          savedData &&
-          currentPage !== `/my-company/${company_id}/describe-job`
-        ) {
-          const localJob = {
-            _id: "local",
-            title: savedData.title || "Untitled Job",
-            location_type: savedData.locationType || "",
-            address: savedData.address || "",
-            status: "closed",
-            number_of_peoples: savedData.number_of_peoples || 0,
-            deadline: savedData.deadline || "",
-            createdAt: new Date().toISOString(),
-            applicantsCount: 0,
-            awaitingsCount: 0,
-          };
-          fetchedJobs.push(localJob);
-          setIncompleteJobs({ [localJob._id]: true });
-          limit -= 1; // Giảm limit để đảm bảo chỉ hiển thị 2 item trên trang đầu tiên
-        }
-      }
-
-      // Fetch dữ liệu từ database
       const response = await axiosInstance.get(
-        `/job/company/${company_id}?page=${page}&limit=${limit}`
+        `/job/company/${company_id}?page=${page}&limit=2`
       );
 
       const {
@@ -90,25 +59,45 @@ const JobList: React.FC = () => {
         currentPage: dbCurrentPage,
       } = response.data.data;
 
-      const statusMap: { [key: string]: string } = {};
+      const savedData = JSON.parse(
+        localStorage.getItem("jobPostData") || "null"
+      );
+      const currentPage = localStorage.getItem("currentPage");
+      let combinedJobs: Job[] = [];
       const incompleteMap: { [key: string]: boolean } = {};
 
-      dbJobs.forEach((job: Job) => {
-        statusMap[job._id] = job.status;
-        incompleteMap[job._id] = false; // Job từ database luôn hoàn thiện
-      });
+      if (
+        savedData &&
+        currentPage !== `/my-company/${company_id}/describe-job`
+      ) {
+        const localJob: Job = {
+          _id: "local",
+          title: savedData.title || "Untitled Job",
+          location_type: savedData.locationType || "",
+          address: savedData.address || "",
+          status: "closed",
+          number_of_peoples: savedData.number_of_peoples || 0,
+          deadline: savedData.deadline || "",
+          createdAt: new Date().toISOString(),
+          applicantsCount: 0,
+          awaitingsCount: 0,
+        };
+        combinedJobs = [localJob, ...dbJobs.slice(0, 1)];
+        incompleteMap[localJob._id] = true;
+      } else {
+        combinedJobs = dbJobs.slice(0, 2);
+        (dbJobs as Job[]).forEach((job) => {
+          incompleteMap[job._id] = false;
+        });
+      }
 
-      fetchedJobs = [...fetchedJobs, ...dbJobs];
-
-      setJobs(fetchedJobs);
+      setJobs(combinedJobs);
+      setIncompleteJobs(incompleteMap);
       setPagination({
-        totalJobs: totalJobs,
+        totalJobs,
         currentPage: dbCurrentPage,
-        totalPages: limit === 1 ? totalPages / 2 : totalPages,
+        totalPages,
       });
-      setJobStatus(statusMap);
-      setIncompleteJobs((prev) => ({ ...prev, ...incompleteMap }));
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Error fetching jobs:", err);
       setError(

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import JobDB from "../models/jobModel";
 import ApplicationDB from "../models/applicationModel";
 import UserDB from "../models/userModel";
+import mongoose from "mongoose";
 
 // Lấy thông tin ứng viên với phân trang
 export const getApplicantInfos = async (req: Request, res: Response) => {
@@ -168,5 +169,51 @@ export const saveApplicant = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error saving applicant:", error);
     res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+export const getApplicantCountsByJobId = async (req: Request, res: Response) => {
+  try {
+    const { jobId } = req.params;
+
+    // Validate jobId
+    if (!mongoose.Types.ObjectId.isValid(jobId)) {
+      res.status(400).json({ message: "Invalid job ID", data: null });
+    }
+
+    // Aggregate the counts based on status
+    const counts = await ApplicationDB.aggregate([
+      {
+        $match: { job_id: new mongoose.Types.ObjectId(jobId) },
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Parse the aggregated data
+    const statusCounts = counts.reduce(
+      (acc, curr) => {
+        acc[curr._id] = curr.count;
+        return acc;
+      },
+      { applied: 0, reviewing: 0 } // Default counts
+    );
+
+    res.status(200).json({
+      message: "Applicant counts fetched successfully",
+      data: {
+        applicantsCount: statusCounts.applied,
+        awaitingsCount: statusCounts.reviewing,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: (error as any).message || "Failed to fetch applicant counts",
+      data: null,
+    });
   }
 };
