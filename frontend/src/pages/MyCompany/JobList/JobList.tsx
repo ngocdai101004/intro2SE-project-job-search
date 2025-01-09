@@ -195,22 +195,57 @@ const JobList: React.FC = () => {
                 >
                   <thead>
                     <tr>
-                      <th style={{ width: "5%" }}>
-                        {/* <input type="checkbox" /> */}
+                      <th style={{ width: "5%" }}></th>
+                      <th style={{ width: "20%" }}>
+                        Job title
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          className="lucide lucide-chevrons-up-down"
+                        >
+                          <path d="m7 15 5 5 5-5" />
+                          <path d="m7 9 5-5 5 5" />
+                        </svg>
                       </th>
-                      <th style={{ width: "20%" }}>Job title</th>
                       <th style={{ width: "35%" }}>Candidates</th>
-                      <th style={{ width: "25%" }}>Date posted</th>
-                      <th style={{ width: "20%" }}>Job status</th>
+                      <th style={{ width: "25%" }}>
+                        <div className="title-icon">
+                          Date posted
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-chevrons-up-down"
+                          >
+                            <path d="m7 15 5 5 5-5" />
+                            <path d="m7 9 5-5 5 5" />
+                          </svg>
+                        </div>
+                      </th>
+                      <th style={{ width: "20%" }}>
+                        Job status
+                        <i className="bi bi-chevron-down"></i>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {jobs.length > 0 ? (
                       jobs.map((job) => (
                         <tr key={job._id}>
-                          <td>
-                            <input type="checkbox" />
-                          </td>
+                          <td></td>
                           <td>
                             <span
                               className="job-title"

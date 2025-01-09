@@ -147,7 +147,7 @@ const Candidates: React.FC = () => {
                 >
                   <thead>
                     <tr>
-                      <th>{/* <input type="checkbox" /> */}</th>
+                      <th></th>
                       <th>Candidates</th>
                       <th>Job applied to</th>
                       <th style={{ width: "40%" }}>Feedback</th>
@@ -158,9 +158,7 @@ const Candidates: React.FC = () => {
                     {candidates.length > 0 ? (
                       candidates.map((candidate, index) => (
                         <tr key={index}>
-                          <td>
-                            <input type="checkbox" />
-                          </td>
+                          <td></td>
                           <td>
                             <p className="candidate-name">
                               {candidate.candidateName}
