@@ -59,7 +59,7 @@ interface ICompany {
   admin_id?: string[];
 
   // Header
-  avatar: string;
+  avatar?: string;
   company_name: string;
   applicant: string[];
   employees: string[];
@@ -75,7 +75,7 @@ interface ICompany {
   reviews: IReview[];
 
   // QA
-  qa: IQA[];
+  qa?: IQA[];
 }
 
 export default ICompany;

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Col, Nav, Row, Image, Container } from "react-bootstrap";
-import ICompany from "../../../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../common/axiosInstance";
 import { toast } from "react-toastify";
+import ICompany from "../../../interfaces/company";
 
 interface CompanyHeaderProps {
   myState?: string;
@@ -46,18 +46,18 @@ const CompanyHeader = ({
   };
 
   useEffect(() => {
-    setFollows(companyData ? companyData.followers.length : 0);
+    setFollows(companyData?.followers?.length || 0);
     if (companyData) {
       fetchFollowed();
     }
-    const sumRating = companyData
-      ? companyData.reviews.reduce((acc, review) => acc + review.rating, 0)
-      : 0;
-    const len = companyData
-      ? companyData.reviews.length == 0
+    const sumRating =
+      companyData?.reviews?.reduce((acc, review) => acc + review.rating, 0) ||
+      0;
+
+    const len =
+      (companyData?.reviews?.length || 0) == 0
         ? 1
-        : companyData.reviews.length
-      : 1;
+        : companyData?.reviews?.length || 1;
     const rating = sumRating / len;
 
     setCompanyRating(rating);
@@ -126,7 +126,7 @@ const CompanyHeader = ({
                     {"☆".repeat(5 - Math.floor(companyRating))}
                   </div>
                   <small className="text-muted ms-2">
-                    {companyData ? companyData.reviews.length : 0} reviews
+                    {companyData ? companyData.reviews?.length || 0 : 0} reviews
                   </small>
                 </div>
                 <small className="text-muted">

@@ -5,7 +5,7 @@ import ProtectedRoute from "./common/ProtectedRoute.tsx";
 import Verify from "./pages/Auth/Verify.tsx";
 import ForgotPassword from "./pages/Auth/ForgotPassword.tsx";
 import ForgotPasswordEmail from "./pages/Auth/ForgotPasswordEmail.tsx";
-import Company from "./pages/Company/Company.tsx";
+// import Company from "./pages/Company/MainCompanyProfile/Company.tsx";
 import Home from "./pages/Home/Home.tsx";
 import CreateJobPost from "./pages/MyCompany/CreateJobPost/CreateJobPost.tsx";
 import AddJobBasics from "./pages/MyCompany/AddJobBasics/AddJobBasics.tsx";
@@ -18,14 +18,15 @@ import OwnUserProfile from "./pages/UserProfile/MainUserProfile/OwnUserProfile";
 import GuestUserProfile from "./pages/UserProfile/MainUserProfile/GuestUserProfile.tsx";
 import OwnJobSearchCV from "./pages/UserProfile/JobSearchCV/OwnJobSearchCV.tsx";
 import GuestJobSearchCV from "./pages/UserProfile/JobSearchCV/GuestJobSearchCV.tsx";
-import CompanyList from "./pages/Company/CompanyList.tsx";
+import CompanyList from "./pages/Company/MainCompanyProfile/CompanyList.tsx";
 import Candidates from "./pages/MyCompany/Candidates/Candidates.tsx";
 import AddJobDescription from "./pages/MyCompany/AddJobDescription/AddJobDescription.tsx";
 import BuildProfile from "./pages/BuildProfile/BuildProfile.tsx";
 import ChatPage from "./pages/Chat/Chat.tsx";
-
 import ResumeBuilder from "./pages/BuildJobSearchCV/ResumeBuilder.tsx";
 import BuildCompany from "./pages/BuildCompany/BuildCompany.tsx";
+import MainCompany from "./pages/Company/MainCompanyProfile/MainCompany.tsx";
+
 const router = createBrowserRouter([
   {
     path: "/signin",
@@ -56,7 +57,7 @@ const router = createBrowserRouter([
 
   {
     path: "/company/:company_id/:active_key",
-    element: <Company />,
+    element: <MainCompany />,
   },
   {
     path: "/my-company/:company_id/create-job-post",
