@@ -3,10 +3,12 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import axiosInstance from "../../../common/axiosInstance";
 import "./Candidates.css";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 interface Candidate {
   id: string;
+  userId: string;
+  jobId: string;
   candidateName: string;
   jobTitle: string;
   feedback: string;
@@ -22,6 +24,7 @@ interface Pagination {
 
 const Candidates: React.FC = () => {
   const { company_id } = useParams<{ company_id: string }>();
+  const navigate = useNavigate();
   const [candidates, setCandidates] = useState<Candidate[]>([]); // State lưu danh sách ứng viên
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [error, setError] = useState<string>(""); // Error state
@@ -125,6 +128,10 @@ const Candidates: React.FC = () => {
     }
   };
 
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <MainLayout company_id={company_id!}>
       <Container fluid className="candidate-post-container">
@@ -160,7 +167,18 @@ const Candidates: React.FC = () => {
                         <tr key={index}>
                           <td></td>
                           <td>
-                            <p className="candidate-name">
+                            <p
+                              className="candidate-name"
+                              style={{
+                                cursor: "pointer",
+                                textDecoration: "underline",
+                              }}
+                              onClick={() =>
+                                handleNavigate(
+                                  `/user/${candidate.userId}/profile`
+                                )
+                              }
+                            >
                               {candidate.candidateName}
                             </p>
                             <div className="candidate-state">
