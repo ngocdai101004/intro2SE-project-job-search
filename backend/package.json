@@ -30,7 +30,7 @@
     "react-markdown": "^9.0.1",
     "remark-gfm": "^4.0.0",
     "string-similarity": "^4.0.4",
-    "transformers": "^3.1.0",
+    "transformers": "^1.8.3",
     "ts-loader": "^9.5.1"
   },
   "devDependencies": {
