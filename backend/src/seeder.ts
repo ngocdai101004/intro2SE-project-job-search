@@ -32,7 +32,7 @@ const importData = async () => {
     const jobData = [];
     for (const job of jobs) {
       const embeddingArray = await getEmbedding(job.title);
-      const decimalEmbeddingArray = embeddingArray.map((value) =>
+      const decimalEmbeddingArray = embeddingArray.map((value: string) =>
         Number(value.toString())
       );
 
