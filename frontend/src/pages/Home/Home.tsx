@@ -28,6 +28,7 @@ const Home: React.FC = () => {
     sortByDate: "",
     sortBySalary: "",
   });
+  const [userID, setUserID] = useState<string>("");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -35,6 +36,7 @@ const Home: React.FC = () => {
         const response = await axiosInstance.get("/auth/check");
         if (response.status === 200) {
           setIsAuthenticated(true);
+          setUserID(response.data.data.userID);
         }
       } catch (error) {
         console.log(error);
@@ -142,7 +144,7 @@ const Home: React.FC = () => {
       <div className="d-flex flex-column vh-100">
         <MyHeader mydefaultActiveKey="/home" className="fixed-top" />
 
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} userID={(userID !== "" ? userID : null)} />
         <SortBar sortStatus={sortStatus} setSortStatus={setSortStatus} />
 
         <div className="jobs-section text-center">

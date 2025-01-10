@@ -22,28 +22,30 @@ connectDB();
 
 const importData = async () => {
   try {
-    await User.deleteMany();
-    await User.insertMany(users);
-    await Chat.deleteMany();
-    await Chat.insertMany(chats);
-    await Application.deleteMany();
-    await Application.insertMany(applications);
-    await Job.deleteMany();
-    const jobData = [];
-    for (const job of jobs) {
-      const embeddingArray = await getEmbedding(job.title);
-      const decimalEmbeddingArray = embeddingArray.map((value) =>
-        Number(value.toString())
-      );
+    // await User.deleteMany();
+    // await User.insertMany(users);
+    // await Chat.deleteMany();
+    // await Chat.insertMany(chats);
+    // await Application.deleteMany();
+    // await Application.insertMany(applications);
+    // await Job.deleteMany();
+    // const jobData = [];
+    // for (const job of jobs) {
+    //   const embeddingArray = await getEmbedding(
+    //     job.title + " " + job.description || ""
+    //   );
+    //   const decimalEmbeddingArray = embeddingArray.map((value) =>
+    //     Number(value.toString())
+    //   );
 
-      job.plot_embedding = decimalEmbeddingArray;
-      jobData.push(job);
-    }
-    await Job.insertMany(jobData);
-    await Company.deleteMany();
-    await Company.insertMany(companies);
-    await UserInfo.deleteMany();
-    await UserInfo.insertMany(userInfo);
+    //   job.plot_embedding = decimalEmbeddingArray;
+    //   jobData.push(job);
+    // }
+    // await Job.insertMany(jobData);
+    // await Company.deleteMany();
+    // await Company.insertMany(companies);
+    // await UserInfo.deleteMany();
+    // await UserInfo.insertMany(userInfo);
     const jobSample = await Job.find();
     console.log("Jobs:", jobSample[0]);
     console.log("Data Imported!");

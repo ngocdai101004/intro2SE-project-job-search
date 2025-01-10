@@ -24,27 +24,25 @@ const getJobsBySearching = async (req: Request, res: Response) => {
       filters.location_type = location;
     }
     console.log("Filters:", filters);
-    const sortCriteria: any = {};
-    sortCriteria.score = { $meta: "textScore" };
     const embeddedQuery = await getEmbedding(normalizedQuery);
     const decimalEmbeddingArray = embeddedQuery.map((value) =>
       Number(value.toString())
     );
 
+    const similarityThreshold = 0.78;
+
     const result = await Job.aggregate([
       {
         $vectorSearch: {
           index: "vector_index",
-          // Indexed vectorEmbedding type field to search.
           path: "plot_embedding",
           queryVector: decimalEmbeddingArray,
           numCandidates: 50,
-          limit: 5,
+          limit: 20,
           filter: {},
         },
       },
       { $match: filters },
-      { $sort: sortCriteria },
       { $limit: 20 },
       {
         $project: {
@@ -54,8 +52,15 @@ const getJobsBySearching = async (req: Request, res: Response) => {
           jobType: 1,
           open_time: 1,
           score: { $meta: "searchScore" },
+          similarity: { $meta: "vectorSearchScore" },
         },
       },
+      {
+        $match: {
+          similarity: { $gte: similarityThreshold },
+        },
+      },
+      { $sort: { similarity: -1 } },
     ]);
 
     console.log("Result:", result);
