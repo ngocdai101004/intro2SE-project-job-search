@@ -175,8 +175,7 @@ const UserHeader = ({myState, setMyState, userID}: UserHeaderProps) => {
                         onClick={handleStartChat}
                     >
                         <div className="d-flex flex-row align-items-center">
-                            <i className="bi bi-chat me-3" style={{fontSize: "1.2rem"}}></i>
-                            <span>Start chat</span>
+                            <i className="bi bi-chat-dots-fill me-3" style={{fontSize: "1.2rem"}}></i>
                         </div>
                     </Button>
                 )}
