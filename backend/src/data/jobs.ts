@@ -53,7 +53,7 @@ export const jobs = [
     salary: { min: 2000, max: 2000 },
     deadline: getRandomDateWithinDays(10),
     open_time: getRandomDateWithinDays(-10),
-    plot_embedding: new Array(768).fill(0),
+    plot_embedding: new Array(768).fill(1),
   },
   {
     _id: new ObjectId(),
@@ -92,7 +92,7 @@ export const jobs = [
     emails: "hr@company1.com",
     deadline: getRandomDateWithinDays(10),
     open_time: getRandomDateWithinDays(-10),
-    plot_embedding: new Array(768).fill(0),
+    plot_embedding: new Array(768).fill(1),
   },
 
   {
@@ -130,7 +130,7 @@ export const jobs = [
     salary: { min: 2200, max: 2200 },
     deadline: getRandomDateWithinDays(10),
     open_time: getRandomDateWithinDays(-10),
-    plot_embedding: new Array(768).fill(0),
+    plot_embedding: new Array(768).fill(1),
   },
   {
     _id: new ObjectId(),
@@ -168,7 +168,7 @@ export const jobs = [
     salary: { min: 2500, max: 2500 },
     deadline: getRandomDateWithinDays(10),
     open_time: getRandomDateWithinDays(-10),
-    plot_embedding: new Array(768).fill(0),
+    plot_embedding: new Array(768).fill(1),
   },
 
   {
@@ -208,7 +208,7 @@ export const jobs = [
     salary: { min: 2400, max: 2400 },
     deadline: getRandomDateWithinDays(10),
     open_time: getRandomDateWithinDays(-10),
-    plot_embedding: new Array(768).fill(0),
+    plot_embedding: new Array(768).fill(1),
   },
   {
     _id: new ObjectId(),
@@ -245,7 +245,7 @@ export const jobs = [
     salary: { min: 3000, max: 3000 },
     deadline: getRandomDateWithinDays(10),
     open_time: getRandomDateWithinDays(-10),
-    plot_embedding: new Array(768).fill(0),
+    plot_embedding: new Array(768).fill(1),
   },
   {
     _id: new ObjectId(),
@@ -283,7 +283,7 @@ export const jobs = [
     salary: { min: 2800, max: 2800 },
     deadline: getRandomDateWithinDays(10),
     open_time: getRandomDateWithinDays(-10),
-    plot_embedding: new Array(768).fill(0),
+    plot_embedding: new Array(768).fill(1),
   },
   {
     _id: new ObjectId(),
@@ -319,6 +319,6 @@ export const jobs = [
     salary: { min: 3200, max: 3200 },
     deadline: getRandomDateWithinDays(10),
     open_time: getRandomDateWithinDays(-10),
-    plot_embedding: new Array(768).fill(0),
+    plot_embedding: new Array(768).fill(1),
   },
 ];

@@ -29,26 +29,25 @@ const importData = async () => {
     await Application.deleteMany();
     await Application.insertMany(applications);
     await Job.deleteMany();
-    await Job.insertMany(jobs);
-    for (const jobData of jobs) {
-      const embeddingArray = await getEmbedding(
-        jobData.title + (jobData.description || "")
-      );
+    const jobData = [];
+    for (const job of jobs) {
+      const embeddingArray = await getEmbedding(job.title);
       const decimalEmbeddingArray = embeddingArray.map((value) =>
-        Decimal128.fromString(value.toString())
+        Number(value.toString())
       );
 
-      jobData.plot_embedding = decimalEmbeddingArray;
-      console.log(jobData.plot_embedding);
+      job.plot_embedding = decimalEmbeddingArray;
+      jobData.push(job);
     }
+    await Job.insertMany(jobData);
     await Company.deleteMany();
     await Company.insertMany(companies);
     await UserInfo.deleteMany();
     await UserInfo.insertMany(userInfo);
-
-    console.log("Data Imported!");
     const jobSample = await Job.find();
     console.log("Jobs:", jobSample[0]);
+    console.log("Data Imported!");
+    process.exit();
   } catch (error) {
     console.error(`${error}`);
     process.exit(1);

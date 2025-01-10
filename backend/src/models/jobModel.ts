@@ -79,7 +79,7 @@ const jobSchema = new mongoose.Schema(
       required: true,
     },
     plot_embedding: {
-      type: [mongoose.Types.Decimal128],
+      type: [Number],
       required: true,
     },
   },
