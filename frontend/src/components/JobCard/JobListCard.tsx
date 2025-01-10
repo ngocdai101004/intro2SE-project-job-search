@@ -1,6 +1,7 @@
 import React from "react";
 import { IJobCard } from "../../interfaces/job";
 import TimeFormat from "./TimeFormat";
+import "./Card.css";
 
 interface JobListCardProps {
   job: IJobCard;
@@ -15,9 +16,9 @@ const JobListCard: React.FC<JobListCardProps> = ({
 }) => {
   return (
     <div
-      className={`card mb-4 shadow-sm job-card ${
-        isSelected ? "selected-bg" : ""
-      }`}
+      className={"card mb-4 shadow-sm job-card"}
+      style={{ cursor: "pointer", backgroundColor: isSelected ? "#d8edfe" : "" }}
+
       onClick={onClick}
     >
       <div className="card-body">

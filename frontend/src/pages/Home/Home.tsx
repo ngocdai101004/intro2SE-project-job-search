@@ -6,11 +6,9 @@ import { useState, useEffect } from "react";
 import { IJobCard } from "../../interfaces/job.ts";
 import { IJob } from "../../interfaces/job.ts";
 import SearchBar from "./SearchBar"; // Import the SearchBar component
-import "./Home.css";
 // import JobList from "../../components/JobCard/JobList.tsx";
 import JobListWithPagination from "../../components/JobCard/JobListWithPagination.tsx";
 import JobDetail from "../../components/JobCard/JobDetail.tsx";
-import "./Home.css";
 import { Col, Row } from "react-bootstrap";
 import SortBar from "./SortBar.tsx";
 
@@ -53,12 +51,14 @@ const Home: React.FC = () => {
         let jobList = [];
         if (isAuthenticated) {
           const recommendedJobsResponse = await axiosInstance.get(
-            "/job/recommended"
+        "/job/recommended"
           );
-          jobList = recommendedJobsResponse.data.data.jobs || [];
+          jobList = recommendedJobsResponse.data.data.jobs.slice(0, 30) || [];
         } else {
           const jobsResponse = await axiosInstance.get("/job");
-          jobList = jobsResponse.data.data.jobs || [];
+          console.log("Jobs Response", jobsResponse.data.data.jobs);
+          jobList = jobsResponse.data.data.jobs.slice(0, 20) || [];
+          console.log("Job List", jobList);
         }
 
         const companiesResponse = await axiosInstance.get("/company");
@@ -138,7 +138,8 @@ const Home: React.FC = () => {
   };
 
 
-  console.log("Jobs in Home", jobs);
+  console.log("Jobs in Home", jobs.length);
+  console.log("Selected Job in Home", selectedJob);
   return (
     <div>
       <div className="d-flex flex-column vh-100">

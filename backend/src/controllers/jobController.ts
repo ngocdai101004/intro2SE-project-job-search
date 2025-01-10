@@ -20,7 +20,7 @@ export const createJob = async (req: Request, res: Response) => {
       ...jobData,
       owner_id: userID,
       plot_embedding: await getEmbedding(
-        jobData.title + (jobData.description || "")
+        jobData.title + jobData.description || ""
       ),
     });
     const userInfo = await UserInfo.find({
@@ -58,7 +58,10 @@ export const getJobs = async (req: Request, res: Response) => {
     if (company_id) {
       jobs = await Job.find({ company_id: company_id });
     } else {
-      jobs = await Job.find();
+      jobs = await Job.find()
+        .select("-plot_embedding")
+        .sort({ open_time: -1 })
+        .limit(20);
     }
 
     res.status(200).json({
@@ -180,7 +183,7 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
 export const getJobByID = async (req: Request, res: Response) => {
   try {
     const { jobID } = req.params;
-    const job = await Job.findById(jobID);
+    const job = await Job.findById(jobID).select("-plot_embedding");
     res.status(200).json({
       message: "Job fetched successfully",
       data: { job },
@@ -200,7 +203,10 @@ export const getRecommendedJobs = async (req: Request, res: Response) => {
 
     // If no job references, return 10 random jobs
     if (job_references.length === 0) {
-      const jobs = await Job.find().sort({ open_time: -1 }).limit(30);
+      const jobs = await Job.find()
+        .select("-plot_embedding")
+        .sort({ open_time: -1 })
+        .limit(30);
       res.status(200).json({
         message: "Recommended jobs fetched successfully",
         data: { jobs },
@@ -228,17 +234,16 @@ export const getRecommendedJobs = async (req: Request, res: Response) => {
 
         return { ...job.toObject(), similarity: avgSimilarity };
       })
-      .filter((job) => job.similarity >= 0.3) // Filter jobs with similarity above threshold
+      .filter((job) => job.similarity >= 0.2) // Filter jobs with similarity above threshold
       .sort((a, b) => b.similarity - a.similarity)
-      .slice(0, 30);
+      .slice(0, 20);
 
-    console.log("Before", jobs.length);
-    if (jobs.length < 30) {
+    if (jobs.length < 20) {
       const additionalJobs = await Job.find({
         _id: { $nin: jobs.map((job) => job._id) },
       })
         .sort({ open_time: -1 })
-        .limit(30 - jobs.length);
+        .limit(20 - jobs.length);
       const additionalJobsWithSimilarity = additionalJobs.map((job) => ({
         ...job.toObject(),
         similarity: 0, // or any default similarity value
@@ -246,7 +251,6 @@ export const getRecommendedJobs = async (req: Request, res: Response) => {
       jobs.push(...additionalJobsWithSimilarity);
     }
 
-    console.log("After", jobs.length);
     res.status(200).json({
       message: "Recommended jobs fetched successfully",
       data: { jobs },
@@ -255,6 +259,7 @@ export const getRecommendedJobs = async (req: Request, res: Response) => {
     res.status(400).json({ message: (error as any).message, data: [] });
   }
 };
+
 // Cập nhật trạng thái công việc
 export const updateJobStatus = async (req: Request, res: Response) => {
   try {
