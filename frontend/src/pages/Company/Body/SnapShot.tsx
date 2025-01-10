@@ -1,4 +1,4 @@
-import { Card, Row, Col, Button } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ICompany from "../../../interfaces/company";
 
@@ -61,10 +61,10 @@ const Snapshot: React.FC<{ companyData: ICompany }> = ({ companyData }) => {
         </Row>
         <p style={{ fontSize: "0.85rem" }}>{companyData.short_description}</p>
 
-        <h4 className="mt-4 mb-3" style={{ fontSize: "1.2rem" }}>
+        {/* <h4 className="mt-4 mb-3" style={{ fontSize: "1.2rem" }}>
           Job near you
-        </h4>
-        <Row>
+        </h4> */}
+        {/* <Row>
           <Col md={4} className="mb-3">
             <Card className="p-3 text-center">
               <h6 style={{ fontSize: "1rem" }}>
@@ -107,7 +107,7 @@ const Snapshot: React.FC<{ companyData: ICompany }> = ({ companyData }) => {
               </Button>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </Card>
     </div>
   );

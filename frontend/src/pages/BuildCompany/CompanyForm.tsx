@@ -1,5 +1,5 @@
 // UserRegistrationForm.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import PersonalInfo from "./InfoCards/CompanyInfo.tsx";
 import DescriptionInfo from "./InfoCards/DescriptionInfo.tsx";
@@ -33,6 +33,20 @@ const UserRegistrationForm: React.FC<Props> = ({
   const [currentStep, setCurrentStep] = useState<FormStep>("information");
 
   const [adminInfos, setAdminInfos] = useState<IUser[]>([]);
+
+  useEffect(() => {
+    if ((companyData.admin_id ?? []).length === 0) return;
+    console.log(companyData.admin_id);
+    setAdminInfos([]);
+    companyData.admin_id?.forEach(async (adminId) => {
+      try {
+        const response = await axiosInstance.get(`/user/${adminId}/profile`);
+        setAdminInfos((prev) => [response.data.data.user, ...prev]);
+      } catch (error: unknown) {
+        console.error("Failed to fetch admin info", error);
+      }
+    });
+  }, [companyData.admin_id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     console.log("Formatdata", companyData);
