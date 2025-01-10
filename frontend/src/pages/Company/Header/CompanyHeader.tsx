@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Col, Nav, Row, Image, Container } from "react-bootstrap";
-import ICompany from "../../../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../common/axiosInstance";
 import { toast } from "react-toastify";
+import ICompany from "../../../interfaces/company";
 
 interface CompanyHeaderProps {
   myState?: string;
   setMyState?: React.Dispatch<React.SetStateAction<string>>;
-  companyData: ICompany | null;
+  companyData: ICompany;
 }
 
 const CompanyHeader = ({
@@ -26,16 +26,19 @@ const CompanyHeader = ({
 
   const fetchFollowed = async () => {
     try {
-      const response = await axiosInstance.get(
-        `/company/${companyData?._id}/isFollowed`
-      );
-      console.log(response.data.message);
-      setMessage(response.data.message);
-      if (response.data.data.isFollowed !== undefined) {
-        setFollowed(response.data.data.isFollowed);
-        return true;
-      } else {
-        return false;
+      console.log("company id: ", companyData?._id);
+      if (companyData?._id !== undefined) {
+        const response = await axiosInstance.get(
+          `/company/${companyData?._id}/isFollowed`
+        );
+        console.log(response.data.message);
+        setMessage(response.data.message);
+        if (response.data.data.isFollowed !== undefined) {
+          setFollowed(response.data.data.isFollowed);
+          return true;
+        } else {
+          return false;
+        }
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -46,18 +49,20 @@ const CompanyHeader = ({
   };
 
   useEffect(() => {
-    setFollows(companyData ? companyData.followers.length : 0);
+    setFollows(companyData?.followers?.length || 0);
     if (companyData) {
       fetchFollowed();
     }
-    const sumRating = companyData
-      ? companyData.reviews.reduce((acc, review) => acc + review.rating, 0)
-      : 0;
-    const len = companyData
-      ? companyData.reviews.length == 0
+    const sumRating =
+      companyData?.reviews?.reduce(
+        (acc, review) => acc + (review.rating || 0),
+        0
+      ) || 0;
+
+    const len =
+      (companyData?.reviews?.length || 0) == 0
         ? 1
-        : companyData.reviews.length
-      : 1;
+        : companyData?.reviews?.length || 1;
     const rating = sumRating / len;
 
     setCompanyRating(rating);
@@ -108,14 +113,14 @@ const CompanyHeader = ({
             <Row>
               <Col xs="auto" className="d-flex justify-content-center">
                 <Image
-                  src={companyData ? companyData.avatar : "/company-avatar.jpg"} // Đặt đường dẫn tới logo
+                  src={companyData?.avatar || "/company-avatar.jpg"} // Đặt đường dẫn tới logo
                   roundedCircle
-                  style={{ width: "80px" }}
+                  style={{ width: "80px", height: "80px", objectFit: "cover" }}
                 />
               </Col>
               <Col className="d-flex flex-column justify-content-center">
                 <h5 className="mb-1">
-                  {companyData ? companyData.company_name : "Fusodoya Company"}
+                  {companyData?.company_name || "Fusodoya Company"}
                 </h5>
                 <div className="d-flex align-items-center mb-1">
                   <span className="me-2 text-primary fw-bold">
@@ -126,12 +131,11 @@ const CompanyHeader = ({
                     {"☆".repeat(5 - Math.floor(companyRating))}
                   </div>
                   <small className="text-muted ms-2">
-                    {companyData ? companyData.reviews.length : 0} reviews
+                    {companyData?.reviews?.length || 0} reviews
                   </small>
                 </div>
                 <small className="text-muted">
-                  {companyData ? companyData.applicant?.length : 0} others have
-                  applied here
+                  {companyData?.applicant?.length || 0} others have applied here
                 </small>
               </Col>
             </Row>
@@ -212,12 +216,6 @@ const CompanyHeader = ({
                   className="text-dark fs-5"
                 >
                   Reviews
-                </Nav.Link>
-              </Nav.Item>
-
-              <Nav.Item className="me-2 me-md-5">
-                <Nav.Link eventKey="/qa" href="qa" className="text-dark fs-5">
-                  Q&A
                 </Nav.Link>
               </Nav.Item>
             </Nav>

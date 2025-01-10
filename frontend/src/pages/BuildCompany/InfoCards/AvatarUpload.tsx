@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import ICompany from "../../../interfaces/company"; // Adjust the path as necessary
 import { uploadFile } from "../../../utils/s3";
 import IFile from "../../../interfaces/file";
@@ -55,9 +55,43 @@ const AvatarUpload: React.FC<Props> = ({ data, onChange }) => {
     }
   };
 
+  const handleRemoveAvatar = () => {
+    onChange("avatar", ""); // Clear the avatar URL in the parent component
+  };
+
   return (
     <div>
       <h4>Upload Avatar</h4>
+      {(data.avatar ?? "") !== "" && (
+        <div style={{ position: "relative" }}>
+          <div className="mb-3 text-center">
+            <div
+              style={{
+                width: "150px",
+                height: "150px",
+                borderRadius: "50%",
+                overflow: "hidden",
+                display: "inline-block",
+                border: "1px solid #ddd",
+              }}
+            >
+              <img
+                src={data.avatar}
+                alt="Avatar preview"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+            <Button
+              variant="danger"
+              onClick={handleRemoveAvatar}
+              className="mt-2"
+              style={{ position: "absolute", bottom: "10px", right: "10px" }}
+            >
+              Remove Image
+            </Button>
+          </div>
+        </div>
+      )}
       <Form.Group controlId="formFile">
         <Form.Label>Choose an image</Form.Label>
         <Form.Control
@@ -68,16 +102,6 @@ const AvatarUpload: React.FC<Props> = ({ data, onChange }) => {
         />
       </Form.Group>
       {loading && <p>Uploading...</p>}
-      {data.avatar && (
-        <div>
-          <h5>Current Avatar:</h5>
-          <img
-            src={data.avatar}
-            alt="Current Avatar"
-            style={{ width: "100px", height: "100px", objectFit: "cover" }}
-          />
-        </div>
-      )}
     </div>
   );
 };

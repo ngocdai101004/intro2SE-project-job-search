@@ -6,6 +6,9 @@ import mongoose from "mongoose";
 import CompanyDB from "../models/companyModel";
 import { sendEmail } from "../utils/sendEmail";
 import UserDB from "../models/userModel";
+import Application from "../models/applicationModel";
+import exp from "constants";
+import { getEmbedding } from "../utils/plot-embedding";
 
 // Create a new job
 export const createJob = async (req: Request, res: Response) => {
@@ -16,6 +19,9 @@ export const createJob = async (req: Request, res: Response) => {
       open_time: new Date(),
       ...jobData,
       owner_id: userID,
+      plot_embedding: await getEmbedding(
+        jobData.title + (jobData.description || "")
+      ),
     });
     const userInfo = await UserInfo.find({
       following: { $in: [job.company_id] },
@@ -69,31 +75,35 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
     const { companyId } = req.params;
     const { page = 1, limit = 10 } = req.query;
 
-    // Kiểm tra companyId hợp lệ
+    // Validate companyId
     if (!mongoose.Types.ObjectId.isValid(companyId)) {
-      res.status(400).json({ message: "Invalid company ID", data: [] });
-      return;
+      res.status(400).json({ message: "Invalid company ID", data: null });
     }
 
     const pageNumber = parseInt(page as string, 10) || 1;
     const pageSize = parseInt(limit as string, 10) || 10;
     const skip = (pageNumber - 1) * pageSize;
 
+    // Fetch company address
+    const company = await CompanyDB.findById(companyId).select(
+      "address.city_state address.country"
+    );
+    if (!company) {
+      res.status(404).json({ message: "Company not found", data: null });
+    }
+    const city_state = company?.address?.city_state || "";
+    const country = company?.address?.country || "";
+    // Format the address as "city_state, country"
+    const formattedAddress = `${city_state}${
+      city_state && country ? ", " : ""
+    }${country}`;
+
+    // Fetch jobs with pagination
     const jobs = await Job.aggregate([
-      {
-        $match: { company_id: new mongoose.Types.ObjectId(companyId) },
-      },
-      {
-        $lookup: {
-          from: "companies",
-          localField: "company_id",
-          foreignField: "_id",
-          as: "companyInfo",
-        },
-      },
-      {
-        $unwind: "$companyInfo",
-      },
+      { $match: { company_id: new mongoose.Types.ObjectId(companyId) } },
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: pageSize },
       {
         $lookup: {
           from: "applications",
@@ -122,13 +132,14 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
               },
             },
           },
-          address: "$companyInfo.address.city_state",
+          address: formattedAddress,
         },
       },
       {
         $project: {
           _id: 1,
           title: 1,
+          location_type: 1,
           status: 1,
           number_of_peoples: 1,
           deadline: 1,
@@ -140,11 +151,12 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
           address: 1,
         },
       },
-      { $sort: { createdAt: -1 } },
-      { $skip: skip },
-      { $limit: pageSize },
+      // { $sort: { createdAt: -1 } },
+      // { $skip: skip },
+      // { $limit: pageSize },
     ]);
 
+    // Total job count
     const totalJobs = await Job.countDocuments({ company_id: companyId });
 
     res.status(200).json({
@@ -243,14 +255,11 @@ export const getRecommendedJobs = async (req: Request, res: Response) => {
     res.status(400).json({ message: (error as any).message, data: [] });
   }
 };
-
 // Cập nhật trạng thái công việc
 export const updateJobStatus = async (req: Request, res: Response) => {
   try {
     const { jobID } = req.params; // Lấy jobID từ params
     const { status } = req.body; // Lấy status từ body
-
-    console.log(jobID, status);
 
     // Kiểm tra trạng thái hợp lệ
     const validStatuses = ["open", "closed", "draft"];

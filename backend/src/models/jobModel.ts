@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Double } from "mongodb";
 
 const jobSchema = new mongoose.Schema(
   {
@@ -33,7 +34,7 @@ const jobSchema = new mongoose.Schema(
     location_type: {
       type: String,
       required: true,
-      enum: ["remote", "on-site", "hybrid"], // Example location types
+      // Example location types
     },
 
     description: {
@@ -75,6 +76,10 @@ const jobSchema = new mongoose.Schema(
 
     deadline: {
       type: Date,
+      required: true,
+    },
+    plot_embedding: {
+      type: [mongoose.Types.Decimal128],
       required: true,
     },
   },

@@ -11,9 +11,11 @@ import { companies } from "./data/companies";
 import Company from "./models/companyModel";
 import { userInfo } from "./data/userInfo";
 import UserInfo from "./models/userInfoModel";
+import { getEmbedding } from "./utils/plot-embedding";
+import mongoose from "mongoose";
 
 import connectDB from "./configs/db";
-
+import { Decimal128 } from "bson";
 dotenv.config();
 
 connectDB();
@@ -28,13 +30,25 @@ const importData = async () => {
     await Application.insertMany(applications);
     await Job.deleteMany();
     await Job.insertMany(jobs);
+    for (const jobData of jobs) {
+      const embeddingArray = await getEmbedding(
+        jobData.title + (jobData.description || "")
+      );
+      const decimalEmbeddingArray = embeddingArray.map((value) =>
+        Decimal128.fromString(value.toString())
+      );
+
+      jobData.plot_embedding = decimalEmbeddingArray;
+      console.log(jobData.plot_embedding);
+    }
     await Company.deleteMany();
     await Company.insertMany(companies);
     await UserInfo.deleteMany();
     await UserInfo.insertMany(userInfo);
 
     console.log("Data Imported!");
-    process.exit();
+    const jobSample = await Job.find();
+    console.log("Jobs:", jobSample[0]);
   } catch (error) {
     console.error(`${error}`);
     process.exit(1);

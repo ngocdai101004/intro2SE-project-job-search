@@ -110,7 +110,7 @@ const CreateJobPost: React.FC = () => {
                         onClick={
                           () =>
                             selectedOption === "new"
-                              ? handleNavigation("/my-company/add-job-basics")
+                              ? handleNavigation(`/my-company/${company_id}/add-job-basics`)
                               : handleContinue() // Điều hướng đến trang đang điền dở
                         }
                       >

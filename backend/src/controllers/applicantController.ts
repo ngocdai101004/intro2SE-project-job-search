@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import JobDB from "../models/jobModel";
 import ApplicationDB from "../models/applicationModel";
 import UserDB from "../models/userModel";
+import mongoose from "mongoose";
 
 // Lấy thông tin ứng viên với phân trang
 export const getApplicantInfos = async (req: Request, res: Response) => {

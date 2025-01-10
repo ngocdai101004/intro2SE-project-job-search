@@ -47,68 +47,74 @@ const JobList: React.FC = () => {
     setLoading(true);
     try {
       let fetchedJobs: Job[] = [];
-
-      // Kiểm tra dữ liệu từ localStorage chỉ khi ở trang đầu tiên
-      let limit = 2;
-      if (page === 1) {
-        const savedData = JSON.parse(
-          localStorage.getItem("jobPostData") || "null"
-        );
-        const currentPage = localStorage.getItem("currentPage");
-
-        if (
-          savedData &&
-          currentPage !== `/my-company/${company_id}/describe-job`
-        ) {
-          const localJob = {
-            _id: "local",
-            title: savedData.title || "Untitled Job",
-            location_type: savedData.locationType || "",
-            address: savedData.address || "",
-            status: "closed",
-            number_of_peoples: savedData.number_of_peoples || 0,
-            deadline: savedData.deadline || "",
-            createdAt: new Date().toISOString(),
-            applicantsCount: 0,
-            awaitingsCount: 0,
-          };
-          fetchedJobs.push(localJob);
-          setIncompleteJobs({ [localJob._id]: true });
-          limit -= 1; // Giảm limit để đảm bảo chỉ hiển thị 2 item trên trang đầu tiên
-        }
-      }
-
-      // Fetch dữ liệu từ database
-      const response = await axiosInstance.get(
-        `/job/company/${company_id}?page=${page}&limit=${limit}`
+  
+      // Số lượng job cần hiển thị trên mỗi trang
+      const limit = 2;
+  
+      // Kiểm tra dữ liệu trong localStorage
+      const savedData = JSON.parse(
+        localStorage.getItem("jobPostData") || "null"
       );
 
+      const currentPage = localStorage.getItem("currentPage");
+      let hasLocalJob = false;  
+      console.log("Current page:", currentPage);   
+
+      if (
+        page === 1 &&
+        savedData &&
+        currentPage !== `/my-company/${company_id}/describe-job`
+      ) {
+        hasLocalJob = true;
+  
+        const localJob = {
+          _id: "local",
+          title: savedData.title || "Untitled Job",
+          location_type: savedData.locationType || "",
+          address: savedData.address || "",
+          status: "closed",
+          number_of_peoples: savedData.number_of_peoples || 0,
+          deadline: savedData.deadline || "",
+          createdAt: new Date().toISOString(),
+          applicantsCount: 0,
+          awaitingsCount: 0,
+        };
+  
+        fetchedJobs.push(localJob);
+        setIncompleteJobs({ [localJob._id]: true });
+      }
+  
+      // Fetch dữ liệu từ database
+      const response = await axiosInstance.get(
+        `/job/company/${company_id}?page=${page}&limit=2`
+      );
+  
       const {
         jobs: dbJobs,
         totalJobs,
         totalPages,
         currentPage: dbCurrentPage,
       } = response.data.data;
-
+  
       const statusMap: { [key: string]: string } = {};
       const incompleteMap: { [key: string]: boolean } = {};
-
+  
       dbJobs.forEach((job: Job) => {
         statusMap[job._id] = job.status;
         incompleteMap[job._id] = false; // Job từ database luôn hoàn thiện
       });
-
+  
       fetchedJobs = [...fetchedJobs, ...dbJobs];
-
+      fetchedJobs = fetchedJobs.slice(0, limit);
+  
       setJobs(fetchedJobs);
       setPagination({
-        totalJobs: totalJobs,
+        totalJobs: hasLocalJob ? totalJobs + 1 : totalJobs,
         currentPage: dbCurrentPage,
-        totalPages: limit === 1 ? totalPages / 2 : totalPages,
+        totalPages: totalPages,
       });
       setJobStatus(statusMap);
       setIncompleteJobs((prev) => ({ ...prev, ...incompleteMap }));
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Error fetching jobs:", err);
       setError(
@@ -122,6 +128,13 @@ const JobList: React.FC = () => {
   useEffect(() => {
     fetchJobs();
   }, []);
+  
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      fetchJobs(newPage); // Không thêm job local khi chuyển trang
+    }
+  };
+
 
   const updateJobStatus = async (jobId: string, newStatus: string) => {
     try {
@@ -149,14 +162,8 @@ const JobList: React.FC = () => {
     updateJobStatus(jobId, newStatus);
   };
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= pagination.totalPages) {
-      fetchJobs(newPage); // Không thêm job local khi chuyển trang
-    }
-  };
-
   const handlePostJob = () => {
-    navigate("/my-company/create-job-post");
+    navigate(`/my-company/${company_id}/create-job-post`);
   };
 
   const handleCompleteJob = () => {

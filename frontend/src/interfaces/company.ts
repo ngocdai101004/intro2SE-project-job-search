@@ -1,23 +1,23 @@
 interface IAddress {
-  district: string;
-  city_state: string;
-  zip_code: string;
-  country: string;
+  district?: string;
+  city_state?: string;
+  zip_code?: string;
+  country?: string;
 }
 
 interface IDescription {
-  company_size: number[];
-  industry: string;
-  headquarters: string;
-  links: string[];
-  founded: Date;
-  specialities: string[];
+  company_size?: number[];
+  industry?: string;
+  headquarters?: string;
+  links?: string[];
+  founded?: Date;
+  specialities?: string[];
 }
 
 interface IReview {
-  user_id: string;
-  rating: number;
-  review: string;
+  user_id?: string;
+  rating?: number;
+  review?: string;
   date?: Date;
 }
 
