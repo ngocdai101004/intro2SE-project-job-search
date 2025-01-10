@@ -52,7 +52,8 @@ export const createJob = async (req: Request, res: Response) => {
 // Get jobs by query params
 export const getJobs = async (req: Request, res: Response) => {
   try {
-    const { company_id } = req.query;
+    const { company_id, datePost, jobType, location, salaryMin, salaryMax } =
+      req.query;
 
     let jobs;
     if (company_id) {
@@ -62,6 +63,32 @@ export const getJobs = async (req: Request, res: Response) => {
         .select("-plot_embedding")
         .sort({ open_time: -1 })
         .limit(20);
+
+      if (salaryMin || salaryMax) {
+        const min = parseInt((salaryMin as string) || "0");
+        const max = parseInt(salaryMax as string) || Number.MAX_SAFE_INTEGER;
+        jobs = jobs.filter(
+          (job) =>
+            !job.salary ||
+            (job.salary && job.salary.min >= min && job.salary.max <= max)
+        );
+      }
+
+      // Filter by date posted
+      if (datePost && (datePost as string).trim() !== "") {
+        const now = new Date();
+        const days = parseInt(datePost as string);
+        const date = new Date(now.setDate(now.getDate() - days));
+        jobs = jobs.filter((job) => job.open_time >= date);
+      }
+
+      if (jobType && (jobType as string).trim() !== "") {
+        jobs = jobs.filter((job) => job.type === jobType);
+      }
+
+      if (location && (location as string).trim() !== "") {
+        jobs = jobs.filter((job) => job.location_type === location);
+      }
     }
 
     res.status(200).json({
@@ -201,12 +228,12 @@ export const getRecommendedJobs = async (req: Request, res: Response) => {
     const userInfo = await UserInfo.findOne({ user_id: userID });
     const job_references = userInfo?.job_preferences || [];
 
-    // If no job references, return 10 random jobs
+    // If no job references, return 20 random jobs
     if (job_references.length === 0) {
       const jobs = await Job.find()
         .select("-plot_embedding")
         .sort({ open_time: -1 })
-        .limit(30);
+        .limit(20);
       res.status(200).json({
         message: "Recommended jobs fetched successfully",
         data: { jobs },
@@ -219,7 +246,7 @@ export const getRecommendedJobs = async (req: Request, res: Response) => {
     );
 
     // Get all jobs and filter them based on similarity
-    const allJobs = await Job.find();
+    const allJobs = await Job.find().select("-plot_embedding");
     const jobs = allJobs
       .map((job) => {
         let totalSimilarity = 0;
