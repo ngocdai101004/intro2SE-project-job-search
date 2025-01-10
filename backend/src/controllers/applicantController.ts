@@ -51,6 +51,8 @@ export const getApplicantInfos = async (req: Request, res: Response) => {
     // Mapping dữ liệu hoàn chỉnh
     const result = applications.map((app) => ({
       id: app._id, // Lấy ID của applicant
+      userId: app.user_id, // Lấy ID của user
+      jobId: app.job_id, // Lấy ID của job
       candidateName: userMap[app.user_id.toString()]?.name || "Unknown",
       jobTitle: jobMap[app.job_id.toString()] || "Unknown Job",
       feedback: app.feedback || "No feedback",
