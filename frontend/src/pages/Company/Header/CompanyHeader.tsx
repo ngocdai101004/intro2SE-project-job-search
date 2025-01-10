@@ -18,7 +18,6 @@ const CompanyHeader = ({
 }: CompanyHeaderProps) => {
   const myActiveKey = myState || "/snapshot";
   const [followed, setFollowed] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
   const [companyRating, setCompanyRating] = useState(0);
   const [follows, setFollows] = useState<number>(0);
   const setMyActiveKey = setMyState || (() => {});
@@ -32,7 +31,6 @@ const CompanyHeader = ({
           `/company/${companyData?._id}/isFollowed`
         );
         console.log(response.data.message);
-        setMessage(response.data.message);
         if (response.data.data.isFollowed !== undefined) {
           setFollowed(response.data.data.isFollowed);
           return true;
@@ -71,28 +69,33 @@ const CompanyHeader = ({
 
   const handleFollow = async () => {
     const toastId = toast.loading("Updating...");
-    console.log(message);
     if (await fetchFollowed()) {
       if (followed) {
         await axiosInstance.post(`/company/${companyData?._id}/unfollow`);
         setFollowed(false);
         setFollows(follows - 1);
+
+        toast.update(toastId, {
+          render: "Unfollow this company successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
       } else {
         await axiosInstance.post(`/company/${companyData?._id}/follow`);
         setFollowed(true);
         setFollows(follows + 1);
+
+        toast.update(toastId, {
+          render: "Follow this company successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
       }
-      // window.location.reload();
-      toast.update(toastId, {
-        render: message,
-        type: "success",
-        isLoading: false,
-        autoClose: 2000,
-      });
     } else {
-      console.log("failed to fetch followed status");
       toast.update(toastId, {
-        render: message,
+        render: "failed to fetch followed status",
         type: "error",
         isLoading: false,
         autoClose: 2000,

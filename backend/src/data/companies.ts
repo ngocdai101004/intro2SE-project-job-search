@@ -26,19 +26,19 @@ export const companies = [
     short_description: "A leader in innovative tech solutions.",
     reviews: [
       {
-        user_id: users[3]._id,
+        user_id: new ObjectId(),
         rating: 5,
         review: "Great place to work with a strong focus on innovation!",
         date: new Date("2023-12-15"),
       },
       {
-        user_id: users[4]._id,
+        user_id: new ObjectId(),
         rating: 4,
         review: "Good opportunities for growth but high workload.",
         date: new Date("2023-11-25"),
       },
       {
-        user_id: users[5]._id,
+        user_id: new ObjectId(),
         rating: 5,
         review: "Supportive management and collaborative environment.",
         date: new Date("2023-10-10"),
@@ -71,7 +71,7 @@ export const companies = [
     short_description: "Empowering a sustainable future.",
     reviews: [
       {
-        user_id: users[4]._id,
+        user_id: new ObjectId(),
         rating: 4,
         review: "Good company, but better communication is needed.",
         date: new Date("2023-11-15"),
@@ -110,19 +110,19 @@ export const companies = [
     short_description: "Transforming education through technology.",
     reviews: [
       {
-        user_id: users[3]._id,
+        user_id: new ObjectId(),
         rating: 5,
         review: "Great mission and impactful work.",
         date: new Date("2023-12-05"),
       },
       {
-        user_id: users[4]._id,
+        user_id: new ObjectId(),
         rating: 5,
         review: "Supportive environment for both employees and clients.",
         date: new Date("2023-11-20"),
       },
       {
-        user_id: users[5]._id,
+        user_id: new ObjectId(),
         rating: 4,
         review: "Exciting projects but needs more resources.",
         date: new Date("2023-10-15"),

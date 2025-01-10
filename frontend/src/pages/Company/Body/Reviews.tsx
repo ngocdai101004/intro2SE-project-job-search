@@ -13,6 +13,7 @@ interface ReviewsProps {
 const Reviews = ({ company_id }: ReviewsProps) => {
   const [reviews, setReviews] = useState<IReview[] | null>(null);
   const [isReviewed, setIsReviewed] = useState<boolean>(false);
+  let firstTime = false;
 
   const fetchReviews = async () => {
     try {
@@ -31,6 +32,7 @@ const Reviews = ({ company_id }: ReviewsProps) => {
         `/company/${company_id}/isReviewed`
       );
       setIsReviewed(response.data.data.isReviewed);
+      firstTime = !response.data.data.isReviewed;
     } catch (error) {
       console.error(error);
     }
@@ -93,7 +95,7 @@ const Reviews = ({ company_id }: ReviewsProps) => {
           {isReviewed ? (
             <ReviewedInform setIsReviewed={setIsReviewed} />
           ) : (
-            <ReviewForm company_id={company_id} />
+            <ReviewForm company_id={company_id} firstTime={firstTime} />
           )}
         </Col>
       </Row>

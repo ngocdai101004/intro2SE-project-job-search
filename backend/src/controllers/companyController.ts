@@ -137,13 +137,13 @@ export const isFollowed = async (req: Request, res: Response) => {
 
     if (company.followers.includes(userID)) {
       res.status(200).json({
-        message: "You are already following this company",
+        message: "Unfollow this company successfully",
         data: { isFollowed: true },
       });
       return;
     }
     res.status(200).json({
-      message: "You are now following this company",
+      message: "Follow this company successfully",
       data: { isFollowed: false },
     });
   } catch (error) {

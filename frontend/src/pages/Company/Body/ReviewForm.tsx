@@ -8,9 +8,10 @@ import { toast } from "react-toastify";
 
 interface ReviewFormProps {
   company_id: string;
+  firstTime: boolean;
 }
 
-const ReviewForm = ({ company_id }: ReviewFormProps) => {
+const ReviewForm = ({ company_id, firstTime }: ReviewFormProps) => {
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>("");
 
@@ -36,7 +37,7 @@ const ReviewForm = ({ company_id }: ReviewFormProps) => {
 
       // Chuyển hướng đến trang khác sau khi gửi thành công
       toast.update(toastId, {
-        render: "Company created successfully",
+        render: firstTime ? "Created successfully." : "Updated successfully.",
         type: "success",
         isLoading: false,
         autoClose: 2000,
