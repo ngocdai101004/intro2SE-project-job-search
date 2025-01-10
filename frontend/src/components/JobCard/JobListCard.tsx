@@ -23,7 +23,7 @@ const JobListCard: React.FC<JobListCardProps> = ({
                 cursor: "pointer",
                 transition: "background-color 0.3s ease",
             }}
-            onMouseEnter={() => setColor("primary")}
+            onMouseEnter={() => setColor("secondary")}
             onMouseLeave={() => setColor("transparent")}
         >
             <div className="card-body">
