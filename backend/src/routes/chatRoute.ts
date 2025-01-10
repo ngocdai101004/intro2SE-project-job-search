@@ -7,7 +7,7 @@ const router = Router();
 
 router.use(verifyUser);
 router.get("/", getChatInfo);
-router.post("/:id/create", createChat);
+router.post("/create", createChat);
 router.post("/", sendMessage);
 
 

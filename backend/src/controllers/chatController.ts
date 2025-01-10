@@ -71,6 +71,15 @@ const createChat = async (req: Request, res: Response) => {
         if (!userID || !recipientID) {
             res.status(400).json({message: "Missing required fields"});
         }
+        const chat = await ChatDB.findOne({
+            users: {$all: [userID, recipientID]}
+        });
+
+        if (chat) {
+            res.status(201).json({message: "Chat already exists"});
+            return
+        }
+
         await ChatDB.create({
             users: [userID, recipientID],
             messages: [],
