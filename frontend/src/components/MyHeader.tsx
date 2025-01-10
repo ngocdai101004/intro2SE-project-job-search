@@ -87,7 +87,7 @@ export default function MyHeader({
             </Nav.Item>
             <Nav.Item>
               <Nav.Link
-                eventKey="/uset"
+                eventKey="/user"
                 href="/user-list"
                 className="text-white"
               >

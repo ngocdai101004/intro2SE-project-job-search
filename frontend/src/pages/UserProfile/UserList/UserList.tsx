@@ -18,6 +18,7 @@ const UserList = () => {
   const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [userID, setUserID] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -28,7 +29,8 @@ const UserList = () => {
         setUserList(response.data.data.users);
         setFilteredUsers(response.data.data.users); // Initialize filtered list
 
-        console.log("User List:", response.data.data);
+        const userResponse = await axiosInstance.get("/user/profile");
+        setUserID(userResponse.data.data.user._id);
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
@@ -74,46 +76,55 @@ const UserList = () => {
           </div>
         ) : (
           <Row>
-            {filteredUsers.map((user) => (
-              <Col key={user._id} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                <Card
-                  onClick={() => navigate(`/user/${user._id}/profile`)}
-                  style={{
-                    cursor: "pointer",
-                    borderRadius: "10px",
-                    border: "1px solid darkgray",
-                    height: "100%",
-                  }}
+            {filteredUsers
+              .filter((user) => user._id !== userID)
+              .map((user) => (
+                <Col
+                  key={user._id}
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  className="mb-4"
                 >
-                  <Card.Img
-                    variant="top"
-                    src={user.avatar || "https://via.placeholder.com/150"}
-                    alt={`${user.first_name} ${user.last_name} avatar`}
+                  <Card
+                    onClick={() => navigate(`/user/${user._id}/profile`)}
                     style={{
-                      height: "150px",
-                      objectFit: "cover",
-                      borderRadius: "10px 10px 0 0",
+                      cursor: "pointer",
+                      borderRadius: "10px",
+                      border: "1px solid darkgray",
+                      height: "100%",
                     }}
-                  />
-                  <Card.Body>
-                    <Card.Title
-                      style={{ fontSize: "16px", fontWeight: "bold" }}
-                    >
-                      {user.first_name} {user.last_name}
-                    </Card.Title>
-                    <Card.Text
-                      className="text-muted"
-                      style={{ fontSize: "14px" }}
-                    >
-                      {user.email || "Email not available"}
-                    </Card.Text>
-                    <Card.Text style={{ fontSize: "13px", color: "#6c757d" }}>
-                      {user.short_bio || "No description available"}
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
+                  >
+                    <Card.Img
+                      variant="top"
+                      src={user.avatar || "https://via.placeholder.com/150"}
+                      alt={`${user.first_name} ${user.last_name} avatar`}
+                      style={{
+                        height: "150px",
+                        objectFit: "cover",
+                        borderRadius: "10px 10px 0 0",
+                      }}
+                    />
+                    <Card.Body>
+                      <Card.Title
+                        style={{ fontSize: "16px", fontWeight: "bold" }}
+                      >
+                        {user.first_name} {user.last_name}
+                      </Card.Title>
+                      <Card.Text
+                        className="text-muted"
+                        style={{ fontSize: "14px" }}
+                      >
+                        {user.email || "Email not available"}
+                      </Card.Text>
+                      <Card.Text style={{ fontSize: "13px", color: "#6c757d" }}>
+                        {user.short_bio || "No description available"}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
           </Row>
         )}
       </Container>
