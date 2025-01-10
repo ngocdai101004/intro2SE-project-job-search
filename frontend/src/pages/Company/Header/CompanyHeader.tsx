@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Nav, Row, Image, Container } from "react-bootstrap";
+import { Col, Container, Image, Nav, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../common/axiosInstance";
 import { toast } from "react-toastify";
@@ -145,7 +145,7 @@ const CompanyHeader = ({
           </Col>
 
           <Col xs={3} style={{ backgroundColor: "#00000000", border: "none" }}>
-            <Row className="mb-2 d-flex justify-content-between">
+            <Row className="mb-2 d-flex">
               <Col xs="auto" className="d-flex justify-content-center">
                 <button
                   className="btn btn-primary"
