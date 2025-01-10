@@ -321,42 +321,36 @@ const ResumeForm: React.FC<Props> = ({ isFirstTime }) => {
               <Form>
                 <div className="min-vh-50 mb-4">{renderStepContent()}</div>
 
-                                <div className="d-flex justify-content-between">
-                                    {currentStep !== 'summary' ? (
-                                        <Button 
-                                            variant="outline-primary" 
-                                            onClick={previousStep}
-                                        >
-                                            Previous
-                                        </Button>
-                                    ):  <div></div>}
-                                    
-                                    {currentStep !== 'review' ? (
-                                        <Button 
-                                            variant="primary" 
-                                            onClick={nextStep}
-                                        >
-                                            Next
-                                        </Button>
-                                    ) : (
-                                        <Button 
-                                            variant="primary" 
-                                            type="button"
-                                            style={{ marginRight: '10px' }}
-                                            onClick={handleSubmit}
-                                        >
-                                            Save Resume
-                                        </Button>
-                                    )}
-                                </div>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-                    <MyToastContainer />
-                </Container>
+                <div className="d-flex justify-content-between">
+                  {currentStep !== "summary" && (
+                    <Button variant="outline-primary" onClick={previousStep}>
+                      Previous
+                    </Button>
+                  )}
+
+                  {currentStep !== "review" ? (
+                    <Button variant="primary" onClick={nextStep}>
+                      Next
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="primary"
+                      type="button"
+                      style={{ marginRight: "10px" }}
+                      onClick={handleSubmit}
+                    >
+                      Save Resume
+                    </Button>
+                  )}
                 </div>
-            </div>
-            );
-        };
+              </Form>
+            </Card.Body>
+          </Card>
+          <MyToastContainer />
+        </Container>
+      </div>
+    </div>
+  );
+};
 
 export default ResumeForm;

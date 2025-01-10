@@ -34,12 +34,12 @@ const AdminInfo: React.FC<Props> = ({
           return;
         }
 
-        const updatedLinks = [user._id, ...(data.admin_id || [])];
+        const updatedAdmins = [user._id, ...(data.admin_id || [])];
 
         setAdminInfos([user, ...(adminInfos || [])]);
-        console.log("adminInfo", adminInfos);
-        console.log("updatedLinks", updatedLinks);
-        onChange("admin_id", updatedLinks);
+        // console.log("adminInfo", adminInfos);
+        // console.log("updatedLinks", updatedAdmins);
+        onChange("admin_id", updatedAdmins);
         setAdminInput(""); // Clear the input after adding
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
@@ -48,22 +48,29 @@ const AdminInfo: React.FC<Props> = ({
     }
   };
 
-  const handleDeleteLink = (linkToDelete: string) => {
-    const updatedLinks = (data.description?.links || []).filter(
-      (link) => link !== linkToDelete
+  const handleDeleteAdmin = (adminId: string) => {
+    const updatedAdmins = (adminInfos || []).filter(
+      (user) => user._id !== adminId
     );
-    onChange("admin_id", updatedLinks);
+    console.log("updateAdmins", updatedAdmins);
+    onChange(
+      "admin_id",
+      updatedAdmins.map((user) => user._id)
+    );
+    setAdminInfos(updatedAdmins);
   };
 
-  function handleUserItem(index: number): import("react").ReactNode {
-    return (
-      adminInfos[index].first_name +
-      " " +
-      adminInfos[index].last_name +
-      " | " +
-      adminInfos[index].email
-    );
-  }
+  // function handleUserItem(index: number): import("react").ReactNode {
+  //   const user = adminInfos[index];
+  //   if (!user) return null;
+  //   return (
+  //     user.first_name +
+  //     " " +
+  //     user.last_name +
+  //     " | " +
+  //     user.email
+  //   );
+  // }
 
   return (
     <div>
@@ -84,36 +91,44 @@ const AdminInfo: React.FC<Props> = ({
             </Button>
           </div>
           <ul className="mt-2" style={{ fontSize: "0.9rem" }}>
-            {data.admin_id?.map((admin, index) => (
-              <li
-                key={index}
-                className="d-flex justify-content-between align-items-center"
-              >
-                <span>{handleUserItem(index)}</span>
-                <Button
-                  className="m-2"
-                  variant="outline-danger"
-                  size="sm"
-                  onClick={() => handleDeleteLink(admin)}
-                  style={{
-                    backgroundColor: "white",
-                    color: "red",
-                    borderColor: "red",
-                    transition: "background-color 0.3s, color 0.3s",
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor = "red";
-                    e.currentTarget.style.color = "white";
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = "white";
-                    e.currentTarget.style.color = "red";
-                  }}
+            {adminInfos.map((user) => {
+              const admin = user._id;
+              // const user = adminInfos.find((u) => u._id === admin);
+              return (
+                <li
+                  key={admin}
+                  className="d-flex justify-content-between align-items-center"
                 >
-                  x
-                </Button>
-              </li>
-            ))}
+                  <span>
+                    {user
+                      ? `${user.first_name} ${user.last_name} | ${user.email}`
+                      : "Unknown User"}
+                  </span>
+                  <Button
+                    className="m-2"
+                    variant="outline-danger"
+                    size="sm"
+                    onClick={() => handleDeleteAdmin(admin || "")}
+                    style={{
+                      backgroundColor: "white",
+                      color: "red",
+                      borderColor: "red",
+                      transition: "background-color 0.3s, color 0.3s",
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = "red";
+                      e.currentTarget.style.color = "white";
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = "white";
+                      e.currentTarget.style.color = "red";
+                    }}
+                  >
+                    x
+                  </Button>
+                </li>
+              );
+            })}
           </ul>
         </Form.Group>
       </Row>
