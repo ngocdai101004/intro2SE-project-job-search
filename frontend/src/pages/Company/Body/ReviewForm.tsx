@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Form, Button, Row, Col, Alert } from "react-bootstrap";
+import { Form, Button, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { IReview } from "../../../interfaces/interfaces";
 import axiosInstance from "../../../common/axiosInstance";
+import { MyToastContainer } from "../../../components/MyToastContainer";
+import { toast } from "react-toastify";
 
 interface ReviewFormProps {
   company_id: string;
@@ -11,8 +13,6 @@ interface ReviewFormProps {
 const ReviewForm = ({ company_id }: ReviewFormProps) => {
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>("");
-  const [success, setSuccess] = useState<boolean | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const handleRating = (index: number): void => {
     setRating(index);
@@ -21,6 +21,8 @@ const ReviewForm = ({ company_id }: ReviewFormProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const toastId = toast.loading("Updating...");
+
     const reviewData: IReview = {
       rating,
       review,
@@ -28,27 +30,28 @@ const ReviewForm = ({ company_id }: ReviewFormProps) => {
     };
 
     try {
-      setSuccess(false);
-      setError(null);
-      if (rating === 0) {
-        setError("Please rate the company before submitting your review.");
-        return;
-      }
-      if (review.trim() === "") {
-        setError("Please write your review before submitting.");
-        return;
-      }
-
       await axiosInstance.post(`/company/${company_id}/review`, reviewData);
-      setSuccess(true);
       setRating(0);
       setReview("");
 
       // Chuyển hướng đến trang khác sau khi gửi thành công
-      window.location.reload();
-    } catch (error) {
+      toast.update(toastId, {
+        render: "Company created successfully",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+        onClose: () => window.location.reload(),
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       console.error(error);
-      setSuccess(false);
+      // Hiển thị lỗi
+      toast.update(toastId, {
+        render: error.response.data.message || "An error occurred.",
+        type: "error",
+        isLoading: false,
+        autoClose: 2000,
+      });
     }
   };
 
@@ -115,14 +118,6 @@ const ReviewForm = ({ company_id }: ReviewFormProps) => {
               required
             />
           </Form.Group>
-          {success === true && (
-            <Alert variant="success">Review submitted successfully!</Alert>
-          )}
-          {success === false && (
-            <Alert variant="danger">
-              {error || "Failed to submit the review. Please try again."}
-            </Alert>
-          )}
           <Row className="text-end">
             <Col>
               <Button variant="primary" type="submit">
@@ -132,6 +127,7 @@ const ReviewForm = ({ company_id }: ReviewFormProps) => {
           </Row>
         </Form>
       </div>
+      <MyToastContainer />
     </div>
   );
 };

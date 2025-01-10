@@ -109,10 +109,6 @@ const router = createBrowserRouter([
     element: <ResumeBuilder />,
   },
   {
-    path: "/build-company",
-    element: <BuildCompany />,
-  },
-  {
     path: "/user/:userID/profile",
     element: <GuestUserProfile />,
   },
@@ -187,6 +183,10 @@ const router = createBrowserRouter([
       {
         path: "/chat",
         element: <ChatPage />,
+      },
+      {
+        path: "/build-company",
+        element: <BuildCompany />,
       },
     ],
   },

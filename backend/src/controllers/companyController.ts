@@ -233,6 +233,14 @@ export const reviewCompany = async (req: Request, res: Response) => {
       return;
     }
 
+    if (review.rating < 1 || review.rating > 5) {
+      res.status(400).json({
+        message: "Please rate between 1 and 5",
+        data: {},
+      });
+      return;
+    }
+
     review.user_id = userID;
     if (company.reviews.some((r) => r.user_id.toString() === userID)) {
       // Update review
