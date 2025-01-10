@@ -20,12 +20,11 @@ const Jobs = ({ company_id }: JobsProps) => {
     const fetchJobs = async () => {
       try {
         let jobList = [];
-      
+
         const recommendedJobsResponse = await axiosInstance.get(
           `/job?company_id=${company_id}`
         );
         jobList = recommendedJobsResponse.data.data.jobs || [];
-        
 
         const companiesResponse = await axiosInstance.get("/company");
         const companies = companiesResponse.data.data || [];
@@ -65,32 +64,41 @@ const Jobs = ({ company_id }: JobsProps) => {
           className="container justify-content-center"
           style={{ marginTop: "20px" }}
         >
-          <Row>
-            <Col
-              xs={4}
-              style={{
-                overflow: "scroll",
-                scrollbarWidth: "none",
-                height: "60vh",
-              }}
+          {jobs.length === 0 ? (
+            <div
+              className="no-jobs-message"
+              style={{ textAlign: "center", marginTop: "20px" }}
             >
-              <JobList
-                jobs={jobs}
-                selectedJob={selectedJob}
-                onJobSelect={setSelectedJob}
-              />
-            </Col>
-            <Col
-              xs={8}
-              style={{
-                overflow: "scroll",
-                scrollbarWidth: "none",
-                height: "60vh",
-              }}
-            >
-              {selectedJob && <JobDetail job={selectedJob} />}
-            </Col>
-          </Row>
+              <h5>No jobs available at the moment. Please check back later.</h5>
+            </div>
+          ) : (
+            <Row>
+              <Col
+                xs={4}
+                style={{
+                  overflow: "scroll",
+                  scrollbarWidth: "none",
+                  height: "60vh",
+                }}
+              >
+                <JobList
+                  jobs={jobs}
+                  selectedJob={selectedJob}
+                  onJobSelect={setSelectedJob}
+                />
+              </Col>
+              <Col
+                xs={8}
+                style={{
+                  overflow: "scroll",
+                  scrollbarWidth: "none",
+                  height: "60vh",
+                }}
+              >
+                {selectedJob && <JobDetail job={selectedJob} />}
+              </Col>
+            </Row>
+          )}
         </div>
       </div>
     </div>
