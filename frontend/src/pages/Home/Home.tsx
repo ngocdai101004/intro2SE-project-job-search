@@ -7,7 +7,8 @@ import { IJobCard } from "../../interfaces/job.ts";
 import { IJob } from "../../interfaces/job.ts";
 import SearchBar from "./SearchBar"; // Import the SearchBar component
 import "./Home.css";
-import JobList from "../../components/JobCard/JobList.tsx";
+// import JobList from "../../components/JobCard/JobList.tsx";
+import JobListWithPagination from "../../components/JobCard/JobListWithPagination.tsx";
 import JobDetail from "../../components/JobCard/JobDetail.tsx";
 import "./Home.css";
 import { Col, Row } from "react-bootstrap";
@@ -148,7 +149,11 @@ const Home: React.FC = () => {
           <h2>Jobs for you</h2>
           <hr style={{ width: "80%", margin: "0 auto" }} />
         </div>
-
+        {jobs.length === 0 && (
+          <div className="no-jobs-message" style={{ textAlign: "center", marginTop: "20px" }}>
+            <h5>No jobs available at the moment. Please check back later.</h5>
+          </div>
+        )}
         <div
           className="container justify-content-center flex-grow-1"
           style={{ marginTop: "15px" }}
@@ -162,18 +167,24 @@ const Home: React.FC = () => {
                 height: "100vh",
               }}
             >
-              <JobList
+              {/* <JobList
                 jobs={jobs}
                 selectedJob={selectedJob}
                 onJobSelect={setSelectedJob}
-              />
+              /> */}
+            <JobListWithPagination
+              jobs={jobs}
+              itemsPerPage={5}
+              onJobSelect={setSelectedJob}
+              selectedJobId={selectedJob?._id}
+            />
             </Col>
             <Col
               xs={8}
               style={{
                 overflow: "scroll",
                 scrollbarWidth: "none",
-                height: "60vh",
+                height: "100vh",
               }}
             >
               {selectedJob && <JobDetail job={selectedJob} />}

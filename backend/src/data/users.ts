@@ -19,7 +19,8 @@ export const users = [
     },
     gender: "male",
     date_of_birth: new Date("1990-01-01"),
-    avatar: "/company-avatar.jpg",
+    avatar:
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
     short_bio: "Software Engineer with 10 years of experience.",
   },
   {
@@ -38,7 +39,8 @@ export const users = [
     },
     gender: "male",
     date_of_birth: new Date("1985-08-20"),
-    avatar: "/company-avatar.jpg",
+    avatar:
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
     short_bio: "Experienced developer specializing in backend systems.",
   },
   {
@@ -57,7 +59,8 @@ export const users = [
     },
     gender: "male",
     date_of_birth: new Date("1985-08-20"),
-    avatar: "/company-avatar.jpg",
+    avatar:
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
     short_bio: "Full-stack developer with a passion for coding.",
   },
 
@@ -77,7 +80,8 @@ export const users = [
     },
     gender: "male",
     date_of_birth: new Date("1985-08-20"),
-    avatar: "/company-avatar.jpg",
+    avatar:
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
     short_bio: "AI specialist with a focus on machine learning.",
   },
   {
@@ -96,7 +100,8 @@ export const users = [
     },
     gender: "female",
     date_of_birth: new Date("1992-05-15"),
-    avatar: "/company-avatar.jpg",
+    avatar:
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
     short_bio: "Frontend developer with expertise in React and Angular.",
   },
   {
@@ -115,7 +120,8 @@ export const users = [
     },
     gender: "male",
     date_of_birth: new Date("1988-11-30"),
-    avatar: "/company-avatar.jpg",
+    avatar:
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
     short_bio: "DevOps engineer with a knack for automation and CI/CD.",
   },
 ];
