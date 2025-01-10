@@ -7,9 +7,11 @@ import { useParams } from "react-router-dom";
 import { JobDetailProps } from "../../../interfaces/job";
 import JobDetail from "../../../components/JobCard/JobDetail";
 import { Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 interface Candidate {
   id: string;
   jobId: string;
+  userId: string;
   companyId: string;
   companyName: string;
   companyAvatar: string;
@@ -32,6 +34,7 @@ interface CandidateWithJob extends Candidate {
 
 const Candidates: React.FC = () => {
   const { company_id } = useParams<{ company_id: string }>();
+  const navigate = useNavigate();
   const [candidates, setCandidates] = useState<Candidate[]>([]); // State lưu danh sách ứng viên
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [error, setError] = useState<string>(""); // Error state
@@ -160,6 +163,10 @@ const Candidates: React.FC = () => {
     }
   };
 
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <MainLayout company_id={company_id!}>
       <Container fluid className="candidate-post-container">
@@ -195,7 +202,18 @@ const Candidates: React.FC = () => {
                         <tr key={index}>
                           <td></td>
                           <td>
-                            <p className="candidate-name">
+                            <p
+                              className="candidate-name"
+                              style={{
+                                cursor: "pointer",
+                                textDecoration: "underline",
+                              }}
+                              onClick={() =>
+                                handleNavigate(
+                                  `/user/${candidate.userId}/profile`
+                                )
+                              }
+                            >
                               {candidate.candidateName}
                             </p>
                             <div className="candidate-state">
@@ -219,12 +237,12 @@ const Candidates: React.FC = () => {
                             style={{ padding: "0", margin: "-3px" }}
                             onClick={() => setSelectedJob(candidate.job)}
                           >
-                            <span className="candidate-job">
+                            <span className="candidate-job" style={{ cursor: "pointer", textDecoration: "underline", fontWeight: "bold" }}>
                               {candidate.jobTitle}
                             </span>
                           </button>
                           {selectedJob && (
-                            <Modal show={true} onHide={() => setSelectedJob(null)} size="xl">
+                            <Modal show={true} onHide={() => setSelectedJob(null)} size="lg">
                               <Modal.Header closeButton>
                               <Modal.Title>Job Details</Modal.Title>
                               </Modal.Header>

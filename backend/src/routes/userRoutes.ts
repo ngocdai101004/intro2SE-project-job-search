@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { verifyUser } from "../middlewares/verifyUser";
 import {
+  getAllUsers,
   getUserByEmail,
   getUser,
   updateUser,
@@ -42,6 +43,8 @@ import {
 } from "../controllers/userController";
 
 const router = Router();
+
+router.get("/user-list", getAllUsers);
 
 router.get("/", getUserByEmail);
 router.get("/:userID/profile", getUser);

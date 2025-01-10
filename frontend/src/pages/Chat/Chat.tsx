@@ -105,11 +105,16 @@ const ChatPage = () => {
                                         ></div>
                                         <div className="w-75">
                                             <h6 className="m-0 fw-bold">{chat.users[0].userID === sender_id ? chat.users[1].username : chat.users[0].username}</h6> {/* Display user names */}
-                                            <small>
-                                                {chat.messages[chat.messages.length - 1]?.message.length < 25
-                                                    ? chat.messages[chat.messages.length - 1]?.message
-                                                    : `${chat.messages[chat.messages.length - 1]?.message.slice(0, 25)}...`}
-                                            </small>
+                                            {chat.messages.length <= 0 && (
+                                                <small>You haven't chat to each other</small>
+                                            )}
+                                            {chat.messages.length > 0 && (
+                                                <small>
+                                                    {chat.messages[chat.messages.length - 1]?.message.length < 25
+                                                        ? chat.messages[chat.messages.length - 1]?.message
+                                                        : `${chat.messages[chat.messages.length - 1]?.message.slice(0, 25)}...`}
+                                                </small>
+                                            )}
                                         </div>
                                     </div>
                                     <div>

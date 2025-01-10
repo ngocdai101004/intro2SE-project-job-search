@@ -87,6 +87,7 @@ const CompanyList = () => {
                     cursor: "pointer",
                     borderRadius: "10px",
                     border: "1px solid darkgray",
+                    height: "100%",
                   }}
                 >
                   <Card.Img
