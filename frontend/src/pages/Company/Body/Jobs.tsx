@@ -13,21 +13,6 @@ interface JobsProps {
 const Jobs = ({ company_id }: JobsProps) => {
   const [jobs, setJobs] = useState<IJobCard[]>([]);
   const [selectedJob, setSelectedJob] = useState<IJobCard | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await axiosInstance.get("/auth/check");
-        if (response.status === 200) {
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    checkAuth();
-  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -35,15 +20,12 @@ const Jobs = ({ company_id }: JobsProps) => {
     const fetchJobs = async () => {
       try {
         let jobList = [];
-        if (isAuthenticated) {
-          const recommendedJobsResponse = await axiosInstance.get(
-            `/job?company_id=${company_id}`
-          );
-          jobList = recommendedJobsResponse.data.data.jobs || [];
-        } else {
-          const jobsResponse = await axiosInstance.get("/job");
-          jobList = jobsResponse.data.data.jobs || [];
-        }
+      
+        const recommendedJobsResponse = await axiosInstance.get(
+          `/job?company_id=${company_id}`
+        );
+        jobList = recommendedJobsResponse.data.data.jobs || [];
+        
 
         const companiesResponse = await axiosInstance.get("/company");
         const companies = companiesResponse.data.data || [];
@@ -74,7 +56,7 @@ const Jobs = ({ company_id }: JobsProps) => {
     return () => {
       isMounted = false;
     };
-  }, [isAuthenticated]);
+  }, [company_id]);
 
   return (
     <div>

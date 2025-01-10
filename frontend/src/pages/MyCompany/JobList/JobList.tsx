@@ -127,7 +127,7 @@ const JobList: React.FC = () => {
 
   useEffect(() => {
     fetchJobs();
-  }, []);
+  }, [company_id]);
   
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= pagination.totalPages) {

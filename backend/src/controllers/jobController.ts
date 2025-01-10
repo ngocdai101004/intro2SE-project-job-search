@@ -57,7 +57,9 @@ export const getJobs = async (req: Request, res: Response) => {
 
     let jobs;
     if (company_id) {
-      jobs = await Job.find({ company_id: company_id });
+      jobs = await Job.find({ company_id: company_id }).select(
+        "-plot_embedding"
+      );
     } else {
       jobs = await Job.find()
         .select("-plot_embedding")
@@ -185,10 +187,10 @@ export const getJobsByCompanyId = async (req: Request, res: Response) => {
       // { $skip: skip },
       // { $limit: pageSize },
     ]);
-
     // Total job count
     const totalJobs = await Job.countDocuments({ company_id: companyId });
 
+    console.log(jobs);
     res.status(200).json({
       message: "Jobs fetched successfully",
       data: {
