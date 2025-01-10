@@ -40,7 +40,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, userID }) => {
   }, [userID]);
 
   useEffect(() => {
+    if (searchHistory.length > 100) {
+      setSearchHistory(searchHistory.slice(0, 100));
+    }
     localStorage.setItem("searchHistory:" + userID, JSON.stringify(searchHistory));
+    
   }, [searchHistory, userID]);
 
   const handleSearch = async (searchTerm?: string) => {
@@ -150,7 +154,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, userID }) => {
           Find jobs
         </button>
         {showHistory && filteredHistory.length > 0 && (
-          <ul
+            <ul
             style={{
               position: "absolute",
               top: "50px",
@@ -160,24 +164,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, userID }) => {
               borderRadius: "5px",
               boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
               listStyleType: "none",
-              padding: "10px",
-              marginLeft: "-120px",
+              padding: "0px 10px",
+              marginLeft: "-115px",
               zIndex: 1000,
             }}
-          >
-            {filteredHistory.map((term, index) => (
+            >
+            {filteredHistory.slice(0, 7).map((term, index) => (
               <li
-                key={index}
-                onClick={() => handleHistoryClick(term)}
-                style={{
-                  padding: "10px 0",
-                  cursor: "pointer",
-                }}
+              key={index}
+              onClick={() => handleHistoryClick(term)}
+              style={{
+                padding: "5px 0",
+                cursor: "pointer",
+              }}
               >
-                {term}
+              {term}
               </li>
             ))}
-          </ul>
+            </ul>
         )}
       </div>
 
