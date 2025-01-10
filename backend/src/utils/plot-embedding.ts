@@ -16,7 +16,7 @@ async function getEmbedding(text: string) {
 
     // Get the embedding values
     const embedding = result.embedding.values;
-    const scaledEmbedding = embedding.map((value) => value);
+    const scaledEmbedding = embedding.map((value: any) => value);
 
     return scaledEmbedding;
   } catch (error) {
