@@ -12,6 +12,7 @@ const AddJobBasics: React.FC = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [numPeople, setNumPeople] = useState("1");
   const [locationType, setLocationType] = useState("");
+  const [error, setError] = useState(""); // State để lưu lỗi của Job Title
 
   // Load dữ liệu đã lưu trong localStorage
   useEffect(() => {
@@ -23,6 +24,13 @@ const AddJobBasics: React.FC = () => {
 
   // Lưu dữ liệu vào localStorage và chuyển tiếp
   const handleSaveAndContinue = () => {
+    if (!jobTitle.trim()) {
+      // Nếu Job title trống, hiển thị lỗi và ngừng thực hiện
+      setError("Job title is required.");
+      return;
+    }
+    setError(""); // Xóa lỗi nếu đã nhập
+
     const currentData = {
       title: jobTitle, // Đặt tên phù hợp với model Job
       number_of_peoples: parseInt(numPeople), // Số lượng người cần tuyển
@@ -80,8 +88,19 @@ const AddJobBasics: React.FC = () => {
                       type="text"
                       placeholder="Enter job title"
                       value={jobTitle}
-                      onChange={(e) => setJobTitle(e.target.value)}
+                      onChange={(e) => {
+                        setJobTitle(e.target.value);
+                        if (error) setError(""); // Xóa lỗi khi có sự thay đổi trong trường nhập
+                      }}
+                      onFocus={() => {
+                        if (error) setError(""); // Xóa lỗi khi trường được focus
+                      }}
+                      isInvalid={!!error} // Đánh dấu lỗi nếu có
                     />
+                    {/* Hiển thị lỗi nếu có */}
+                    <Form.Control.Feedback type="invalid">
+                      {error}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="formNumPeople">
@@ -97,11 +116,12 @@ const AddJobBasics: React.FC = () => {
                       value={numPeople}
                       onChange={(e) => setNumPeople(e.target.value)}
                     >
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
+                      {/* Tạo các tùy chọn từ 1 đến 50 */}
+                      {Array.from({ length: 50 }, (_, index) => (
+                        <option key={index + 1} value={index + 1}>
+                          {index + 1}
+                        </option>
+                      ))}
                     </Form.Select>
                   </Form.Group>
 

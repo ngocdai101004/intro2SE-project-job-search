@@ -165,7 +165,9 @@ const DescribeJob: React.FC = () => {
                   <Button
                     variant="secondary"
                     onClick={() =>
-                      handleNavigation("/my-company/add-job-description")
+                      handleNavigation(
+                        `/my-company/${company_id}/add-job-description`
+                      )
                     }
                   >
                     ← Back
@@ -186,7 +188,7 @@ const DescribeJob: React.FC = () => {
                       onClick={handleSaveToDatabase}
                       disabled={loading}
                     >
-                      {loading ? "Saving..." : "Continue →"}
+                      {loading ? "Saving..." : "Saving"}
                     </Button>
                   </div>
                 </div>

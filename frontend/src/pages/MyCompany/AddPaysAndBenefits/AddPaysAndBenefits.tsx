@@ -13,6 +13,7 @@ const AddPaysAndBenefits: React.FC = () => {
   const [minimumPay, setMinimumPay] = useState("");
   const [maximumPay, setMaximumPay] = useState("");
   const [benefits, setBenefits] = useState<string[]>([""]); // Danh sách lợi ích
+  const [benefitErrors, setBenefitErrors] = useState<string[]>([]); // Lỗi của mỗi trường benefit
 
   // Load dữ liệu từ localStorage khi render lại trang
   useEffect(() => {
@@ -25,17 +26,34 @@ const AddPaysAndBenefits: React.FC = () => {
   // Thêm dòng mới cho lợi ích
   const addBenefit = () => {
     setBenefits([...benefits, ""]);
+    setBenefitErrors([...benefitErrors, ""]); // Thêm lỗi rỗng cho trường mới
   };
 
   // Xử lý thay đổi nội dung cho lợi ích
   const handleBenefitChange = (index: number, value: string) => {
-    const updated = [...benefits];
-    updated[index] = value;
-    setBenefits(updated);
+    const updatedBenefits = [...benefits];
+    updatedBenefits[index] = value;
+    setBenefits(updatedBenefits);
+
+    // Xóa lỗi khi có thay đổi
+    const updatedErrors = [...benefitErrors];
+    updatedErrors[index] = value.trim() ? "" : "This field is required.";
+    setBenefitErrors(updatedErrors);
   };
 
   // Lưu dữ liệu vào localStorage và chuyển tiếp
   const handleSaveAndContinue = () => {
+    // Kiểm tra validation cho các trường Benefit
+    const errors = benefits.map((benefit) =>
+      benefit.trim() ? "" : "This field is required."
+    );
+    setBenefitErrors(errors);
+
+    // Nếu có lỗi, ngăn chuyển tiếp
+    if (errors.some((error) => error !== "")) {
+      return;
+    }
+
     const currentData = {
       salary: {
         min: minimumPay,
@@ -134,20 +152,27 @@ const AddPaysAndBenefits: React.FC = () => {
                   <Form.Group className="mb-3">
                     <strong>
                       <Form.Label column sm={12} className="text-left">
-                        Benefits
+                        Benefits{" "}
+                        <span className="required" style={{ color: "red" }}>
+                          *
+                        </span>
                       </Form.Label>
                     </strong>
                     {benefits.map((benefit, index) => (
-                      <Form.Control
-                        key={index}
-                        type="text"
-                        placeholder={`Benefit ${index + 1}`}
-                        value={benefit}
-                        onChange={(e) =>
-                          handleBenefitChange(index, e.target.value)
-                        }
-                        className="mb-2"
-                      />
+                      <div key={index} className="mb-2">
+                        <Form.Control
+                          type="text"
+                          placeholder={`Benefit ${index + 1}`}
+                          value={benefit}
+                          onChange={(e) =>
+                            handleBenefitChange(index, e.target.value)
+                          }
+                          isInvalid={!!benefitErrors[index]} // Đánh dấu lỗi nếu có
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {benefitErrors[index]}
+                        </Form.Control.Feedback>
+                      </div>
                     ))}
                     <Button variant="outline-secondary" onClick={addBenefit}>
                       + Add Benefit

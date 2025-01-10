@@ -367,6 +367,9 @@ export const getAllCompaniesByOwnerAdmin = async (
           $or: [{ owner_id: userObjectId }, { admin_id: userObjectId }],
         },
       },
+      { $sort: { createdAt: -1 } }, // Sắp xếp theo ngày tạo mới nhất
+      { $skip: skip }, // Bỏ qua số lượng bản ghi
+      { $limit: pageSize }, // Lấy số lượng bản ghi theo pageSize
       {
         $addFields: {
           role: {
@@ -389,9 +392,6 @@ export const getAllCompaniesByOwnerAdmin = async (
           address: "$address.city_state",
         },
       },
-      { $sort: { createdAt: -1 } }, // Sắp xếp theo ngày tạo mới nhất
-      { $skip: skip }, // Bỏ qua số lượng bản ghi
-      { $limit: pageSize }, // Lấy số lượng bản ghi theo pageSize
     ]);
 
     // Trả về dữ liệu
