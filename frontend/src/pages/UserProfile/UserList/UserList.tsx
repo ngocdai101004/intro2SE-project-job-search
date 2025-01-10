@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import ICompany from "../../../interfaces/company";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../common/axiosInstance";
 import MyHeader from "../../../components/MyHeader";
+import IUser from "../../../interfaces/user";
 import {
   Card,
   Col,
@@ -13,9 +13,9 @@ import {
   Spinner,
 } from "react-bootstrap";
 
-const CompanyList = () => {
-  const [companyList, setCompanyList] = useState<ICompany[]>([]);
-  const [filteredCompanies, setFilteredCompanies] = useState<ICompany[]>([]);
+const UserList = () => {
+  const [userList, setUserList] = useState<IUser[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -24,11 +24,13 @@ const CompanyList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/company");
-        setCompanyList(response.data.data);
-        setFilteredCompanies(response.data.data); // Initialize filtered list
+        const response = await axiosInstance.get("/user/user-list");
+        setUserList(response.data.data.users);
+        setFilteredUsers(response.data.data.users); // Initialize filtered list
+
+        console.log("User List:", response.data.data);
       } catch (error) {
-        console.error("Error fetching company data:", error);
+        console.error("Error fetching user data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -39,23 +41,23 @@ const CompanyList = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
-    setFilteredCompanies(
-      companyList.filter((company) =>
-        company.company_name?.toLowerCase().includes(query)
+    setFilteredUsers(
+      userList.filter((user) =>
+        `${user.first_name} ${user.last_name}`.toLowerCase().includes(query)
       )
     );
   };
 
   return (
     <div>
-      <MyHeader mydefaultActiveKey="/company" />
+      <MyHeader mydefaultActiveKey="/user" />
       <Container className="container mt-4">
-        <h3 className="mb-3">Company List</h3>
+        <h3 className="mb-3">User List</h3>
 
         {/* Search Bar */}
         <InputGroup className="mb-4">
           <FormControl
-            placeholder="Search for a company..."
+            placeholder="Search for a user..."
             value={searchQuery}
             onChange={handleSearch}
           />
@@ -66,23 +68,16 @@ const CompanyList = () => {
           <div className="d-flex justify-content-center mt-5">
             <Spinner animation="border" />
           </div>
-        ) : filteredCompanies.length === 0 ? (
+        ) : !Array.isArray(filteredUsers) || filteredUsers.length === 0 ? (
           <div className="text-center text-muted mt-5">
-            <p>No companies found</p>
+            <p>No users found</p>
           </div>
         ) : (
           <Row>
-            {filteredCompanies.map((company) => (
-              <Col
-                key={company._id}
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                className="mb-4"
-              >
+            {filteredUsers.map((user) => (
+              <Col key={user._id} xs={12} sm={6} md={4} lg={3} className="mb-4">
                 <Card
-                  onClick={() => navigate(`/company/${company._id}/snapshot`)}
+                  onClick={() => navigate(`/user/${user._id}/profile`)}
                   style={{
                     cursor: "pointer",
                     borderRadius: "10px",
@@ -92,8 +87,8 @@ const CompanyList = () => {
                 >
                   <Card.Img
                     variant="top"
-                    src={company.avatar || "https://via.placeholder.com/150"}
-                    alt={`${company.company_name} avatar`}
+                    src={user.avatar || "https://via.placeholder.com/150"}
+                    alt={`${user.first_name} ${user.last_name} avatar`}
                     style={{
                       height: "150px",
                       objectFit: "cover",
@@ -104,24 +99,16 @@ const CompanyList = () => {
                     <Card.Title
                       style={{ fontSize: "16px", fontWeight: "bold" }}
                     >
-                      {company.company_name}
+                      {user.first_name} {user.last_name}
                     </Card.Title>
                     <Card.Text
                       className="text-muted"
                       style={{ fontSize: "14px" }}
                     >
-                      {company.address?.country || "Address not available"}
+                      {user.email || "Email not available"}
                     </Card.Text>
                     <Card.Text style={{ fontSize: "13px", color: "#6c757d" }}>
-                      {company.short_description || "No description available"}
-                    </Card.Text>
-                    <Card.Text style={{ fontSize: "13px", color: "#6c757d" }}>
-                      {"Employees: " + company.employees?.length ||
-                        "No description available"}
-                    </Card.Text>
-                    <Card.Text style={{ fontSize: "13px", color: "#6c757d" }}>
-                      {"Followers: " + company.followers?.length ||
-                        "No description available"}
+                      {user.short_bio || "No description available"}
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -134,4 +121,4 @@ const CompanyList = () => {
   );
 };
 
-export default CompanyList;
+export default UserList;

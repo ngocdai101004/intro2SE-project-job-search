@@ -2,6 +2,23 @@ import { Request, Response } from "express";
 import User from "../models/userModel";
 import UserInfo from "../models/userInfoModel";
 import { sendEmail } from "../utils/sendEmail";
+
+// Get all users
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find().select(
+      "-password -verification_code -__v -createdAt -updatedAt"
+    );
+    res.status(200).json({ message: "Users found", data: { users } });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message, data: {} });
+    } else {
+      res.status(500).json({ message: "An unknown error occurred", data: {} });
+    }
+  }
+};
+
 // Get user
 const getUser = async (req: Request, res: Response) => {
   try {
@@ -1001,6 +1018,7 @@ const deleteQualification = async (req: Request, res: Response) => {
 };
 
 export {
+  getAllUsers,
   getUser,
   getUserByEmail,
   updateUser,
