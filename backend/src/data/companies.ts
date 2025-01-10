@@ -5,10 +5,10 @@ export const companies = [
   {
     _id: new ObjectId("67773cd820a2ca18b092cf8b"),
     owner_id: users[0]._id,
-    admin_id: [users[1]._id, users[2]._id],
+    admin_id: [users[2]._id],
     company_name: "TechVibes Inc.",
-    sumRating: 14,
-    followers: [users[3]._id, users[4]._id],
+    followers: [new ObjectId(), new ObjectId()],
+    employees: [users[1], users[3]._id, users[4]._id, users[5]._id],
     address: {
       district: "District 1",
       city_state: "San Francisco, CA",
@@ -44,15 +44,16 @@ export const companies = [
         date: new Date("2023-10-10"),
       },
     ],
-    avatar: "/company-avatar.jpg",
+    avatar: "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/techvibe.jpg",
   },
   {
     _id: new ObjectId("67773cd820a2ca18b092cf8c"),
     owner_id: users[1]._id,
-    admin_id: [users[0]._id, users[2]._id],
+    admin_id: [users[0]._id, users[3]._id],
     company_name: "GreenTech Solutions",
-    sumRating: 11,
     followers: [new ObjectId(), new ObjectId()],
+    employees: [users[4]._id, users[5]._id],
+
     address: {
       district: "Downtown",
       city_state: "Austin, TX",
@@ -70,12 +71,6 @@ export const companies = [
     short_description: "Empowering a sustainable future.",
     reviews: [
       {
-        user_id: users[3]._id,
-        rating: 4,
-        review: "A company with great values and a meaningful mission.",
-        date: new Date("2023-12-01"),
-      },
-      {
         user_id: users[4]._id,
         rating: 4,
         review: "Good company, but better communication is needed.",
@@ -88,15 +83,16 @@ export const companies = [
         date: new Date("2023-10-30"),
       },
     ],
-    avatar: "/company-avatar.jpg",
+    avatar:
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/greentech.jpg",
   },
   {
     _id: new ObjectId("67773cd820a2ca18b092cf90"),
     owner_id: users[2]._id,
     admin_id: [users[1]._id, users[0]._id],
     company_name: "EduGlobal",
-    sumRating: 7,
     followers: [new ObjectId(), new ObjectId()],
+    employees: [users[3]._id, users[4]._id, users[5]._id],
     address: {
       district: "West End",
       city_state: "London, UK",
@@ -132,6 +128,7 @@ export const companies = [
         date: new Date("2023-10-15"),
       },
     ],
-    avatar: "/company-avatar.jpg",
+    avatar:
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/eduglobal.png",
   },
 ];

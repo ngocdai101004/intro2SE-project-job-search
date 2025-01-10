@@ -15,6 +15,7 @@ import {
   isFollowed,
   getAllCompaniesByOwnerAdmin,
 } from "../controllers/companyController";
+import { verifyEmployee } from "../middlewares/verifyEmployee";
 
 const router = Router();
 
@@ -30,7 +31,7 @@ router.get("/:companyID/isFollowed", verifyUser, isFollowed);
 router.post("/:companyID/follow", verifyUser, followCompany);
 router.post("/:companyID/unfollow", verifyUser, unfollowCompany);
 
-router.post("/:companyID/review", verifyUser, reviewCompany);
+router.post("/:companyID/review", verifyUser, verifyEmployee, reviewCompany);
 router.delete("/:companyID/review", verifyUser, deleteCompanyReview);
 router.get("/:companyID/isReviewed", verifyUser, isReviewed);
 

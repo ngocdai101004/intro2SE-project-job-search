@@ -13,6 +13,7 @@ const AddJobDetails: React.FC = () => {
   const [jobTypes, setJobTypes] = useState<string[]>([]);
   const [hasDeadline, setHasDeadline] = useState("no");
   const [deadlineDate, setDeadlineDate] = useState("");
+  const [error, setError] = useState(""); // State để lưu lỗi
 
   // Load dữ liệu từ localStorage
   useEffect(() => {
@@ -29,10 +30,20 @@ const AddJobDetails: React.FC = () => {
         ? prev.filter((item) => item !== type)
         : [...prev, type]
     );
+
+    // Xóa lỗi khi checkbox thay đổi
+    if (error) setError("");
   };
 
   // Lưu dữ liệu vào localStorage và tiếp tục
   const handleSaveAndContinue = () => {
+    if (jobTypes.length === 0) {
+      // Nếu chưa chọn loại công việc, hiển thị lỗi
+      setError("Please select at least one job type.");
+      return;
+    }
+
+    setError(""); // Xóa lỗi nếu hợp lệ
     const currentData = {
       type: jobTypes, // Chuyển thành 'type' phù hợp với model Job
       deadline: hasDeadline === "yes" ? deadlineDate : null, // Format deadline
@@ -104,6 +115,15 @@ const AddJobDetails: React.FC = () => {
                         }
                       )}
                     </div>
+                    {/* Hiển thị lỗi nếu có */}
+                    {error && (
+                      <div
+                        className="text-danger mt-2"
+                        style={{ fontSize: "0.9rem" }}
+                      >
+                        {error}
+                      </div>
+                    )}
                   </Form.Group>
 
                   <Form.Group className="mb-3">
@@ -118,14 +138,20 @@ const AddJobDetails: React.FC = () => {
                         label="No"
                         type="radio"
                         checked={hasDeadline === "no"}
-                        onChange={() => setHasDeadline("no")}
+                        onChange={() => {
+                          setHasDeadline("no");
+                          if (error) setError(""); // Xóa lỗi khi thay đổi lựa chọn
+                        }}
                       />
                       <Form.Check
                         inline
                         label="Yes"
                         type="radio"
                         checked={hasDeadline === "yes"}
-                        onChange={() => setHasDeadline("yes")}
+                        onChange={() => {
+                          setHasDeadline("yes");
+                          if (error) setError(""); // Xóa lỗi khi thay đổi lựa chọn
+                        }}
                       />
                     </div>
                     {hasDeadline === "yes" && (
@@ -141,7 +167,9 @@ const AddJobDetails: React.FC = () => {
                   <div className="d-flex justify-content-between">
                     <Button
                       variant="secondary"
-                      onClick={() => navigate("/my-company/add-job-basics")}
+                      onClick={() =>
+                        navigate(`/my-company/${company_id}/add-job-basics`)
+                      }
                     >
                       ← Back
                     </Button>
