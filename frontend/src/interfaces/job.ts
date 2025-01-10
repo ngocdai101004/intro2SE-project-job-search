@@ -34,4 +34,5 @@ export interface JobListProps {
 
 export interface JobDetailProps {
   job: IJobCard;
+  notApply?: boolean;
 }

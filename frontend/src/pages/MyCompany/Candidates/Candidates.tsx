@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import MainLayout from "../MainLayout/MainLayout";
 import axiosInstance from "../../../common/axiosInstance";
 import "./Candidates.css";
 import { useParams } from "react-router-dom";
-
+import { JobDetailProps } from "../../../interfaces/job";
+import JobDetail from "../../../components/JobCard/JobDetail";
+import { Modal } from "react-bootstrap";
 interface Candidate {
   id: string;
+  jobId: string;
+  companyId: string;
+  companyName: string;
+  companyAvatar: string;
   candidateName: string;
   jobTitle: string;
   feedback: string;
@@ -20,11 +26,17 @@ interface Pagination {
   totalPages: number;
 }
 
+interface CandidateWithJob extends Candidate {
+  job: JobDetailProps;
+}
+
 const Candidates: React.FC = () => {
   const { company_id } = useParams<{ company_id: string }>();
   const [candidates, setCandidates] = useState<Candidate[]>([]); // State lưu danh sách ứng viên
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [error, setError] = useState<string>(""); // Error state
+  const [candidateWithJob, setCandidateWithJob] = useState<CandidateWithJob[]>([])
+  const [selectedJob, setSelectedJob] = useState<JobDetailProps | null>(null);
   const [editingFeedbackId, setEditingFeedbackId] = useState<string | null>(
     null
   ); // ID của feedback đang chỉnh sửa
@@ -54,6 +66,7 @@ const Candidates: React.FC = () => {
         currentPage: data.currentPage,
         totalPages: data.totalPages,
       });
+
     } catch (error) {
       console.error("Error fetching candidates:", error);
       setError("Failed to fetch candidates. Please try again.");
@@ -61,6 +74,28 @@ const Candidates: React.FC = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      const updatedCandidates = await Promise.all(
+        candidates.map(async (candidate) => {
+          const job = await axiosInstance.get(`/job/${candidate.jobId}`);
+          const jobDetail = {
+            ...job.data.data.job,
+            company_name: candidate.companyName,
+            company_avatar: candidate.companyAvatar,
+          };
+          const jobDetailProps = {
+            job: jobDetail,
+          }
+          return { ...candidate, job: jobDetailProps };
+        })
+      );
+      setCandidateWithJob(updatedCandidates);
+    };
+
+    fetchJobDetails();
+  }, [candidates]);
 
   // Xử lý chuyển trang
   const handlePageChange = (newPage: number) => {
@@ -155,8 +190,8 @@ const Candidates: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {candidates.length > 0 ? (
-                      candidates.map((candidate, index) => (
+                    {candidateWithJob.length > 0 ? (
+                      candidateWithJob.map((candidate, index) => (
                         <tr key={index}>
                           <td></td>
                           <td>
@@ -178,9 +213,31 @@ const Candidates: React.FC = () => {
                             </p>
                           </td>
                           <td>
+        
+                          <button
+                            className="btn"
+                            style={{ padding: "0", margin: "-3px" }}
+                            onClick={() => setSelectedJob(candidate.job)}
+                          >
                             <span className="candidate-job">
                               {candidate.jobTitle}
                             </span>
+                          </button>
+                          {selectedJob && (
+                            <Modal show={true} onHide={() => setSelectedJob(null)} size="xl">
+                              <Modal.Header closeButton>
+                              <Modal.Title>Job Details</Modal.Title>
+                              </Modal.Header>
+                              <Modal.Body>
+                              <JobDetail job={selectedJob.job} notApply={true} />
+                              </Modal.Body>
+                              <Modal.Footer>
+                              <Button variant="secondary" onClick={() => setSelectedJob(null)}>
+                                Close
+                              </Button>
+                              </Modal.Footer>
+                            </Modal>
+                          )}
                           </td>
                           <td>
                             {editingFeedbackId === candidate.id ? (

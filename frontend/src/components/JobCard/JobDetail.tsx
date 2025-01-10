@@ -8,7 +8,7 @@ import { uploadFile } from "../../utils/s3";
 import IFile from "../../interfaces/file";
 import { Buffer as NodeBuffer } from "buffer";
 
-const JobDetail: React.FC<JobDetailProps> = ({ job }) => {
+const JobDetail: React.FC<JobDetailProps> = ({ job, notApply}) => {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState<boolean>(false); // Trạng thái hiển thị modal
@@ -145,17 +145,19 @@ const JobDetail: React.FC<JobDetailProps> = ({ job }) => {
               </p>
             )}
           </div>
-          <Button
-            variant="primary"
-            style={{
+            {notApply !== true && (
+            <Button
+              variant="primary"
+              style={{
               fontSize: "0.9rem",
               marginTop: "-20px",
               marginRight: "10px",
-            }}
-            onClick={handleApplyNow}
-          >
-            Apply Now
-          </Button>
+              }}
+              onClick={handleApplyNow}
+            >
+              Apply Now
+            </Button>
+            )}
         </div>
         <hr style={{ width: "100%", margin: "0" }} />
         <div className="card-text" style={{ marginTop: "30px" }}>

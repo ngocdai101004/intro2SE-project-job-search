@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import JobDB from "../models/jobModel";
 import ApplicationDB from "../models/applicationModel";
 import UserDB from "../models/userModel";
+import CompanyDB from "../models/companyModel";
 import mongoose from "mongoose";
 
 // Lấy thông tin ứng viên với phân trang
@@ -16,6 +17,7 @@ export const getApplicantInfos = async (req: Request, res: Response) => {
 
     // Lấy danh sách công việc thuộc công ty
     const jobs = await JobDB.find({ company_id: companyId });
+    const company = await CompanyDB.findById(companyId);
 
     // Tạo mapping cho công việc
     const jobMap = jobs.reduce((acc, job) => {
@@ -51,6 +53,10 @@ export const getApplicantInfos = async (req: Request, res: Response) => {
     // Mapping dữ liệu hoàn chỉnh
     const result = applications.map((app) => ({
       id: app._id, // Lấy ID của applicant
+      jobId: app.job_id, // Lấy ID của công việc
+      companyID: companyId, // Lấy ID của công ty
+      companyName: company?.company_name || "Unknown Company",
+      companyAvatar: company?.avatar || "Unknown Avatar",
       candidateName: userMap[app.user_id.toString()]?.name || "Unknown",
       jobTitle: jobMap[app.job_id.toString()] || "Unknown Job",
       feedback: app.feedback || "No feedback",
