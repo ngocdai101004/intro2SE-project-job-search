@@ -12,6 +12,11 @@ const AddJobDescription: React.FC = () => {
   const [description, setDescription] = useState<string>(""); // Mô tả công việc
   const [responsibilities, setResponsibilities] = useState<string[]>([""]); // Trách nhiệm
   const [requirements, setRequirements] = useState<string[]>([""]); // Yêu cầu
+  const [errors, setErrors] = useState({
+    description: "",
+    responsibilities: [] as string[],
+    requirements: [] as string[],
+  }); // Lỗi cho các trường
 
   // Load dữ liệu từ localStorage khi render lại trang
   useEffect(() => {
@@ -25,11 +30,19 @@ const AddJobDescription: React.FC = () => {
   // Hàm thêm dòng mới cho Responsibilities
   const addResponsibility = () => {
     setResponsibilities([...responsibilities, ""]);
+    setErrors({
+      ...errors,
+      responsibilities: [...errors.responsibilities, ""],
+    });
   };
 
   // Hàm thêm dòng mới cho Requirements
   const addRequirement = () => {
     setRequirements([...requirements, ""]);
+    setErrors({
+      ...errors,
+      requirements: [...errors.requirements, ""],
+    });
   };
 
   // Xử lý thay đổi nội dung Responsibilities
@@ -37,6 +50,11 @@ const AddJobDescription: React.FC = () => {
     const updated = [...responsibilities];
     updated[index] = value;
     setResponsibilities(updated);
+
+    // Xóa lỗi khi người dùng nhập
+    const updatedErrors = [...errors.responsibilities];
+    updatedErrors[index] = value.trim() ? "" : "This field is required.";
+    setErrors({ ...errors, responsibilities: updatedErrors });
   };
 
   // Xử lý thay đổi nội dung Requirements
@@ -44,10 +62,37 @@ const AddJobDescription: React.FC = () => {
     const updated = [...requirements];
     updated[index] = value;
     setRequirements(updated);
+
+    // Xóa lỗi khi người dùng nhập
+    const updatedErrors = [...errors.requirements];
+    updatedErrors[index] = value.trim() ? "" : "This field is required.";
+    setErrors({ ...errors, requirements: updatedErrors });
   };
 
   // Lưu dữ liệu vào localStorage và chuyển tiếp
   const handleSaveAndContinue = () => {
+    // Validation
+    const responsibilityErrors = responsibilities.map((res) =>
+      res.trim() ? "" : "This field is required."
+    );
+    const requirementErrors = requirements.map((req) =>
+      req.trim() ? "" : "This field is required."
+    );
+
+    const hasErrors =
+      !description.trim() ||
+      responsibilityErrors.some((err) => err !== "") ||
+      requirementErrors.some((err) => err !== "");
+
+    if (hasErrors) {
+      setErrors({
+        description: description.trim() ? "" : "Job description is required.",
+        responsibilities: responsibilityErrors,
+        requirements: requirementErrors,
+      });
+      return;
+    }
+
     const currentData = {
       description, // Thêm mô tả công việc
       responsibilities,
@@ -102,9 +147,21 @@ const AddJobDescription: React.FC = () => {
                     rows={5}
                     placeholder="Enter job description"
                     value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) => {
+                      setDescription(e.target.value);
+                      setErrors({
+                        ...errors,
+                        description: e.target.value.trim()
+                          ? ""
+                          : "Job description is required.",
+                      });
+                    }}
+                    isInvalid={!!errors.description}
                     className="mb-2"
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.description}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 {/* Responsibilities */}
@@ -116,16 +173,20 @@ const AddJobDescription: React.FC = () => {
                     </span>
                   </strong>
                   {responsibilities.map((responsibility, index) => (
-                    <Form.Control
-                      key={index}
-                      type="text"
-                      placeholder={`Responsibility ${index + 1}`}
-                      value={responsibility}
-                      onChange={(e) =>
-                        handleResponsibilityChange(index, e.target.value)
-                      }
-                      className="mb-2"
-                    />
+                    <div key={index} className="mb-2">
+                      <Form.Control
+                        type="text"
+                        placeholder={`Responsibility ${index + 1}`}
+                        value={responsibility}
+                        onChange={(e) =>
+                          handleResponsibilityChange(index, e.target.value)
+                        }
+                        isInvalid={!!errors.responsibilities[index]}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.responsibilities[index]}
+                      </Form.Control.Feedback>
+                    </div>
                   ))}
                   <Button
                     variant="outline-secondary"
@@ -144,16 +205,20 @@ const AddJobDescription: React.FC = () => {
                     </span>
                   </strong>
                   {requirements.map((requirement, index) => (
-                    <Form.Control
-                      key={index}
-                      type="text"
-                      placeholder={`Requirement ${index + 1}`}
-                      value={requirement}
-                      onChange={(e) =>
-                        handleRequirementChange(index, e.target.value)
-                      }
-                      className="mb-2"
-                    />
+                    <div key={index} className="mb-2">
+                      <Form.Control
+                        type="text"
+                        placeholder={`Requirement ${index + 1}`}
+                        value={requirement}
+                        onChange={(e) =>
+                          handleRequirementChange(index, e.target.value)
+                        }
+                        isInvalid={!!errors.requirements[index]}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.requirements[index]}
+                      </Form.Control.Feedback>
+                    </div>
                   ))}
                   <Button variant="outline-secondary" onClick={addRequirement}>
                     + Add Requirement
@@ -165,16 +230,16 @@ const AddJobDescription: React.FC = () => {
                   <Button
                     variant="secondary"
                     onClick={() =>
-                      navigate("/my-company/add-pays-and-benefits")
+                      navigate(
+                        `/my-company/${company_id}/add-pays-and-benefits`
+                      )
                     }
                   >
                     ← Back
                   </Button>
-                  <div className="d-flex gap-2">
-                    <Button variant="primary" onClick={handleSaveAndContinue}>
-                      Continue →
-                    </Button>
-                  </div>
+                  <Button variant="primary" onClick={handleSaveAndContinue}>
+                    Continue →
+                  </Button>
                 </div>
               </div>
             </div>
