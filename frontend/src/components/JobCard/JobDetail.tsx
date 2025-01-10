@@ -29,7 +29,7 @@ const JobDetail: React.FC<JobDetailProps> = ({ job }) => {
     }
   };
 
-  // Hàm xử lý file khi người dùng chọn
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setResume(e.target.files[0]);
@@ -45,7 +45,6 @@ const JobDetail: React.FC<JobDetailProps> = ({ job }) => {
     try {
       setUploading(true);
 
-      // Đọc dữ liệu file thành ArrayBuffer
       const arrayBuffer = await new Promise<ArrayBuffer>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => {
@@ -55,10 +54,8 @@ const JobDetail: React.FC<JobDetailProps> = ({ job }) => {
         reader.readAsArrayBuffer(resume);
       });
 
-      // Chuyển đổi ArrayBuffer thành Buffer
       const buffer = NodeBuffer.from(arrayBuffer);
 
-      // Tạo đối tượng IFile theo đúng định dạng
       const file: IFile = {
         filename: resume.name,
         buffer: buffer,
@@ -72,7 +69,6 @@ const JobDetail: React.FC<JobDetailProps> = ({ job }) => {
 
       const response = await axiosInstance.get("/user/profile");
 
-      // Gửi thông tin ứng tuyển lên server
       await axiosInstance.post("/applicant/apply", {
         job_id: job._id,
         user_id: response.data.data.user._id,
@@ -81,7 +77,7 @@ const JobDetail: React.FC<JobDetailProps> = ({ job }) => {
         feedback: "",
       });
 
-      setShowModal(false); // Đóng modal sau khi gửi thành công
+      setShowModal(false); 
     } catch (error) {
       console.error("Failed to apply:", error);
     } finally {
