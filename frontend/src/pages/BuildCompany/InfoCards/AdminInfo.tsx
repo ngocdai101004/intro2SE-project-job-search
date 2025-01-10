@@ -25,11 +25,14 @@ const AdminInfo: React.FC<Props> = ({
         const response = await axiosInstance.get(`/user?email=${adminInput}`);
         const user = response.data.data.user;
 
+        const ownerResponse = await axiosInstance.get("/user/profile");
+        const owner = ownerResponse.data.data.user;
+
         if (data.admin_id?.includes(user._id)) {
           alert("User already added");
           return;
         }
-        if (user._id === data.owner_id) {
+        if (user._id === owner._id) {
           alert("User is the owner of the company");
           return;
         }

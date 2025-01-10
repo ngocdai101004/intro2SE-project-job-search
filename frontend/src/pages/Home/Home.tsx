@@ -49,14 +49,13 @@ const Home: React.FC = () => {
     const fetchJobs = async () => {
       try {
         let jobList = [];
-        if (isAuthenticated) {
-          const recommendedJobsResponse = await axiosInstance.get(
-        "/job/recommended"
-          );
+        console.log("Is Authenticated", isAuthenticated);
+        if (isAuthenticated === true) {
+          console.log("Recommended Jobs", jobList.length);
+          const recommendedJobsResponse = await axiosInstance.get( "/job/recommended" );
           jobList = recommendedJobsResponse.data.data.jobs.slice(0, 30) || [];
         } else {
           const jobsResponse = await axiosInstance.get("/job");
-          console.log("Jobs Response", jobsResponse.data.data.jobs);
           jobList = jobsResponse.data.data.jobs.slice(0, 20) || [];
           console.log("Job List", jobList);
         }

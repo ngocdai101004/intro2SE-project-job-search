@@ -10,7 +10,9 @@ const getJobsBySearching = async (req: Request, res: Response) => {
 
     if (!normalizedQuery) {
       // Redirect to another API
-      res.redirect("/api/job");
+      res.redirect(
+        `/api/job?datePost=${datePost}&jobType=${jobType}&location=${location}&salaryMin=${salaryMin}&salaryMax=${salaryMax}`
+      );
 
       return;
     }
