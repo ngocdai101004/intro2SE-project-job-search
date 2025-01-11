@@ -11,6 +11,7 @@ const CompanyList = () => {
     const [filteredCompanies, setFilteredCompanies] = useState<ICompany[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [uid, setUid] = useState<string>("");
 
     const navigate = useNavigate();
 
@@ -18,6 +19,10 @@ const CompanyList = () => {
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get("/company");
+                const response2 = await axiosInstance.get("/user/profile");
+                if (response2.data.data.user._id) {
+                    setUid(response2.data.data.user._id);
+                }
                 setCompanyList(response.data.data);
                 setFilteredCompanies(response.data.data); // Initialize filtered list
             } catch (error) {
@@ -78,6 +83,47 @@ const CompanyList = () => {
                                     onClick={() => navigate(`/company/${company._id}/snapshot`)}
                                     isSelected={false}
                                 >
+                                    {
+                                        (company.owner_id && company.owner_id === uid) && (
+                                            <div
+                                                style={{
+                                                    position: "absolute",
+                                                    top: "10px",
+                                                    right: "10px",
+                                                    backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent background
+                                                    color: "white",
+                                                    padding: "5px 10px",
+                                                    borderRadius: "5px",
+                                                    fontSize: "12px",
+                                                    fontWeight: "bold",
+                                                    zIndex: 10, // Ensure it appears on top
+                                                }}
+                                            >
+                                                {"Owner"}
+                                            </div>
+                                        )
+                                    }
+
+                                    {
+                                        (company.admin_id && company.admin_id.includes(uid)) && (
+                                            <div
+                                                style={{
+                                                    position: "absolute",
+                                                    top: "10px",
+                                                    right: "10px",
+                                                    backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent background
+                                                    color: "white",
+                                                    padding: "5px 10px",
+                                                    borderRadius: "5px",
+                                                    fontSize: "12px",
+                                                    fontWeight: "bold",
+                                                    zIndex: 10, // Ensure it appears on top
+                                                }}
+                                            >
+                                                {"Admin"}
+                                            </div>
+                                        )
+                                    }
                                     <Card.Img
                                         variant="top"
                                         src={company.avatar || "https://via.placeholder.com/150"}
