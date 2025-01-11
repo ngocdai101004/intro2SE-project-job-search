@@ -40,7 +40,7 @@ export const users = [
     gender: "male",
     date_of_birth: new Date("1985-08-20"),
     avatar:
-      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/63ebbcc8-f487-4c81-9187-9e6265f9d40f.jpg",
     short_bio: "Experienced developer specializing in backend systems.",
   },
   {
@@ -60,7 +60,7 @@ export const users = [
     gender: "male",
     date_of_birth: new Date("1985-08-20"),
     avatar:
-      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/95ae4fdd-500e-404c-9110-bf847a75573c.jpg",
     short_bio: "Full-stack developer with a passion for coding.",
   },
 
@@ -81,7 +81,7 @@ export const users = [
     gender: "male",
     date_of_birth: new Date("1985-08-20"),
     avatar:
-      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/bac542dc-7ce2-4ed1-a999-7317e8328d00.jpg",
     short_bio: "AI specialist with a focus on machine learning.",
   },
   {
@@ -101,7 +101,7 @@ export const users = [
     gender: "female",
     date_of_birth: new Date("1992-05-15"),
     avatar:
-      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/c413ec8f-8a2b-4c09-a4bb-41458fcec813.jpg",
     short_bio: "Frontend developer with expertise in React and Angular.",
   },
   {
@@ -121,7 +121,7 @@ export const users = [
     gender: "male",
     date_of_birth: new Date("1988-11-30"),
     avatar:
-      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/RXR3dxrjt7iRtb2IsZGbbzBzsignature.png",
+      "https://jobsearch.nyc3.digitaloceanspaces.com/avatar/d4ff1e15-78d8-408a-a2eb-f5364bc0155c.jpg",
     short_bio: "DevOps engineer with a knack for automation and CI/CD.",
   },
 ];
