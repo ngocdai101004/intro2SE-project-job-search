@@ -5,18 +5,25 @@
 1. Make sure that you have installed Node.js (v22.12.0) and MongoDB
 2. Clone the repository
 3. Run `npm install` in both backend and frontend directories
-4. Create a `.env` file in the backend directory and add the following variables:
-
+4. Create a `.env` file in the **backend** directory and add the following variables:
  ```dotenv
 PORT=3200
-MONGO_URI=mongodb://localhost:27017/job_search
+MONGO_URI=<your mongo uri>
 JWT_SECRET=secret
 JWT_EXPIRE=30d
-EMAIL_USER=votuan.hcmus.it@gmail.com
-EMAIL_PASS="yotx rbew weiz crvx"
+EMAIL_USER=<your email>
+EMAIL_PASS=<your email pass>
  ```
 
-5. Run `npm run dev` in the backend and frontend directories
+5. Create a `.env` file in the **frontend** directory and add the following variables:
+ ```dotenv
+VITE_S3_SECRET=<your secret key | that appear once when you create>
+VITE_S3_KEY=<your key>
+VITE_S3_ENDPOINT=<your endpoint>
+VITE_S3_BUCKET=jobsearch
+ ```
+
+6. Run `npm run dev` in the backend and frontend directories
 
 # Add mock data
 
