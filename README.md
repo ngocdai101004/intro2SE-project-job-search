@@ -103,57 +103,58 @@ correctly.
 ### Sign in
 
 <a href="#">
-  <img src="frontend/public/home.png" alt="Logo" width="200" style="margin-bottom: 20px;">
+  <img src="frontend/public/home.png" alt="Logo" width="500" style="margin-bottom: 20px;">
 </a>
 <a href="#">
-  <img src="frontend/public/login.png" alt="Logo" width="200" style="margin-bottom: 20px;">
+  <img src="frontend/public/login.png" alt="Logo" width="500" style="margin-bottom: 20px;">
 </a>
 
 - A login page allowing users to sign in with email, password, or via Google and Facebook.
 
 ### Sign up
 
-<a href="#">
-  <img src="frontend/public/signup.png" alt="Logo" width="200" style="margin-bottom: 20px;">
-</a>
+<div align="center">
+  <img src="frontend/public/signup.png" alt="Logo" width="500" style="margin-bottom: 20px;">
+</div>
 
 - A signup page where users can create an account by providing their first name, last name, email, password, and confirming the password.
 
 ### Company Management
 
-<a href="#">
-  <img src="frontend/public/company-management.png" alt="Logo" width="200" style="margin-bottom: 20px;">
-</a>
+<div align="center">
+  <img src="frontend/public/company-management.png" alt="Logo" width="500" style="margin-bottom: 20px;">
+</div>
 
 - This is the company management page where users can view and manage their companies, including roles and creation dates, and navigate to specific company pages.
 
 ### Company Dashboard
 
-<a href="#">
-  <img src="frontend/public/company-dashboard.png" alt="Logo" width="200" style="margin-bottom: 20px;">
-</a>
+<div align="center">
+  <img src="frontend/public/company-dashboard.png" alt="Logo" width="500" style="margin-bottom: 20px;">
+</div>
 
 - This is a simple job dashboard displaying a list of job positions with information about job titles, locations, number of applicants, status, and posting dates.
 
 ### Post Job
 
 <a href="#">
-  <img src="frontend/public/post-job-1.png" alt="Logo" width="200" style="margin-bottom: 20px;">
+  <img src="frontend/public/post-job-1.png" alt="Logo" width="500" style="margin-bottom: 20px;">
 </a>
 <a href="#">
-  <img src="frontend/public/post-job-2.png" alt="Logo" width="200" style="margin-bottom: 20px;">
+  <img src="frontend/public/post-job-2.png" alt="Logo" width="500" style="margin-bottom: 20px;">
 </a>
 <a href="#">
-  <img src="frontend/public/post-job-3.png" alt="Logo" width="200" style="margin-bottom: 20px;">
+  <img src="frontend/public/post-job-3.png" alt="Logo" width="500" style="margin-bottom: 20px;">
 </a>
 <a href="#">
-  <img src="frontend/public/post-job-4.png" alt="Logo" width="200" style="margin-bottom: 20px;">
+  <img src="frontend/public/post-job-4.png" alt="Logo" width="500" style="margin-bottom: 20px;">
 </a>
 <a href="#">
-  <img src="frontend/public/post-job-5.png" alt="Logo" width="200" style="margin-bottom: 20px;">
+  <img src="frontend/public/post-job-5.png" alt="Logo" width="500" style="margin-bottom: 20px;">
 </a>
 <a href="#">
-  <img src="frontend/public/post-job-6.png" alt="Logo" width="200" style="margin-bottom: 20px;">
+  <img src="frontend/public/post-job-6.png" alt="Logo" width="500" style="margin-bottom: 20px;">
 </a>
+
 
 - Companies can post job openings to attract potential candidates for available positions.
