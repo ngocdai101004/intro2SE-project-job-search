@@ -125,6 +125,19 @@ correctly.
 
 - This is the company management page where users can view and manage their companies, including roles and creation dates, and navigate to specific company pages.
 
+### Home Page
+<div align="center">
+  <img src="frontend/public/home_page.png" alt="Logo" width="500" style="margin-bottom: 20px;">
+  <img src="frontend/public/job_for_you.png" alt="Logo" width="500" style="margin-bottom: 20px;">
+
+</div>
+
+The Home Page serves as the main screen of the application, providing users with an easy way to search and browse job listings. Key features include:
+- **Search Bar**: Users can enter job keywords or locations into the search bar to find relevant job listings.
+- **Suggested Job Listings**: A list of suggested jobs is displayed, based on the user's previous preferences.
+- **Job Detail**: When a user clicks on a job listing, they are taken the detailed information about the job.
+
+
 ### Company Dashboard
 
 <div align="center">
@@ -151,3 +164,6 @@ correctly.
 </div>
 
 - Companies can post job openings to attract potential candidates for available positions.
+
+### Build Profile and JobSearch Resume
+
