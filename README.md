@@ -137,6 +137,16 @@ The Home Page serves as the main screen of the application, providing users with
 - **Suggested Job Listings**: A list of suggested jobs is displayed, based on the user's previous preferences.
 - **Job Detail**: When a user clicks on a job listing, they are taken the detailed information about the job.
 
+### Search - Filter - Sort
+<div align="center">
+  <img src="frontend/public/search.png" alt="Home Page" width="500" style="margin-bottom: 20px;">
+</div>
+
+- **Search Bar**: Users can enter job keywords or locations into the search bar to find relevant job listings.  
+- **Filter Options**: Users can filter job listings based on criteria such as Date posted, Job type, Location, Salary Range
+- **Sorting Feature**: Jobs can be sorted by relevance, date posted, or salary to help users find the most suitable opportunities.  
+
+
 
 ### Company Dashboard
 
@@ -165,5 +175,18 @@ The Home Page serves as the main screen of the application, providing users with
 
 - Companies can post job openings to attract potential candidates for available positions.
 
-### Build Profile and JobSearch Resume
+### Build Profile
+<div align="center">
+    <img src="frontend/public/build_profile_1.png" alt="Logo" width="500" style="margin-right: 20px;">
+   <img src="frontend/public/build_profile_2.png" alt="Logo" width="500">
+</div>
+
+<div align="center">
+    <img src="frontend/public/build_profile_3.png" alt="Logo" width="500" style="margin-right: 20px;">
+   <img src="frontend/public/build_profile_4.png" alt="Logo" width="500">
+</div>
+
+- The **Build Profile** feature allows users to create and manage their basic job seeker contact infformation.
+
+### Build Job Search Resume
 
