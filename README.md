@@ -189,4 +189,50 @@ The Home Page serves as the main screen of the application, providing users with
 - The **Build Profile** feature allows users to create and manage their basic job seeker contact infformation.
 
 ### Build Job Search Resume
+<div align="center">
+    <img src="frontend/public/build_resume_4.png" alt="Logo" width="500" style="margin-right: 20px;">
+   <img src="frontend/public/build_resume_5.png" alt="Logo" width="500">
+</div>
+<div align="center">
+    <img src="frontend/public/build_resume_6.png" alt="Logo" width="500" style="margin-right: 20px;">
+   <img src="frontend/public/build_resume_7.png" alt="Logo" width="500">
+</div>
+<div align="center">
+    <img src="frontend/public/build_resume_8.png" alt="Logo" width="500" style="margin-right: 20px;">
+   <img src="frontend/public/build_resume_9.png" alt="Logo" width="500">
+</div>
+<div align="center">
+    <img src="frontend/public/build_resume_10.png" alt="Logo" width="500" style="margin-right: 20px;">
+   <img src="frontend/public/build_resume_11.png" alt="Logo" width="500">
+</div>
+
+The **Build Job Search Resume** feature allows users to create a complete and professional resume directly within the platform. This helps job seekers showcase their qualifications and apply for jobs seamlessly.  
+
+#### Key Features:  
+
+- **Summary**: A brief personal introduction highlighting career goals and key strengths.  
+- **Education**: Users can add their academic background, including degrees, field of study, school, and graduation dates.  
+- **Qualifications**: A section to list qualifications.  
+- **Skills**: Users can showcase their technical and soft skills to attract potential employers.  
+- **Experience**: Work history, including job titles, company names, responsibilities, and employment duration.  
+- **Certifications**: A dedicated section to highlight industry-relevant certifications.  
+- **Job Preferences**: Users can specify their preferred job type, location, salary expectations.
+
+
+### User profile
+<div align="center">
+    <img src="frontend/public/user_profile_snap.png" alt="Logo" width="500" style="margin-right: 20px;">
+   <img src="frontend/public/user_profile_js.png" alt="Logo" width="500">
+</div>
+
+- The **User Profile** feature allows job seekers to manage their personal and professional details, making it easier to apply for jobs and connect with employers.  
+
+### Company profile
+<div align="center">
+    <img src="frontend/public/company_profile_snap.png" alt="Logo" width="500" style="margin-right: 20px;">
+   <img src="frontend/public/company_profile_jobs.png" alt="Logo" width="500">
+   <img src="frontend/public/company_profile_reviews.png" alt="Logo" width="500">
+</div>
+
+- The **Company Profile** page provides job seekers with key information about a company, helping them make informed decisions before applying for a job. Besides that, job seekers can read or submit reviews and ratings based on their experiences with the company.  
 
